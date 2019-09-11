@@ -1,1 +1,1 @@
-# One-click-declaration
+# one-click-declaration
