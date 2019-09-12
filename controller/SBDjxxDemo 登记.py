@@ -5,6 +5,8 @@ import base64
 import json
 
 class SBDjxxDemo(object):
+    # 申报-登记信息
+    '''(最优先调用接口)申报提交之前必须调用登记接口'''
 
     # xmlStr  登记报文:各家公司需要自己收集信息,分地区字段可能不一样
     # xmlStr = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><jsds_jbxxVO><sbbinfo><nsrsbh>91320214MA1NYKMBXK</nsrsbh><qymc>无锡品凡自动化设备有限公司</qymc><sbname>jbxx</sbname><dqbm>32</dqbm><cwlxr>姜不凡</cwlxr><cwlxrlxfs>15961853615</cwlxrlxfs><dscsdlmm>123456</dscsdlmm><dsdlfs>2</dsdlfs><dsdlmm>Jj111111</dsdlmm><dsdlyhm>91320214MA1NYKMBXK</dsdlyhm><gscamm>123456</gscamm><gsdlfs>2</gsdlfs><gsnsmm>Jj111111</gsnsmm><gsnsrsbh>91320214MA1NYKMBXK</gsnsrsbh><gsnsyhm>91320214MA1NYKMBXK</gsnsyhm><kjzd>1</kjzd><nsrzgdm>001</nsrzgdm><qyyf>09</qyyf><qynf>2019</qynf></sbbinfo></jsds_jbxxVO>'
@@ -27,9 +29,9 @@ class SBDjxxDemo(object):
         self.gsnsrsbh = '91320214MA1NYKMBXK'       # 纳税人识别号                      必须传
         self.gsnsyhm = '91320214MA1NYKMBXK'        # 国税登录名                        必须传
 
-        self.kjzd = '1'           # 必须传
+        self.kjzd = '1'           # 必须传 (1-9 代表不同准则 据体参照文档)
         self.nsrzgdm = '001'        # 纳税资格代码 【001增值税一般纳税人/101增值税小规模纳税人】 必须传
-        self.qyyf = '09'           # 启用月份(必填) 【系统(当前)月份】          必须传
+        self.qyyf = '08'           # 启用月份(必填) 【系统(当前)月份】          必须传
         self.qynf = '2019'           # 启用年份(必填) 【系统(当前)年份】          必须传
 
         self.xmlStr = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><jsds_jbxxVO><sbbinfo><nsrsbh>{}</nsrsbh>' \

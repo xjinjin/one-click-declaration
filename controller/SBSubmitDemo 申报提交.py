@@ -5,6 +5,8 @@ from controller.ServicePostUtil import taxsbAPIWizard
 import json
 
 class SBSubmitDemo(object):
+    # 申报-申报提交
+    '''用于增值税、企业所得税、消费税、财务报表等申报表的提交'''
 
     ''' input：appKey,token,param
         transfer：taxsbAPIWizard

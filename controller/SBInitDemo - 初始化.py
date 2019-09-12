@@ -6,6 +6,8 @@ import json
 import time
 
 class SBInitDemo(object):
+    # 申报-江苏初始化前置接口
+    '''江苏初始化前置接口 ，仅限江苏使用'''
 
     # nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'
     def __init__(self):
@@ -24,6 +26,8 @@ class SBInitDemo(object):
         return res
 
 class AfterSBInitDemo(object):
+    # 申报-初始化数据获取
+    '''初始化往期数据（没有xml 报文） ，江苏地区需要 调用 申报-江苏初始化前置接口，再通过此接口 获取数据'''
 
     # nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'
     def __init__(self):

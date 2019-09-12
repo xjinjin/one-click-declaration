@@ -5,6 +5,8 @@ from controller.ServicePostUtil import taxsbAPIWizard
 import json
 
 class SBJKDemo(object):
+    # 申报-申报缴款     江苏不需要缴款 自动扣款
+    '''申报缴款，支持地区湖南、江苏'''
 
     ''' input：appKey,token,param
         transfer：taxsbAPIWizard

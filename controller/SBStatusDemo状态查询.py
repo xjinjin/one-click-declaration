@@ -5,6 +5,9 @@ import base64
 import json
 
 class SBStatusDemo(object):
+    # 申报-申报状态
+    '''申报结果查询接口'''
+
     ''' input：appKey,token,param
         transfer：taxsbAPIWizard
         output: response.json/response.text'''

@@ -5,6 +5,8 @@ from controller.ServicePostUtil import taxsbAPIWizard
 import json
 
 class SBZFDemo(object):
+    # 申报-申报作废
+    '''作废已申报税种（没有xml 报文）'''
 
     ''' input：appKey,token,param
         transfer：taxsbAPIWizard

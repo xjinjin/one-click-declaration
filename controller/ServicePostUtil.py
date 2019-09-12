@@ -33,6 +33,7 @@ class taxsbAPIWizard(object):
             return res.json()
         else:
             return res.text
+        # return res
 
 if __name__ == '__main__':
     pass

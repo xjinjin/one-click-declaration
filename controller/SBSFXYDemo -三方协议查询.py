@@ -5,6 +5,8 @@ from controller.ServicePostUtil import taxsbAPIWizard
 import json
 
 class SBSFXYDemo(object):
+    # 申报-查询三方协议信息
+    '''三方协议，支持湖南、贵州地区'''
 
     ''' input：appKey,token,param
         transfer：taxsbAPIWizard
