@@ -104,7 +104,6 @@ venv.bak/
 .mypy_cache/
 
 # self
-Base64Util.py
 .idea/
 logs
 test.py
