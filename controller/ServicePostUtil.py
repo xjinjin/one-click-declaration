@@ -27,7 +27,7 @@ class taxsbAPIWizard(object):
         }
         headers = {'Content-type': 'application/x-www-form-urlencoded',
                    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'}
-        # headers = {'Content-type':'application/json;charset=UTF-8'}
+        # headers = {'Content-type':'application/json;charset=UTF-8'} # 文档和demo又争议，以demo为准
         res = requests.post(self.url, data=params, headers=headers)
         if res.status_code == 200:
             return res.json()
@@ -36,9 +36,3 @@ class taxsbAPIWizard(object):
 
 if __name__ == '__main__':
     pass
-    # token = '7f182e426e1a5508c40bbdfa'
-    # content = {}
-    # content['bizXml'] = 'bizXml'
-    # res = hmac.new(bytes(token, 'utf-8'), msg=bytes(json.dumps(content), 'utf-8'), digestmod=sha256).hexdigest()
-    # # res = hmac.new(bytes(token, 'utf-8'), msg=json.dumps(content), digestmod=sha256).hexdigest()
-    # print(res)

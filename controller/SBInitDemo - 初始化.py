@@ -7,19 +7,15 @@ import time
 
 class SBInitDemo(object):
 
-    ''' input：appKey,token,param
-        transfer：taxsbAPIWizard
-        output: response.json/response.text'''
-
-    def __init__(self,nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',
-                 skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'):
+    # nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'
+    def __init__(self):
         self.param = {}
-        self.param['nsrsbh'] = nsrsbh   # 纳税人识别号
-        self.param['sbzlbh'] = sbzlbh   # 申报种类编码.参考代码表  平台申报开放API规范2.0(1)文档
-        self.param['skssqq'] = skssqq   # 税款所属期起
-        self.param['skssqz'] = skssqz   # 税款所属期止
-        self.param['nsqxdm'] = nsqxdm   # 纳税期限代码
-        self.param['sssq'] = sssq       # 税款所属期
+        self.param['nsrsbh'] = '91320214MA1NYKMBXK'   # 纳税人识别号
+        self.param['sbzlbh'] = '10101'   # 申报种类编码.参考代码表  平台申报开放API规范2.0(1)文档
+        self.param['skssqq'] = '2019-08-01'   # 税款所属期起
+        self.param['skssqz'] =  '2019-08-31'   # 税款所属期止
+        self.param['nsqxdm'] = '1'   # 纳税期限代码
+        self.param['sssq'] = '2019-09'       # 税款所属期
 
     def void_main(self,appKey,token):
         res = taxsbAPIWizard().post(json.dumps(self.param),appKey,token)
@@ -29,15 +25,15 @@ class SBInitDemo(object):
 
 class AfterSBInitDemo(object):
 
-    def __init__(self,nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',
-                 skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'):
+    # nsrsbh = '91320214MA1NYKMBXK', sbzlbh = '10101',skssqq = '2019-08-01',skssqz = '2019-08-31',nsqxdm = '1',sssq = '2019-09'
+    def __init__(self):
         self.param = {}
-        self.param['nsrsbh'] = nsrsbh   # 纳税人识别号
-        self.param['sbzlbh'] = sbzlbh   # 申报种类编码.参考代码表  平台申报开放API规范2.0(1)文档
-        self.param['skssqq'] = skssqq   # 税款所属期起
-        self.param['skssqz'] = skssqz   # 税款所属期止
-        self.param['sssq'] = sssq       # 税款所属期
-        self.param['nsqxdm'] = nsqxdm   # 纳税期限代码
+        self.param['nsrsbh'] = '91320214MA1NYKMBXK'   # 纳税人识别号
+        self.param['sbzlbh'] = '10101'   # 申报种类编码.参考代码表  平台申报开放API规范2.0(1)文档
+        self.param['skssqq'] = '2019-08-01'   # 税款所属期起
+        self.param['skssqz'] =  '2019-08-31'   # 税款所属期止
+        self.param['sssq'] = '2019-09'       # 税款所属期
+        self.param['nsqxdm'] = '1'  # 纳税期限代码
 
 
     def void_main(self,appKey,token):
