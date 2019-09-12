@@ -9,9 +9,9 @@ class SBDjxxDemo(object):
         transfer：taxsbAPIWizard
         output: response.json/response.text'''
 
-    # xmlStr  登记报文:各家公司需要自己收集信息
+    # xmlStr  登记报文:各家公司需要自己收集信息,分地区字段可能不一样
     def __init__(self,
-                 xmlStr = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><jsds_jbxxVO><sbbinfo><nsrsbh>91310118MA1JLFH42X</nsrsbh><qymc>上海嘉商通云财税科技有限公司</qymc><sbname>jbxx</sbname><dqbm></dqbm><dscsdlmm></dscsdlmm><dsdlfs></dsdlfs><dsdlmm></dsdlmm><dsdlyhm></dsdlyhm><gscamm></gscamm><gsdlfs>2</gsdlfs><gsnsmm>sn084812</gsnsmm><gsnsrsbh>91320000796544096U</gsnsrsbh><gsnsyhm>91320000796544096U</gsnsyhm><kjzd>1</kjzd><nsrzgdm>001</nsrzgdm><qyyf>03</qyyf><qynf>2019</qynf></sbbinfo></jsds_jbxxVO>'
+                 xmlStr = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><jsds_jbxxVO><sbbinfo><nsrsbh>91320214MA1NYKMBXK</nsrsbh><qymc>无锡品凡自动化设备有限公司</qymc><sbname>jbxx</sbname><dqbm>32</dqbm><cwlxr>姜不凡</cwlxr><cwlxrlxfs>15961853615</cwlxrlxfs><dscsdlmm>123456</dscsdlmm><dsdlfs>2</dsdlfs><dsdlmm>Jj111111</dsdlmm><dsdlyhm>91320214MA1NYKMBXK</dsdlyhm><gscamm>123456</gscamm><gsdlfs>2</gsdlfs><gsnsmm>Jj111111</gsnsmm><gsnsrsbh>91320214MA1NYKMBXK</gsnsrsbh><gsnsyhm>91320214MA1NYKMBXK</gsnsyhm><kjzd>1</kjzd><nsrzgdm>001</nsrzgdm><qyyf>09</qyyf><qynf>2019</qynf></sbbinfo></jsds_jbxxVO>'
                  ):
         self.xmlStr = xmlStr
         self.param = {}
@@ -29,3 +29,4 @@ if __name__ == '__main__':
     token = '7f182e426e1a5508c40bbdfa'
     res = SBDjxxDemo().void_main(appKey,token)
     print(res)
+    # {'status': 200, 'code': 'B1000', 'msg': None, 'stackTrace': None, 'data': '登记成功'}
