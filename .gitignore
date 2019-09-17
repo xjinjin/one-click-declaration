@@ -105,8 +105,3 @@ venv.bak/
 
 # self
 .idea/
-logs
-test.py
-test1.py
-db_connect.py
-check_proxy.py

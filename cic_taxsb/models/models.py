@@ -226,11 +226,50 @@ DLFS_SELECTION = [
     ('3','实名账号'),
 ]
 
+SZDM_SELECTION = [
+    ('10101','增值税一般纳税人申报表'),
+    ('10102','增值税小规模申报表'),
+    ('10516','城建税、教育费附加、地方教育附加税(费)申报表(月)'),
+    ('B0516','城建税、教育费附加、地方教育附加税(费)申报表(季)'),
+    ('10502','城镇土地使用税纳税申报表'),
+    ('10520','地方各项基金费申报表（月报）'),
+    ('B0520','地方各项基金费申报表（季）'),
+    ('10501','房产税纳税申报表'),
+    ('90201','综合所得申报表'),
+    ('10512','分类所得申报表'),
+    ('10513','非居民所得申报表'),
+    ('10524','个人经营所得A类'),
+    ('10412','企业所得税月（季）报A类'),
+    ('10413','企业所得税月（季）报B类'),
+    ('90106','社会保险费缴纳表'),
+    ('10601','文化事业建设费(新国税)'),
+    ('39805','财务报表(企业会计制度)'),
+    ('29806','财务报表(小企业会计准则)'),
+    ('10311','消费税（电池）申报表'),
+    ('10111','印花税纳税申报表(新)月/季'),
+    ('B0111','印花税纳税申报表(选报)次'),
+    ('B9805','财务报表(企业会计准则)'),
+    ('C0502','财务报表(企业会计准则)'),
+    ('90601','生产经营所得纳税申报表'),
+    ('10306','消费税其他'),
+    ('42016','增值税预缴申报'),
+    ('10521','土地增值税纳税申报表'),
+    ('10517','残疾人就业保障金缴费申报表 月'),
+    ('B0517','残疾人就业保障金缴费申报表 季'),
+]
+
+NSQXDM_SELECTION = [
+    ('1','月'),
+    ('2','季'),
+    ('3','半年'),
+    ('4','年'),
+    ('5','次'),
+]
+
 class SBDjxx(models.Model):
     _name = "cic_taxsb.djxx"
     _description = "登记税号基本信息"
     _inherit = "cic_taxsb.base"
-    
 
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
     qymc = fields.Char('企业名称', help="企业名称 必须传")
@@ -285,8 +324,188 @@ class SBDjxx(models.Model):
             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")})
 
+class SBInitJs(models.Model):
+    _name = "cic_taxsb.cshjs"
+    _description = "江苏初始化前置接口 ，仅限江苏使用"
+    _inherit = "cic_taxsb.base"
 
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码',default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    sssq = fields.Char('税款所属期', help="税款所属期:('2019-08')")
 
-    
-    
+    content = fields.Text('报文内容', compute='_compute_content')
 
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'nsrsbh',
+            'sbzlbh',
+            'skssqq',
+            'skssqz',
+            'nsqxdm',
+            'sssq'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
+
+class SBInit(models.Model):
+    _name = "cic_taxsb.csh"
+    _description = "初始化往期数据（没有xml 报文） ，江苏地区需要 调用 申报-江苏初始化前置接口，再通过此接口 获取数据"
+    _inherit = "cic_taxsb.base"
+
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    sssq = fields.Char('税款所属期', help="税款所属期:('2019-08')")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码',default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'nsrsbh',
+            'sbzlbh',
+            'skssqq',
+            'skssqz',
+            'sssq',
+            'nsqxdm'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
+
+class SBJk(models.Model):
+    _name = "cic_taxsb.jk"
+    _description = "申报缴款，支持地区湖南、江苏"
+    _inherit = "cic_taxsb.base"
+
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码(江苏必填)', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    sbwj = fields.Char('申报文件(湖南必填)(2019-06-30)', help="申报文件(湖南必填)(2019-06-30)")
+    je = fields.Char('金额 必填', help="金额 必填")
+    yhzl = fields.Char('银行种类(湖南必填)', help="银行种类(湖南必填)")
+    yhdm = fields.Char('银行代码(湖南必填)', help="银行代码(湖南必填)")
+    yhzh = fields.Char('银行账号(湖南必填)', help="银行账号(湖南必填)")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'nsrsbh',
+            'sbzlbh',
+            'nsqxdm',
+            'dqbm',
+            'ssqq',
+            'ssqz',
+            'sbwj',
+            'je',
+            'yhzl',
+            'yhdm',
+            'yhzh',
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
+
+class SBQc(models.Model):
+    _name = "cic_taxsb.qc"
+    _description = "查询当前纳税人能报的税种（没有xml 报文）"
+    _inherit = "cic_taxsb.base"
+
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'nsrsbh',
+            'sbzlbh',
+            'skssqq',
+            'skssqz',
+            'sssq'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
+
+class SBSfxy(models.Model):
+    _name = "cic_taxsb.sfxy"
+    _description = "三方协议，支持湖南、贵州地区"
+    _inherit = "cic_taxsb.base"
+
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'nsrsbh'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
+
+# class SBStatus(models.Model):
+#     _name = "cic_taxsb.status"
+#     _description = "查询最终申报结果"
+#     _inherit = "cic_taxsb.base"
+#
+#     sbzlbh = fields.Char('申报种类编号 查询不同税种得需要更换', help="申报种类编号 查询不同税种得需要更换")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
+#     sbname = fields.Char('申报名称', default="jbxx", help="基本信息接口 【固定值jbxx】       必须传")
+#     qyyf = fields.Char('月份', help="启用月份(必填) 【系统(当前)月份】          必须传")
+#     qynf = fields.Char('年份', help="启用年份(必填) 【系统(当前)年份】          必须传")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'nsrsbh',
+#             'qymc',
+#             'sbname',
+#             'dqbm',
+#             'cwlxr',
+#             'cwlxrlxfs',
+#             'dscsdlmm',
+#             'dsdlfs',
+#             'dsdlmm',
+#             'dsdlyhm',
+#             'gscamm',
+#             'gsdlfs',
+#             'gsnsmm',
+#             'gsnsrsbh',
+#             'gsnsyhm',
+#             'kjzd',
+#             'nsrzgdm',
+#             'qyyf',
+#             'qynf'
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id',None)
+#             res_dict = {'jsds_jbxxVO':{'sbbinfo':temp_dict}}
+#             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")})

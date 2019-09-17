@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cic_taxsb_djxx,cic_taxsb_djxx,model_cic_taxsb_djxx,,1,1,1,1
+access_cic_taxsb_cshjs,cic_taxsb_cshjs,model_cic_taxsb_cshjs,,1,1,1,1
