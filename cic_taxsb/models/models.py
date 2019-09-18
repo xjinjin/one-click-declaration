@@ -500,7 +500,7 @@ class SBStatus(models.Model):
 
 # class SBSubmit(models.Model):
 #     _name = "cic_taxsb.submit"
-#     _description = "提交申报数据"
+#     _description = "提交申报数据,不同的税种，报文不同"
 #     _inherit = "cic_taxsb.base"
 #
 #     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
