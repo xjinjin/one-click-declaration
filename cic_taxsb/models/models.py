@@ -498,36 +498,163 @@ class SBStatus(models.Model):
             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
                                          'lsh':record.lsh})
 
-# class SBSubmit(models.Model):
-#     _name = "cic_taxsb.submit"
-#     _description = "提交申报数据,不同的税种，报文不同"
-#     _inherit = "cic_taxsb.base"
-#
-#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
-#     sbname = fields.Char('查询申报状态 固定这个值', default="sbzt", help="查询申报状态 固定这个值")
-#     kjnd = fields.Char('年份', help="年份(2019)")
-#     kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
-#     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
-#
-#     content = fields.Text('报文内容', compute='_compute_content')
-#
-#     @api.multi
-#     def _compute_content(self):
-#         _fields = [
-#             'sbzlbh',
-#             'nsrsbh',
-#             'sbname',
-#             'kjnd',
-#             'kjqj'
-#         ]
-#         for record in self:
-#             temp_dict = record.read(_fields)[0]
-#             temp_dict.pop('id',None)
-#             res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict}}
-#             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
-#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
-#                                          'lsh':record.lsh})
+class SBSubmitGrjysdsxx(models.Model):
+    _name = "cic_taxsb.submitgrjysdsxx"
+    _description = "个人经营所得A类接口（月季报）"
+    _inherit = "cic_taxsb.base"
+
+    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    # 个人经营所得A类 个人所得税生产经营所得纳税申报表(a表)
+    ewbhxh = fields.Char('1',default='1',help='1')
+    floatrow = fields.Char('1',default='1',help='1')
+    ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
+    zsfs = fields.Char('征收方式',help='征收方式')
+    qylx = fields.Char('企业类型',help='企业类型')
+    skssqz = fields.Char('税款所属期止',help='税款所属期止')
+    nsrsbh = fields.Char('纳税人识别号',help='纳税人识别号')
+    btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
+    mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
+    cbfy = fields.Char('成本费用',help='成本费用')
+    sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
+    lrze = fields.Char('利润总额',help='利润总额')
+    jmse = fields.Char('减免税额',help='减免税额')
+    gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
+    ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
+    yyjse = fields.Char('已预缴税额',help='已预缴税额')
+    ynse = fields.Char('应纳税额',help='应纳税额')
+    srze = fields.Char('收入总额',help='收入总额')
+    skssqq = fields.Char('税款所属期起',help='税款所属期起')
+    hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
+    btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
+    sskcs = fields.Char('速算扣除数',help='速算扣除数')
+    sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
+    tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
+    xm = fields.Char('姓名',help='姓名')
+    yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
+    sl = fields.Char('税率(%)',help='税率(%)')
+
+    ewbhxh = fields.Char('2',default = '2',help='2')
+    floatrow = fields.Char('1',default = '1',help='1')
+    btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
+    yyjse = fields.Char('已预缴税额',help='已预缴税额')
+    lrze = fields.Char('利润总额',help='利润总额')
+    skssqz = fields.Char('税款所属期止',help='税款所属期止')
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    zsfs = fields.Char('征收方式',help='征收方式')
+    cbfy = fields.Char('成本费用',help='成本费用')
+    hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
+    tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
+    yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
+    ynse = fields.Char('应纳税额',help='应纳税额')
+    qylx = fields.Char('企业类型',help='企业类型')
+    xm = fields.Char('姓名',help='姓名')
+    btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
+    srze = fields.Char('收入总额',help='收入总额')
+    sskcs = fields.Char('速算扣除数',help='速算扣除数')
+    sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
+    mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
+    sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
+    sl = fields.Char('税率(%)',help='税率(%)')
+    jmse = fields.Char('减免税额', help='减免税额')
+    gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
+    ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
+    skssqq = fields.Char('税款所属期起',help='税款所属期起')
+    ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields0 = [
+            'sbzlbh',
+            'ssqq',
+            'ssqz',
+            'nsrsbh',
+            'area'
+        ]
+        _fields1 = [
+            'ynssde',
+            'zsfs',
+            'qylx',
+            'skssqz',
+            'nsrsbh',
+            'btzdwnsrsbh',
+            'mbyqndks',
+            'cbfy',
+            'sfzjhm',
+            'lrze',
+            'jmse',
+            'gjdq',
+            'ybtse',
+            'yyjse',
+            'ynse',
+            'srze',
+            'skssqq',
+            'hhqyhhrfpbl',
+            'btzdwmc',
+            'sskcs',
+            'sfzjlx',
+            'tzzjcfy',
+            'xm',
+            'yssdl',
+            'sl',
+        ]
+        _fields2 = [
+            'ewbhxh',
+            'floatrow',
+            'btzdwnsrsbh',
+            'yyjse',
+            'lrze',
+            'skssqz',
+            'nsrsbh',
+            'zsfs',
+            'cbfy',
+            'hhqyhhrfpbl',
+            'tzzjcfy',
+            'yssdl',
+            'ynse',
+            'qylx',
+            'xm',
+            'btzdwmc',
+            'srze',
+            'sskcs',
+            'sfzjhm',
+            'mbyqndks',
+            'sfzjlx',
+            'sl',
+            'jmse',
+            'gjdq',
+            'ybtse',
+            'skssqq',
+            'ynssde'
+        ]
+        for record in self:
+            temp_dict0 = record.read(_fields0)[0]
+            temp_dict0.pop('id',None)
+            temp_dict1 = record.read(_fields1)[0]
+            temp_dict1.pop('id',None)
+            temp_dict2 = record.read(_fields2)[0]
+            temp_dict2.pop('id',None)
+            res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict0,
+                                         'jsds_grjysds_zb':{'zbGridlbVO':temp_dict1,'zbGridlbVO':temp_dict2},
+                                         'jsds_grjysds_jmssx':'',
+                                         'jsds_grjysds_jcxxb_b':''}}
+            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+            record.content = json.dumps({'lsh':record.lsh,
+                                         'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+                                         'nsrsbh':record.nsrsbh,
+                                         'nsqxdm':record.nsqxdm,
+                                         'skssq':record.skssq,
+                                         'serviceId':record.sbzlbh+'Submit'
+                                         })
 
 class SBZf(models.Model):
     _name = "cic_taxsb.zf"
