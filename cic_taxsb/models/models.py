@@ -467,45 +467,97 @@ class SBSfxy(models.Model):
             temp_dict.pop('id', None)
             record.content = json.dumps(temp_dict)
 
-# class SBStatus(models.Model):
-#     _name = "cic_taxsb.status"
-#     _description = "查询最终申报结果"
+class SBStatus(models.Model):
+    _name = "cic_taxsb.status"
+    _description = "查询最终申报结果"
+    _inherit = "cic_taxsb.base"
+
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
+    sbname = fields.Char('查询申报状态 固定这个值', default="sbzt", help="查询申报状态 固定这个值")
+    kjnd = fields.Char('年份', help="年份(2019)")
+    kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
+    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'sbzlbh',
+            'nsrsbh',
+            'sbname',
+            'kjnd',
+            'kjqj'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id',None)
+            res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict}}
+            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+            record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+                                         'lsh':record.lsh})
+
+# class SBSubmit(models.Model):
+#     _name = "cic_taxsb.submit"
+#     _description = "提交申报数据"
 #     _inherit = "cic_taxsb.base"
 #
-#     sbzlbh = fields.Char('申报种类编号 查询不同税种得需要更换', help="申报种类编号 查询不同税种得需要更换")
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
 #     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
-#     sbname = fields.Char('申报名称', default="jbxx", help="基本信息接口 【固定值jbxx】       必须传")
-#     qyyf = fields.Char('月份', help="启用月份(必填) 【系统(当前)月份】          必须传")
-#     qynf = fields.Char('年份', help="启用年份(必填) 【系统(当前)年份】          必须传")
+#     sbname = fields.Char('查询申报状态 固定这个值', default="sbzt", help="查询申报状态 固定这个值")
+#     kjnd = fields.Char('年份', help="年份(2019)")
+#     kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
+#     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
 #
 #     content = fields.Text('报文内容', compute='_compute_content')
 #
 #     @api.multi
 #     def _compute_content(self):
 #         _fields = [
+#             'sbzlbh',
 #             'nsrsbh',
-#             'qymc',
 #             'sbname',
-#             'dqbm',
-#             'cwlxr',
-#             'cwlxrlxfs',
-#             'dscsdlmm',
-#             'dsdlfs',
-#             'dsdlmm',
-#             'dsdlyhm',
-#             'gscamm',
-#             'gsdlfs',
-#             'gsnsmm',
-#             'gsnsrsbh',
-#             'gsnsyhm',
-#             'kjzd',
-#             'nsrzgdm',
-#             'qyyf',
-#             'qynf'
+#             'kjnd',
+#             'kjqj'
 #         ]
 #         for record in self:
 #             temp_dict = record.read(_fields)[0]
 #             temp_dict.pop('id',None)
-#             res_dict = {'jsds_jbxxVO':{'sbbinfo':temp_dict}}
+#             res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict}}
 #             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
-#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")})
+#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+#                                          'lsh':record.lsh})
+
+class SBZf(models.Model):
+    _name = "cic_taxsb.zf"
+    _description = "作废"
+    _inherit = "cic_taxsb.base"
+
+    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
+    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'lsh',
+            'nsrsbh',
+            'sbzlbh',
+            'skssqq',
+            'skssqz',
+            'sssq',
+            'dqbm',
+            'nsqxdm'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0]
+            temp_dict.pop('id', None)
+            record.content = json.dumps(temp_dict)
