@@ -508,61 +508,53 @@ class SBSubmit(models.Model):
     skssqz = fields.Char('税款所属期止', help='税款所属期止')
     serviceId = fields.Char(compute='_compute_serviceId',string = '申报种类编号(自动生成)',
                             help='申报种类编号加Submit就是serviceId，例如：10101Submit')
-
-    @api.multi
+    @api.onchange('sbzlbh')
     def _compute_serviceId(self):
-        for record in self:
-            record.serviceId = record.sbzlbh + 'Submit'
+        self.serviceId = self.sbzlbh + 'Submit'
 
 class SBGrjysdsxx(models.Model):
     _name = "cic_taxsb.grjysdsxx"
     _description = "个人经营所得A类"
     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
 
-    serviceId = fields.Char(compute='_compute_serviceId',readonly = True,string = '申报种类编号(自动生成)',
-                            help='申报种类编号加Submit就是serviceId，例如：10101Submit')
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
 
-    @api.multi('sbzlbh')
-    def _compute_serviceId(self):
-        for record in self:
-            record.serviceId = record.sbzlbh + 'Submit'
-
-    # sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    # ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    # ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    # nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    # area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    # nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    #
-    # # 个人经营所得A类 个人所得税生产经营所得纳税申报表(a表)
-    # ewbhxh = fields.Char('1',default='1',help='1')
-    # floatrow = fields.Char('1',default='1',help='1')
-    # ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
-    # zsfs = fields.Char('征收方式',help='征收方式')
-    # qylx = fields.Char('企业类型',help='企业类型')
-    # skssqz = fields.Char('税款所属期止',help='税款所属期止')
+    # 个人经营所得A类 个人所得税生产经营所得纳税申报表(a表)
+    ewbhxh = fields.Char(default='1')
+    # ewbhxh = fields.Char(default='2')
+    floatrow = fields.Char(default='1')
+    ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
+    zsfs = fields.Char('征收方式',help='征收方式')
+    qylx = fields.Char('企业类型',help='企业类型')
+    skssqz = fields.Char('税款所属期止',help='税款所属期止')
     # nsrsbh = fields.Char('纳税人识别号',help='纳税人识别号')
-    # btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
-    # mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
-    # cbfy = fields.Char('成本费用',help='成本费用')
-    # sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
-    # lrze = fields.Char('利润总额',help='利润总额')
-    # jmse = fields.Char('减免税额',help='减免税额')
-    # gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
-    # ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
-    # yyjse = fields.Char('已预缴税额',help='已预缴税额')
-    # ynse = fields.Char('应纳税额',help='应纳税额')
-    # srze = fields.Char('收入总额',help='收入总额')
-    # skssqq = fields.Char('税款所属期起',help='税款所属期起')
-    # hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
-    # btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
-    # sskcs = fields.Char('速算扣除数',help='速算扣除数')
-    # sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
-    # tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
-    # xm = fields.Char('姓名',help='姓名')
-    # yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
-    # sl = fields.Char('税率(%)',help='税率(%)')
-    #
+    btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
+    mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
+    cbfy = fields.Char('成本费用',help='成本费用')
+    sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
+    lrze = fields.Char('利润总额',help='利润总额')
+    jmse = fields.Char('减免税额',help='减免税额')
+    gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
+    ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
+    yyjse = fields.Char('已预缴税额',help='已预缴税额')
+    ynse = fields.Char('应纳税额',help='应纳税额')
+    srze = fields.Char('收入总额',help='收入总额')
+    skssqq = fields.Char('税款所属期起',help='税款所属期起')
+    hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
+    btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
+    sskcs = fields.Char('速算扣除数',help='速算扣除数')
+    sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
+    tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
+    xm = fields.Char('姓名',help='姓名')
+    yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
+    sl = fields.Char('税率(%)',help='税率(%)')
+
+    content = fields.Text('报文内容', compute='_compute_content')
     # ewbhxh = fields.Char('2',default = '2',help='2')
     # floatrow = fields.Char('1',default = '1',help='1')
     # btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
@@ -591,7 +583,7 @@ class SBGrjysdsxx(models.Model):
     # skssqq = fields.Char('税款所属期起',help='税款所属期起')
     # ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
     #
-    # content = fields.Text('报文内容', compute='_compute_content')
+
     #
     # @api.multi
     # def _compute_content(self):
@@ -677,6 +669,175 @@ class SBGrjysdsxx(models.Model):
     #                                      'skssq':record.skssq,
     #                                      'serviceId':record.sbzlbh+'Submit'
     #                                      })
+
+
+class SBFlsdsbxx(models.Model):
+    _name = "cic_taxsb.flsdsbxx"
+    _description = "分类所得申报表"
+    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    ewbhxh = fields.Char(default='1')
+    floatrow = fields.Char(default='1')
+    bz = fields.Char('备注', help='备注')
+    jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
+    sfcj = fields.Boolean('是否残疾',default = False, help='True/False')
+    sfls = fields.Boolean('是否烈属', default = False, help='True/False')
+    zzlx = fields.Char('证照类型', help='证照类型')
+    jzdzqx = fields.Char('居住地址(区县)',help='居住地址(区县)')
+    rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
+    hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
+    sfjwry = fields.Boolean('是否境外人员', default = False, help='True/False')
+    hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
+    jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
+    lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
+    gh = fields.Char('工号', help='工号')
+    ryzt = fields.Char('人员状态', help='人员状态')
+    lszh = fields.Char('烈属证号', help='烈属证号')
+    lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
+    csrq = fields.Char('出生日期', help='出生日期')
+    cjzh = fields.Char('残疾证号', help='残疾证号')
+    lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
+    lzrq = fields.Char('离职日期', help='离职日期')
+    hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
+    xl = fields.Char('学历', help='学历')
+    sfgy = fields.Boolean('是否雇员',default = True, help='True/False')
+    yjljsj = fields.Char('预计离境时间', help='预计离境时间')
+    csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
+    zwm = fields.Char('中文名', help='中文名')
+    hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
+    grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
+    sfgl = fields.Boolean('是否孤老', default = False, help='True/False')
+    zw = fields.Char('职务', help='职务')
+    qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
+    xb = fields.Char('性别', help='性别')
+    qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
+    khyx = fields.Char('开户银行', help='开户银行')
+    xm = fields.Char('姓名', help='姓名')
+    grtze = fields.Char('个人投资额', help='个人投资额')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    scrjsj = fields.Char('首次入境时间', help='首次入境时间')
+    jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
+    yxzh = fields.Char('银行账号', help='银行账号')
+    dzyx = fields.Char('电子邮箱', help='电子邮箱')
+    lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
+    sjhm = fields.Char('手机号码', help='手机号码')
+    gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
+
+    mssr = fields.Char('免税收入', help='免税收入')
+    jzfs = fields.Char('捐赠方式', help='捐赠方式')
+    # bz = fields.Char('备注', help='备注')
+    # zzhm = fields.Char('证照号码', help='证照号码')
+    # yzf = fields.Char()
+    # zzlx = fields.Char('证照类型', help='证照类型')
+    jmse = fields.Char('减免税额', help='减免税额')
+    sdxm = fields.Char('所得项目', help='所得项目')
+    sjjze = fields.Char('实际捐赠额', help='实际捐赠额')
+    sr = fields.Char('收入', help='收入')
+    jajsbl = fields.Char('减按计税比例', help='减按计税比例')
+    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+
+    nscount = fields.Char(default = '7')
+    nsamount = fields.Char(default = '36010.00')
+    gsgbze = fields.Char(default = '0')
+    totalYbtse = fields.Char(default = '0')
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        pass
+
+
+class SBZhsbsdxx(models.Model):
+    _name = "cic_taxsb.zhsbsdxxV"
+    _description = "个税综合所得申报表"
+    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    ewbhxh = fields.Char(default='1')
+    floatrow = fields.Char(default='1')
+    bz = fields.Char('备注', help='备注')
+    jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
+    sfcj = fields.Boolean('是否残疾', default=False, help='True/False')
+    sfls = fields.Boolean('是否烈属', default=False, help='True/False')
+    zzlx = fields.Char('证照类型', help='证照类型')
+    jzdzqx = fields.Char('居住地址(区县)', help='居住地址(区县)')
+    rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
+    hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
+    sfjwry = fields.Boolean('是否境外人员', default=False, help='True/False')
+    hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
+    jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
+    lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
+    gh = fields.Char('工号', help='工号')
+    ryzt = fields.Char('人员状态', help='人员状态')
+    lszh = fields.Char('烈属证号', help='烈属证号')
+    lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
+    csrq = fields.Char('出生日期', help='出生日期')
+    cjzh = fields.Char('残疾证号', help='残疾证号')
+    lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
+    rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
+    lzrq = fields.Char('离职日期', help='离职日期')
+    hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
+    xl = fields.Char('学历', help='学历')
+    yjljsj = fields.Char('预计离境时间', help='预计离境时间')
+    csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
+    zwm = fields.Char('中文名', help='中文名')
+    hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
+    grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
+    sfgl = fields.Boolean('是否孤老', default=False, help='True/False')
+    zw = fields.Char('职务', help='职务')
+    qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
+    xb = fields.Char('性别', help='性别')
+    qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
+    khyx = fields.Char('开户银行', help='开户银行')
+    xm = fields.Char('姓名', help='姓名')
+    grtze = fields.Char('个人投资额', help='个人投资额')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    scrjsj = fields.Char('首次入境时间', help='首次入境时间')
+    jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
+    dzyx = fields.Char('电子邮箱', help='电子邮箱')
+    lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
+    sjhm = fields.Char('手机号码', help='手机号码')
+    gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
+
+    gh = fields.Char('工号', help='工号')
+    jbylbxf = fields.Char('基本养老保险费', help='基本养老保险费')
+    syylbx = fields.Char('税延养老保险', help='税延养老保险')
+    ljzfdklx = fields.Char('累计住房贷款利息', help='累计住房贷款利息')
+    xm = fields.Char('姓名', help='姓名')
+    bqsr = fields.Char('本期免税收入', help='本期免税收入')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    bz = fields.Char('备注', help='备注')
+    zzlx = fields.Char('证照类型', help='证照类型')
+    qt = fields.Char('其他', help='其他')
+    ljzfzj = fields.Char('累计住房租金', help='累计住房租金')
+    jmse = fields.Char('减免税额', help='减免税额')
+    sybxf = fields.Char('失业保险费', help='失业保险费')
+    ljjxjy = fields.Char('累计继续教育', help='累计继续教育')
+
+    nscount = fields.Char(default='7')
+    nsamount = fields.Char(default='36010.00')
+    gsgbze = fields.Char(default='0')
+    totalYbtse = fields.Char(default='0')
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        pass
 
 class SBZf(models.Model):
     _name = "cic_taxsb.zf"
