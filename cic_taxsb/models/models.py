@@ -266,6 +266,26 @@ NSQXDM_SELECTION = [
     ('5','次'),
 ]
 
+POBZ_SELECTION = [
+    ('0','无'),
+    ('1','有')
+]
+
+DSZNBZ_SELECTION = [
+    ('0', '否'),
+    ('1', '是')
+]
+
+BRJKBZ_SELECTION = [
+    ('0', '否'),
+    ('1', '是')
+]
+
+DKLX_SELECTION = [
+    ('1', '公积金贷款'),
+    ('2', '商业贷款')
+]
+
 class SBDjxx(models.Model):
     _name = "cic_taxsb.djxx"
     _description = "登记税号基本信息"
@@ -555,6 +575,11 @@ class SBGrjysdsxx(models.Model):
     sl = fields.Char('税率(%)',help='税率(%)')
 
     content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        pass
+
     # ewbhxh = fields.Char('2',default = '2',help='2')
     # floatrow = fields.Char('1',default = '1',help='1')
     # btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
@@ -670,7 +695,6 @@ class SBGrjysdsxx(models.Model):
     #                                      'serviceId':record.sbzlbh+'Submit'
     #                                      })
 
-
 class SBFlsdsbxx(models.Model):
     _name = "cic_taxsb.flsdsbxx"
     _description = "分类所得申报表"
@@ -754,7 +778,6 @@ class SBFlsdsbxx(models.Model):
     def _compute_content(self):
         pass
 
-
 class SBZhsbsdxx(models.Model):
     _name = "cic_taxsb.zhsbsdxxV"
     _description = "个税综合所得申报表"
@@ -827,11 +850,134 @@ class SBZhsbsdxx(models.Model):
     jmse = fields.Char('减免税额', help='减免税额')
     sybxf = fields.Char('失业保险费', help='失业保险费')
     ljjxjy = fields.Char('累计继续教育', help='累计继续教育')
+    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+    zfgjj = fields.Char('住房公积金', help='住房公积金')
+    qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
+    ljznjy = fields.Char('累计子女教育', help='累计子女教育')
+    ljsylr = fields.Char('累计赡养老人', help='累计赡养老人')
+    jbyilbxf = fields.Char('基本医疗保险费', help='基本医疗保险费')
 
-    nscount = fields.Char(default='7')
-    nsamount = fields.Char(default='36010.00')
-    gsgbze = fields.Char(default='0')
-    totalYbtse = fields.Char(default='0')
+    ewbhxh = fields.Char(default='1')
+    floatrow = fields.Char(default='1')
+    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+    qt = fields.Char('其他', help='其他')
+    bz = fields.Boolean('备注', help='备注')
+    zzlx = fields.Char('证照类型', help='证照类型')
+    syylbx = fields.Char('税延养老保险', help='税延养老保险')
+    jmse = fields.Char('减免税额', help='减免税额')
+    bqmssr = fields.Char('本期免税收入', help='本期免税收入')
+    gh = fields.Boolean('工号', help='工号')
+    bqsr = fields.Char('本期收入', help='本期收入')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    sdxm = fields.Char('所得项目', help='所得项目')
+    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+    xm = fields.Char('姓名', help='姓名')
+
+    ewbhxh = fields.Char(default = '1')
+    floatrow = fields.Char(default = '1')
+    syylbx = fields.Char('税延养老保险', help='税延养老保险')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    gh = fields.Char('工号', help='工号')
+    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+    rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
+    qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
+    qt = fields.Char('其他', help='其他')
+    xm = fields.Char('姓名', help='姓名')
+    jmse = fields.Char('减免税额', help='减免税额')
+    mssr = fields.Char('免税收入', help='免税收入')
+    ykjse = fields.Char('已扣缴税额', help='已扣缴税额')
+    bz = fields.Char('备注', help='备注')
+    qnycxjje = fields.Char('全年一次性奖金额', help='全年一次性奖金额')
+    zzlx = fields.Boolean('证照类型',help='证照类型')
+    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+
+    '''
+    综合所得申报表	减免事项附表
+    综合所得申报表	商业健康保险附表
+    综合所得申报表	税延养老保险附表
+    专项人员信息
+    '''
+
+    kKjnd = fields.Char(default = '0')
+    kRyxm = fields.Char()
+    kZjlx = fields.Char('证件类型', help='证件类型')
+    khyx = fields.Char('开户银行', help='开户银行')
+    xm = fields.Char('姓名', help='姓名')
+    grtze = fields.Char('个人投资额', help='个人投资额')
+    zzhm = fields.Char('证照号码', help='证照号码')
+    kPobz = fields.Selection(POBZ_SELECTION,string = '配偶标志', help='配偶标志')
+    kPoxm = fields.Char('配偶姓名', help='配偶姓名')
+    kPozjlx = fields.Char('配偶证件类型', help='配偶证件类型')
+    kDsznbz = fields.Selection(DSZNBZ_SELECTION,string = '独生子女标志', help='独生子女标志')
+    kSylrftfs = fields.Char('赡养老人分摊方式', help='赡养老人分摊方式')
+    kSylrbndykcje = fields.Integer('养老人本年度月扣除金额', help='养老人本年度月扣除金额')
+
+    # 子女信息
+    kZnxm = fields.Char('子女姓名',help='子女姓名')
+    kZjlx = fields.Char('证件类型',help='证件类型')
+    kZjhm = fields.Char('证件号码',help='证件号码')
+    kCsrq = fields.Char('出生日期',help='出生日期')
+    kGj = fields.Char('国籍',help='国籍')
+    kDqsjyjd = fields.Char('当前受教育阶段',help='当前受教育阶段')
+    kDqsjyjdqssj = fields.Char('当前受教育阶段起始时间',help='当前受教育阶段起始时间')
+    kDqsjyjdjssj = fields.Char('当前受教育阶段结束时间',help='当前受教育阶段结束时间')
+    kJyzzsj = fields.Char('教育终止时间',help='教育终止时间')
+    kDqjdqj = fields.Char('当前就读国籍',help='当前就读国籍')
+    kDqjdxx = fields.Char('当前就读学校',help='当前就读学校')
+    kBrkcbl = fields.Char('本人扣除比例',help='本人扣除比例')
+
+    # 住房租金
+    kProvince = fields.Char('主要工作省份', help='主要工作省份')
+    kCity = fields.Char('主要工作城市', help='主要工作城市')
+    kCzflx = fields.Char('出租方类型', help='出租方类型')
+    kCzfxm = fields.Char('出租方姓名（组织名称）', help='出租方姓名（组织名称）')
+    kCzfzjlx = fields.Char('出租方证件类型', help='出租方证件类型')
+    kCzfzjhm = fields.Char('出租方证件号码（统一社会信用代码）', help='出租方证件号码（统一社会信用代码）')
+    kZfzldz = fields.Char('住房坐落地址', help='住房坐落地址')
+    kZfzlhtbh = fields.Char('租赁合同编号', help='租赁合同编号')
+    kZlqq = fields.Char('租赁期起', help='租赁期起')
+    kZlqz = fields.Char('租赁期止', help='租赁期止')
+
+    # 住房贷款 住房信息
+    kFwzldz = fields.Char('房屋坐落地址', help='房屋坐落地址')
+    kBrjkbz = fields.Selection(BRJKBZ_SELECTION,string = '本人借款标志 0-否 1-是', help='本人借款标志 0-否 1-是')
+    kZfzslx = fields.Char('住房证书类型', help='住房证书类型')
+    kZfzsh = fields.Char('住房证书号', help='住房证书号')
+    kDklx = fields.Selection(DKLX_SELECTION,string = '贷款类型 1-公积金贷款 2-商业贷款', help='贷款类型 1-公积金贷款 2-商业贷款')
+    kDkyh = fields.Char('贷款银行', help='贷款银行')
+    kDkhtbh = fields.Char('贷款合同编号', help='贷款合同编号')
+    kSchkrq = fields.Char('首次还款日期', help='首次还款日期')
+    kDkqx = fields.Char('贷款期限(月数)', help='贷款期限(月数)')
+
+    # 赡养老人 被赡养人信息
+    kXm1 = fields.Char('姓名', help='姓名')
+    kZjlx1 = fields.Char('证件类型', help='证件类型')
+    kZjhm1 = fields.Char('证件号码', help='证件号码')
+    kGj1 = fields.Char('国籍', help='国籍')
+    kGx1 = fields.Char('关系', help='关系')
+    kCsrq1 = fields.Char('出生日期', help='出生日期')
+
+    # 共同赡养人信息
+    kXm2 = fields.Char('姓名', help='姓名')
+    kZjlx2 = fields.Char('证件类型', help='证件类型')
+    kZjhm2 = fields.Char('证件号码', help='证件号码')
+    kGj2 = fields.Char('国籍', help='国籍')
+
+    # 继续教育
+    kJyjd = fields.Char('教育阶段', help='教育阶段')
+    kRxsj = fields.Char('入学时间', help='入学时间')
+    kBysj = fields.Char('毕业时间', help='毕业时间')
+    kJxjylx = fields.Char('继续教育类型', help='继续教育类型')
+    kFzrq = fields.Char('发证（批准）日期', help='发证（批准）日期')
+    kZsmc = fields.Char('证书名称', help='证书名称')
+    kZsbh = fields.Char('证书编号', help='证书编号')
+    kFzjg = fields.Char('发证机关', help='发证机关')
+
+    nscount = fields.Char('纳税人数', help='纳税人数')
+    nsamount = fields.Char('纳税金额', help='纳税金额')
+    gsgbze = fields.Char('公司股本总额', help='公司股本总额')
+    totalYbtse = fields.Char('应补退税额', help='应补退税额')
 
     content = fields.Text('报文内容', compute='_compute_content')
 
