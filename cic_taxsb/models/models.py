@@ -176,6 +176,7 @@ class taxsbBase(models.Model):
         else:
             return res.text
 
+# 地区代码
 DQBM_SELECTION = [
     ('11', '北京市'),
     ('12', '天津市'),
@@ -215,17 +216,20 @@ DQBM_SELECTION = [
     ('4403', '深圳市'),
 ]
 
+# 纳税人资格代码
 NSRZGDM_SELECTION = [
     ('001', '增值税一般纳税人'),
     ('101', '增值税小规模纳税人'),
 ]
 
+# 登陆方式（1.用户名/密码 2.ca登陆）
 DLFS_SELECTION = [
     ('1','CA登录'),
     ('2','密码登录'),
     ('3','实名账号'),
 ]
 
+# 税种代码表
 SZDM_SELECTION = [
     ('10101','增值税一般纳税人申报表'),
     ('10102','增值税小规模申报表'),
@@ -258,6 +262,36 @@ SZDM_SELECTION = [
     ('B0517','残疾人就业保障金缴费申报表 季'),
 ]
 
+# serviceId代码表
+SERVICEID_SELECTION = [
+    ('10101Submit','增值税一般纳税人申报表'),
+    ('10102Submit','增值税小规模申报表'),
+    ('10516Submit','城建税、教育费附加、地方教育附加税(费)申报表(月)'),
+    ('B0516Submit','城建税、教育费附加、地方教育附加税(费)申报表(季)'),
+    ('10502Submit','城镇土地使用税纳税申报表'),
+    ('10520Submit','地方各项基金费申报表（月报）'),
+    ('B0520Submit','地方各项基金费申报表（季）'),
+    ('10409Submit','地税企业所得税A类（查账，2018年版）'),
+    ('10410Submit','地税企业所得税B类（核定，2018年版）'),
+    ('10501Submit','房产税纳税申报表'),
+    ('10511Submit','综合所得申报表'),
+    ('10512Submit','分类所得申报表'),
+    ('10513Submit','非居民所得申报表'),
+    ('10524Submit','个人经营所得A类'),
+    ('10412Submit','企业所得税月（季）报A类'),
+    ('10413Submit','企业所得税月（季）报B类'),
+    ('90106Submit','社会保险费缴纳表'),
+    ('10601Submit','文化事业建设费(新国税)'),
+    ('39805Submit','财务报表(企业会计制度)'),
+    ('29806Submit','财务报表(小企业会计准则)'),
+    ('10311Submit','消费税（电池）申报表'),
+    ('10111Submit','印花税纳税申报表(新)'),
+    ('B0111Submit','印花税纳税申报表(选报)'),
+    ('B9805Submit','财务报表(企业会计准则)'),
+    ('C0502Submit','地方各项基金费申报表（选报）基金申报表')
+]
+
+# 纳税期限代码
 NSQXDM_SELECTION = [
     ('1','月'),
     ('2','季'),
@@ -266,24 +300,74 @@ NSQXDM_SELECTION = [
     ('5','次'),
 ]
 
+# 配偶标志
 POBZ_SELECTION = [
     ('0','无'),
     ('1','有')
 ]
 
+# 独生子女标志
 DSZNBZ_SELECTION = [
     ('0', '否'),
     ('1', '是')
 ]
 
+# 本人借款标志 0-否 1-是
 BRJKBZ_SELECTION = [
     ('0', '否'),
     ('1', '是')
 ]
 
+# 贷款类型 1-公积金贷款 2-商业贷款
 DKLX_SELECTION = [
     ('1', '公积金贷款'),
     ('2', '商业贷款')
+]
+
+# 会计制度代码
+KJZDDM_SELECTION = [
+    ('1', '小企业会计准则2013版'),
+    ('2', '企业会计制度'),
+    ('3', '企业会计准则2007版'),
+    ('4', '企业会计准则2017版'),
+    ('5', '企业会计准则2017版'),
+    ('6', '企业会计准则(商业银行)'),
+    ('7', '企业会计准则(保险公司)'),
+    ('8', '企业会计准则(证券公司)'),
+    ('9', '企业会计准则(担保企业快捷核算办法)')
+]
+
+# 企业身份代码
+QYSFDM_SELECTION = [
+    ('001', '增值税一般纳税人'),
+    ('101', '增值税小规模纳税人')
+]
+
+# 申报初始化接口返回代码
+SBCSHJKFHDM_SELECTION = [
+    ('B1000', '初始化成功'),
+    ('B2000', '初始化失败')
+]
+
+# 申报提交接口状态代码
+SBTJJKZTDM_SELECTION = [
+    ('B0000', '受理中'),
+    ('B1000', '受理成功'),
+    ('B2000', '受理中')
+]
+
+# 申报结果查询代码
+SBJGCXDM_SELECTION = [
+    ('S0000', '未申报'),
+    ('S1000', '申报成功'),
+    ('S2000', '申报失败'),
+    ('B1000', '申报中')
+]
+
+# 申报作废结果返回代码
+SBZFJGFHDM_SELECTION = [
+    ('Z0000', '作废成功'),
+    ('Z1000', '作废失败')
 ]
 
 class SBDjxx(models.Model):
@@ -312,7 +396,6 @@ class SBDjxx(models.Model):
     qynf = fields.Char('年份', help="启用年份(必填) 【系统(当前)年份】          必须传")
 
     content = fields.Text('报文内容', compute='_compute_content')
-
 
     @api.multi
     def _compute_content(self):
@@ -522,6 +605,7 @@ class SBSubmit(models.Model):
     _name = "cic_taxsb.submit"
     _description = "提交申报数据,税种不同，报文不同"
 
+    # 和xml报文一起组成字典content,这几个字段是提交必填项。单独出来
     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
@@ -531,6 +615,134 @@ class SBSubmit(models.Model):
     @api.onchange('sbzlbh')
     def _compute_serviceId(self):
         self.serviceId = self.sbzlbh + 'Submit'
+
+class SBXqykjzz(models.Model):
+    _name = "cic_taxsb.xqykjzz"
+    _description = "财务报表(小企业会计准则)月(季)"
+    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+
+    # 每个税种表都有这几个字段，单独出来。xml。此对象提交
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+
+    # all the records.  self.post().  inverse_name字段等于当前记录.     不存储
+    xqykjzz_line = fields.One2many('cic_taxsb.xqykjzz.line', 'xqykjzz_id')
+
+class SBXqykjzzline(models.Model):
+    _name = "cic_taxsb.xqykjzz.line"
+    _description = "财务报表(小企业会计准则)月(季)"
+
+    # 0/1 record.   存储
+    xqykjzz_id = fields.Many2one('cic_taxsb.xqykjzz')
+
+    # 短期借款
+    ewbhxh = fields.Char('行次', help="行次")
+    dqjkqmye = fields.Char('期末余额', help="期末余额")
+    hbzjncye = fields.Char('年初余额', help="年初余额")
+    hbzjqmye = fields.Char('期末余额', help="期末余额")
+    dqjkncye = fields.Char('年初余额', help="年初余额")
+
+    # 应付票据
+    # ewbhxh = fields.Char('行次', help="行次")
+    yfpjqmye = fields.Char('期末余额', help="期末余额")
+    dqtzqmye = fields.Char('期末余额', help="期末余额")
+    yfpjncye = fields.Char('年初余额', help="年初余额")
+    dqtzncye = fields.Char('年初余额', help="年初余额")
+
+    # 应收票据
+    # ewbhxh = fields.Char('行次', help="行次")
+    yspjqmye = fields.Char('期末余额', help="期末余额")
+    yfzkncye = fields.Char('年初余额', help="年初余额")
+    yfzkqmye = fields.Char('期末余额', help="期末余额")
+    yspjncye = fields.Char('年初余额', help="年初余额")
+
+    # 预收帐款
+    # ewbhxh = fields.Char('行次', help="行次")
+    ygszkqmye = fields.Char('应收账款##期末余额', help="应收账款##期末余额")
+    yszkqmye = fields.Char('预收帐款##期末余额', help="预收帐款##期末余额")
+    ygszkncye = fields.Char('应收账款##年初余额', help="应收账款##年初余额")
+    yszkncye = fields.Char('预收帐款##年初余额', help="预收帐款##年初余额")
+
+    # 预付账款
+    # ewbhxh = fields.Char('行次', help="行次")
+    yfzkqmye = fields.Char('期末余额', help="期末余额")
+    yfzkncye = fields.Char('年初余额', help="年初余额")
+    yfzgxcncye = fields.Char('年初余额', help="年初余额")
+    yfzgxcqmye = fields.Char('期末余额', help="期末余额")
+
+    # 应收股利
+    # ewbhxh = fields.Char('行次', help="行次")
+    ysglqmye = fields.Char('期末余额', help="期末余额")
+    yjsfqmye = fields.Char('期末余额', help="期末余额")
+    yjsfncye = fields.Char('年初余额', help="年初余额")
+    ysglncye = fields.Char('年初余额', help="年初余额")
+
+    # 应付利息
+    # ewbhxh = fields.Char('行次', help="行次")
+    yflxncye = fields.Char('年初余额', help="年初余额")
+    yslxqmye = fields.Char('期末余额', help="期末余额")
+    yslxncye = fields.Char('年初余额', help="年初余额")
+    yflxqmye = fields.Char('期末余额', help="期末余额")
+
+    # 应付利润
+    # ewbhxh = fields.Char('行次', help="行次")
+    yflrncye = fields.Char('年初余额', help="年初余额")
+    qtyskncye = fields.Char('年初余额', help="年初余额")
+    qtyskqmye = fields.Char('期末余额', help="期末余额")
+    yflrqmye = fields.Char('期末余额', help="期末余额")
+
+    # 存货
+    # ewbhxh = fields.Char('行次', help="行次")
+    chqmye = fields.Char('期末余额', help="期末余额")
+    qtyfkncye = fields.Char('年初余额', help="年初余额")
+    chncye = fields.Char('年初余额', help="年初余额")
+    qtyfkqmye = fields.Char('期末余额', help="期末余额")
+
+    # 其他流动负债
+    # ewbhxh = fields.Char('行次', help="行次")
+    qtldfzqmye = fields.Char('期末余额', help="期末余额")
+    qzyclncye = fields.Char('年初余额', help="年初余额")
+    qzyclqmye = fields.Char('期末余额', help="期末余额")
+    qtldfzncye = fields.Char('年初余额', help="年初余额")
+
+    # 在产品
+    # ewbhxh = fields.Char('行次', help="行次")
+    zcpncye = fields.Char('年初余额', help="年初余额")
+    ldfzhjqmye = fields.Char('期末余额', help="期末余额")
+    zcpqmye = fields.Char('期末余额', help="期末余额")
+    ldfzhjncye = fields.Char('年初余额', help="年初余额")
+
+    # 库存材料
+    # ewbhxh = fields.Char('行次', help="行次")
+    kcclncye = fields.Char('年初余额', help="年初余额")
+    kcclqmye = fields.Char('期末余额', help="期末余额")
+
+    # 周转材料
+    # ewbhxh = fields.Char('行次', help="行次")
+    zzclqmye = fields.Char('期末余额', help="期末余额")
+    zqjkqmye = fields.Char('期末余额', help="期末余额")
+    zzclncye = fields.Char('年初余额', help="年初余额")
+    zqjkncye = fields.Char('年初余额', help="年初余额")
+
+    # 长期应付款
+    # ewbhxh = fields.Char('行次', help="行次")
+    zqyfkncye = fields.Char('年初余额', help="年初余额")
+    qtldzcqmye = fields.Char('期末余额', help="期末余额")
+    qtldzcncye = fields.Char('年初余额', help="年初余额")
+    zqyfkqmye = fields.Char('期末余额', help="期末余额")
+
+    # 递延收益
+    # ewbhxh = fields.Char('行次', help="行次")
+    dysyqmye = fields.Char('期末余额', help="期末余额")
+    ldzchjqmye = fields.Char('期末余额', help="期末余额")
+    ldzchjncye = fields.Char('年初余额', help="年初余额")
+    dysyncye = fields.Char('年初余额', help="年初余额")
+
+
 
 class SBGrjysdsxx(models.Model):
     _name = "cic_taxsb.grjysdsxx"
