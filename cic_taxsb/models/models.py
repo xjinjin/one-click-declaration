@@ -485,121 +485,121 @@ class SBInit(models.Model):
             temp_dict.pop('id', None)
             record.content = json.dumps(temp_dict)
 
-class SBJk(models.Model):
-    _name = "cic_taxsb.jk"
-    _description = "申报缴款，支持地区湖南、江苏"
-    _inherit = "cic_taxsb.base"
+# class SBJk(models.Model):
+#     _name = "cic_taxsb.jk"
+#     _description = "申报缴款，支持地区湖南、江苏"
+#     _inherit = "cic_taxsb.base"
+#
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码(江苏必填)', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     sbwj = fields.Char('申报文件(湖南必填)(2019-06-30)', help="申报文件(湖南必填)(2019-06-30)")
+#     je = fields.Char('金额 必填', help="金额 必填")
+#     yhzl = fields.Char('银行种类(湖南必填)', help="银行种类(湖南必填)")
+#     yhdm = fields.Char('银行代码(湖南必填)', help="银行代码(湖南必填)")
+#     yhzh = fields.Char('银行账号(湖南必填)', help="银行账号(湖南必填)")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'nsrsbh',
+#             'sbzlbh',
+#             'nsqxdm',
+#             'dqbm',
+#             'ssqq',
+#             'ssqz',
+#             'sbwj',
+#             'je',
+#             'yhzl',
+#             'yhdm',
+#             'yhzh',
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id', None)
+#             record.content = json.dumps(temp_dict)
 
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码(江苏必填)', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    sbwj = fields.Char('申报文件(湖南必填)(2019-06-30)', help="申报文件(湖南必填)(2019-06-30)")
-    je = fields.Char('金额 必填', help="金额 必填")
-    yhzl = fields.Char('银行种类(湖南必填)', help="银行种类(湖南必填)")
-    yhdm = fields.Char('银行代码(湖南必填)', help="银行代码(湖南必填)")
-    yhzh = fields.Char('银行账号(湖南必填)', help="银行账号(湖南必填)")
+# class SBQc(models.Model):
+#     _name = "cic_taxsb.qc"
+#     _description = "查询当前纳税人能报的税种（没有xml 报文）"
+#     _inherit = "cic_taxsb.base"
+#
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'nsrsbh',
+#             'sbzlbh',
+#             'skssqq',
+#             'skssqz',
+#             'sssq'
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id', None)
+#             record.content = json.dumps(temp_dict)
 
-    content = fields.Text('报文内容', compute='_compute_content')
+# class SBSfxy(models.Model):
+#     _name = "cic_taxsb.sfxy"
+#     _description = "三方协议，支持湖南、贵州地区"
+#     _inherit = "cic_taxsb.base"
+#
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'nsrsbh'
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id', None)
+#             record.content = json.dumps(temp_dict)
 
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'nsrsbh',
-            'sbzlbh',
-            'nsqxdm',
-            'dqbm',
-            'ssqq',
-            'ssqz',
-            'sbwj',
-            'je',
-            'yhzl',
-            'yhdm',
-            'yhzh',
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0]
-            temp_dict.pop('id', None)
-            record.content = json.dumps(temp_dict)
-
-class SBQc(models.Model):
-    _name = "cic_taxsb.qc"
-    _description = "查询当前纳税人能报的税种（没有xml 报文）"
-    _inherit = "cic_taxsb.base"
-
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'nsrsbh',
-            'sbzlbh',
-            'skssqq',
-            'skssqz',
-            'sssq'
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0]
-            temp_dict.pop('id', None)
-            record.content = json.dumps(temp_dict)
-
-class SBSfxy(models.Model):
-    _name = "cic_taxsb.sfxy"
-    _description = "三方协议，支持湖南、贵州地区"
-    _inherit = "cic_taxsb.base"
-
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'nsrsbh'
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0]
-            temp_dict.pop('id', None)
-            record.content = json.dumps(temp_dict)
-
-class SBStatus(models.Model):
-    _name = "cic_taxsb.status"
-    _description = "查询最终申报结果"
-    _inherit = "cic_taxsb.base"
-
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
-    sbname = fields.Char('查询申报状态 固定这个值', default="sbzt", help="查询申报状态 固定这个值")
-    kjnd = fields.Char('年份', help="年份(2019)")
-    kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
-    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'sbzlbh',
-            'nsrsbh',
-            'sbname',
-            'kjnd',
-            'kjqj'
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0]
-            temp_dict.pop('id',None)
-            res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict}}
-            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
-            record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
-                                         'lsh':record.lsh})
+# class SBStatus(models.Model):
+#     _name = "cic_taxsb.status"
+#     _description = "查询最终申报结果"
+#     _inherit = "cic_taxsb.base"
+#
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
+#     sbname = fields.Char('查询申报状态 固定这个值', default="sbzt", help="查询申报状态 固定这个值")
+#     kjnd = fields.Char('年份', help="年份(2019)")
+#     kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
+#     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'sbzlbh',
+#             'nsrsbh',
+#             'sbname',
+#             'kjnd',
+#             'kjqj'
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id',None)
+#             res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict}}
+#             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+#                                          'lsh':record.lsh})
 
 class SBSubmit(models.Model):
     _name = "cic_taxsb.submit"
@@ -617,11 +617,12 @@ class SBSubmit(models.Model):
         self.serviceId = self.sbzlbh + 'Submit'
 
 class SBXqykjzz(models.Model):
+
     _name = "cic_taxsb.xqykjzz"
     _description = "财务报表(小企业会计准则)月(季)"
     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
 
-    # 每个税种表都有这几个字段，单独出来。xml。此对象提交
+    # 申报信息
     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
@@ -629,120 +630,351 @@ class SBXqykjzz(models.Model):
     area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
 
-    # all the records.  self.post().  inverse_name字段等于当前记录.     不存储
-    xqykjzz_line = fields.One2many('cic_taxsb.xqykjzz.line', 'xqykjzz_id')
-
-class SBXqykjzzline(models.Model):
-    _name = "cic_taxsb.xqykjzz.line"
-    _description = "财务报表(小企业会计准则)月(季)"
-
-    # 0/1 record.   存储
-    xqykjzz_id = fields.Many2one('cic_taxsb.xqykjzz')
-
-    # 短期借款
-    ewbhxh = fields.Char('行次', help="行次")
+    # 资产负债表
+    ## 短期借款  货币资金
     dqjkqmye = fields.Char('期末余额', help="期末余额")
     hbzjncye = fields.Char('年初余额', help="年初余额")
     hbzjqmye = fields.Char('期末余额', help="期末余额")
     dqjkncye = fields.Char('年初余额', help="年初余额")
 
-    # 应付票据
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 应付票据	短期投资
     yfpjqmye = fields.Char('期末余额', help="期末余额")
     dqtzqmye = fields.Char('期末余额', help="期末余额")
     yfpjncye = fields.Char('年初余额', help="年初余额")
     dqtzncye = fields.Char('年初余额', help="年初余额")
 
-    # 应收票据
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 应收票据	应付账款
     yspjqmye = fields.Char('期末余额', help="期末余额")
     yfzkncye = fields.Char('年初余额', help="年初余额")
     yfzkqmye = fields.Char('期末余额', help="期末余额")
     yspjncye = fields.Char('年初余额', help="年初余额")
 
-    # 预收帐款
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 预收帐款	应收账款
     ygszkqmye = fields.Char('应收账款##期末余额', help="应收账款##期末余额")
     yszkqmye = fields.Char('预收帐款##期末余额', help="预收帐款##期末余额")
     ygszkncye = fields.Char('应收账款##年初余额', help="应收账款##年初余额")
     yszkncye = fields.Char('预收帐款##年初余额', help="预收帐款##年初余额")
 
-    # 预付账款
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 预付账款	应付职工薪酬
     yfzkqmye = fields.Char('期末余额', help="期末余额")
     yfzkncye = fields.Char('年初余额', help="年初余额")
     yfzgxcncye = fields.Char('年初余额', help="年初余额")
     yfzgxcqmye = fields.Char('期末余额', help="期末余额")
 
-    # 应收股利
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 应收股利	应交税费
     ysglqmye = fields.Char('期末余额', help="期末余额")
     yjsfqmye = fields.Char('期末余额', help="期末余额")
     yjsfncye = fields.Char('年初余额', help="年初余额")
     ysglncye = fields.Char('年初余额', help="年初余额")
 
-    # 应付利息
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 应付利息	应收利息
     yflxncye = fields.Char('年初余额', help="年初余额")
     yslxqmye = fields.Char('期末余额', help="期末余额")
     yslxncye = fields.Char('年初余额', help="年初余额")
     yflxqmye = fields.Char('期末余额', help="期末余额")
 
-    # 应付利润
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 其他应收款	应付利润
     yflrncye = fields.Char('年初余额', help="年初余额")
     qtyskncye = fields.Char('年初余额', help="年初余额")
     qtyskqmye = fields.Char('期末余额', help="期末余额")
     yflrqmye = fields.Char('期末余额', help="期末余额")
 
-    # 存货
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 其他应付款	存货
     chqmye = fields.Char('期末余额', help="期末余额")
     qtyfkncye = fields.Char('年初余额', help="年初余额")
     chncye = fields.Char('年初余额', help="年初余额")
     qtyfkqmye = fields.Char('期末余额', help="期末余额")
 
-    # 其他流动负债
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 其中：原材料	其他流动负债
     qtldfzqmye = fields.Char('期末余额', help="期末余额")
     qzyclncye = fields.Char('年初余额', help="年初余额")
     qzyclqmye = fields.Char('期末余额', help="期末余额")
     qtldfzncye = fields.Char('年初余额', help="年初余额")
 
-    # 在产品
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 在产品	流动负债合计
     zcpncye = fields.Char('年初余额', help="年初余额")
     ldfzhjqmye = fields.Char('期末余额', help="期末余额")
     zcpqmye = fields.Char('期末余额', help="期末余额")
     ldfzhjncye = fields.Char('年初余额', help="年初余额")
 
-    # 库存材料
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 库存材料	非流动负债
     kcclncye = fields.Char('年初余额', help="年初余额")
     kcclqmye = fields.Char('期末余额', help="期末余额")
 
-    # 周转材料
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 周转材料	长期借款
     zzclqmye = fields.Char('期末余额', help="期末余额")
     zqjkqmye = fields.Char('期末余额', help="期末余额")
     zzclncye = fields.Char('年初余额', help="年初余额")
     zqjkncye = fields.Char('年初余额', help="年初余额")
 
-    # 长期应付款
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 其他流动资产	长期应付款
     zqyfkncye = fields.Char('年初余额', help="年初余额")
     qtldzcqmye = fields.Char('期末余额', help="期末余额")
     qtldzcncye = fields.Char('年初余额', help="年初余额")
     zqyfkqmye = fields.Char('期末余额', help="期末余额")
 
-    # 递延收益
-    # ewbhxh = fields.Char('行次', help="行次")
+    ## 流动资产合计	递延收益
     dysyqmye = fields.Char('期末余额', help="期末余额")
     ldzchjqmye = fields.Char('期末余额', help="期末余额")
     ldzchjncye = fields.Char('年初余额', help="年初余额")
     dysyncye = fields.Char('年初余额', help="年初余额")
 
+    ## 非流动资产	其他非流动负债
+    qtfldfzncye = fields.Char('年初余额', help="年初余额")
+    qtfldfzqmye = fields.Char('期末余额', help="期末余额")
 
+    ## 长期债券投资	非流动负债合计
+    fldfzhjncye = fields.Char('年初余额', help="年初余额")
+    zqzqtzncye = fields.Char('年初余额', help="年初余额")
+    zqzqtzqmye = fields.Char('期末余额', help="期末余额")
+    fldfzhjqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 长期股权投资	负债合计
+    zqgqtzqmye = fields.Char('期末余额', help="期末余额")
+    fzhjncye = fields.Char('年初余额', help="年初余额")
+    fzhjqmye = fields.Char('期末余额', help="期末余额")
+    zqgqtzncye = fields.Char('年初余额', help="年初余额")
+
+    ## 固定资产原价
+    gdzcyjncye = fields.Char('年初余额', help="年初余额")
+    gdzcyjqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 减：累计折旧
+    jljzjncye = fields.Char('年初余额', help="年初余额")
+    jljzjqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 固定资产账面价值
+    gdzczmjzncye = fields.Char('年初余额', help="年初余额")
+    gdzczmjzqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 在建工程
+    zjgcncye = fields.Char('年初余额', help="年初余额")
+    zjgcqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 工程物资
+    gcwzncye = fields.Char('年初余额', help="年初余额")
+    gcwzqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 固定资产清理
+    gdzcqlqmye = fields.Char('期末余额', help="期末余额")
+    gdzcqlncye = fields.Char('年初余额', help="年初余额")
+
+    ## 生产性生物资产	所有者权益（或股东权益）
+    scxswzcncye = fields.Char('年初余额', help="年初余额")
+    scxswzcqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 无形资产	实收资本（或股本）
+    wxzcqmye = fields.Char('期末余额', help="期末余额")
+    wxzcncye = fields.Char('年初余额', help="年初余额")
+    sszbhgbqmye = fields.Char('期末余额', help="期末余额")
+    sszbhgbncye = fields.Char('年初余额', help="年初余额")
+
+    ## 开发支出	资本公积
+    zbgjqmye = fields.Char('期末余额', help="期末余额")
+    zbgjncye = fields.Char('年初余额', help="年初余额")
+    kfzcncye = fields.Char('年初余额', help="年初余额")
+    kfzcqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 长期待摊费用	盈余公积
+    zqdtfyqmye = fields.Char('期末余额', help="期末余额")
+    zqdtfyncye = fields.Char('年初余额', help="年初余额")
+    yygjqmye = fields.Char('期末余额', help="期末余额")
+    yygjncye = fields.Char('年初余额', help="年初余额")
+
+    ## 其他非流动资产	未分配利润
+    wfplrncye = fields.Char('年初余额', help="年初余额")
+    qtfldzcncye = fields.Char('年初余额', help="年初余额")
+    wfplrqmye = fields.Char('期末余额', help="期末余额")
+    qtfldzcqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 非流动资产合计	所有者权益（或股东权益）合计
+    syzqyhjncye = fields.Char('年初余额', help="年初余额")
+    syzqyhjqmye = fields.Char('年初余额', help="年初余额")
+    fldzchjncye = fields.Char('期末余额', help="期末余额")
+    fldzchjqmye = fields.Char('期末余额', help="期末余额")
+
+    ## 资产合计	负债和所有者权益（或股东权益）总计
+    zchjncye = fields.Char('年初余额', help="年初余额")
+    zchjqmye = fields.Char('期末余额', help="期末余额")
+    fzhsyzqyhjqmye = fields.Char('期末余额', help="期末余额")
+    fzhsyzqyhjncye = fields.Char('年初余额', help="年初余额")
+
+    # 利润表
+    ## 一、营业收入
+    yyysrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    yyysrbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 减：营业成本
+    jyycbbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    jyycbbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 营业税金及附加
+    yysjjfjbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    yysjjfjbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 其中：消费税
+    qzxfsbyje = fields.Char('本月金额', help="本月金额")
+    qzxfsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 营业税
+    yysbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    yysbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 城市建设维护税
+    csjswhsbyje = fields.Char('本月金额', help="本月金额")
+    csjswhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 资源税
+    zysbyje = fields.Char('本月金额', help="本月金额")
+    zysbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 土地增值税
+    tdzzsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    tdzzsbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 城镇土地使用税、房产税、车船税、印花税
+    cztdsysfcsccsyhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    cztdsysfcsccsyhsbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 教育附加、矿产资源、排污费
+    jyfjkczypwfbyje = fields.Char('本月金额', help="本月金额")
+    jyfjkczypwfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 销售费用
+    xsfybyje = fields.Char('本月金额', help="本月金额")
+    xsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 其中：商品维修费
+    qzspwxfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    qzspwxfbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 广告费和业务宣传费
+    ggfhywxcfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    ggfhywxcfbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 管理费用
+    glfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+    glfybyje = fields.Char('本月金额', help="本月金额")
+
+    ## 其中：开办费
+    qzkbfbyje = fields.Char('本月金额', help="本月金额")
+    qzkbfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 业务招待费
+    ywzdfbyje = fields.Char('本月金额', help="本月金额")
+    ywzdfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 研究费用
+    yjfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+    yjfybyje = fields.Char('本月金额', help="本月金额")
+
+    ## 财务费用
+    cwfybyje = fields.Char('本月金额', help="本月金额")
+    cwfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 其中：利息费用(收入以-号填列)
+    qzlxfysryhtlbyje = fields.Char('本月金额', help="本月金额")
+    qzlxfysryhtlbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 加：投资收益
+    jtzsybnljje = fields.Char('本年累计金额', help="本年累计金额")
+    jtzsybyje = fields.Char('本月金额', help="本月金额")
+
+    ## 二、营业利润
+    eyylrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    eyylrbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 加：营业外收入
+    jyywsrbyje = fields.Char('本月金额', help="本月金额")
+    jyywsrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 其中：政府补助
+    qzzfbzbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    qzzfbzbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 减：营业外支出
+    jyywzcbyje = fields.Char('本月金额', help="本月金额")
+    jyywzcbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 其中：坏账损失
+    qzhzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    qzhzssbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 无法收回的长期债券投资损失
+    wfshdzqzqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    wfshdzqzqtzssbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 无法收回的长期股权投资损失
+    wfshdzqgqtzssbyje = fields.Char('本月金额', help="本月金额")
+    wfshdzqgqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 自然灾害等不可抗力因素造成的损失
+    zrzhdbkklyszcdssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+    zrzhdbkklyszcdssbyje = fields.Char('本月金额', help="本月金额")
+
+    ## 税收滞纳金
+    ssznjbyje = fields.Char('本月金额', help="本月金额")
+    ssznjbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 三、利润总额
+    slrzebyje = fields.Char('本月金额', help="本月金额")
+    slrzebnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    ## 减：所得税费用
+    jsdsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+    jsdsfybyje = fields.Char('本月金额', help="本月金额")
+
+    ## 四、净利润
+    sjlrbyje = fields.Char('本月金额', help="本月金额")
+    sjlrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+
+    # 现金流量表
+
+    content = fields.Text('报文内容', compute='_compute_content')
+
+    @api.multi
+    def _compute_content(self):
+        _fields_sbbinfo = ['sbzlbh','ssqq','ssqz','nsrsbh','area','nsqxdm']
+        _fields_zcfzb = ['dqjkqmye','hbzjncye','hbzjqmye','dqjkncye','yfpjqmye','dqtzqmye','yfpjncye','dqtzncye',
+                         'yspjqmye', 'yfzkncye', 'yfzkqmye','yspjncye','ygszkqmye', 'yszkqmye', 'ygszkncye','yszkncye',
+                         'yfzkqmye', 'yfzkncye', 'yfzgxcncye', 'yfzgxcqmye','ysglqmye', 'yjsfqmye', 'yjsfncye', 'ysglncye',
+                         'yflxncye', 'yslxqmye', 'yslxncye', 'yflxqmye','yflrncye', 'qtyskncye', 'qtyskqmye', 'yflrqmye',
+                         'chqmye', 'qtyfkncye', 'chncye', 'qtyfkqmye','qtldfzqmye', 'qzyclncye', 'qzyclqmye', 'qtldfzncye',
+                         'zcpncye', 'ldfzhjqmye', 'zcpqmye', 'ldfzhjncye','kcclncye', 'kcclqmye', 'zzclqmye', 'zqjkqmye',
+                         'zzclncye', 'zqjkncye', 'zqyfkncye', 'qtldzcqmye','qtldzcncye', 'zqyfkqmye', 'dysyqmye', 'ldzchjqmye',
+                         'ldzchjncye', 'dysyncye', 'qtfldfzncye', 'qtfldfzqmye','fldfzhjncye', 'zqzqtzncye', 'zqzqtzqmye', 'fldfzhjqmye',
+                         'zqgqtzqmye', 'fzhjncye', 'fzhjqmye', 'zqgqtzncye','gdzcyjncye', 'gdzcyjqmye', 'jljzjncye', 'jljzjqmye',
+                         'gdzczmjzncye', 'gdzczmjzqmye', 'zjgcncye', 'zjgcqmye','gcwzncye', 'gcwzqmye', 'gdzcqlqmye', 'gdzcqlncye',
+                         'scxswzcncye', 'scxswzcqmye', 'wxzcqmye', 'wxzcncye','sszbhgbqmye', 'sszbhgbncye', 'zbgjqmye', 'zbgjncye',
+                         'kfzcncye', 'kfzcqmye', 'zqdtfyqmye', 'zqdtfyncye','yygjqmye', 'yygjncye', 'wfplrncye', 'qtfldzcncye',
+                         'wfplrqmye', 'qtfldzcqmye', 'syzqyhjncye', 'syzqyhjqmye','fldzchjncye', 'fldzchjqmye', 'zchjncye', 'zchjqmye',
+                         'fzhsyzqyhjqmye', 'fzhsyzqyhjncye'
+                         ]
+        _fields_lrb = ['yyysrbnljje','yyysrbyje','jyycbbnljje','jyycbbyje','yysjjfjbnljje','yysjjfjbyje',
+                       'qzxfsbyje', 'qzxfsbnljje', 'yysbnljje', 'yysbyje', 'csjswhsbyje', 'csjswhsbnljje',
+                       'zysbyje', 'zysbnljje', 'tdzzsbnljje', 'tdzzsbyje', 'cztdsysfcsccsyhsbnljje', 'cztdsysfcsccsyhsbyje',
+                       'jyfjkczypwfbyje', 'jyfjkczypwfbnljje', 'xsfybyje', 'xsfybnljje', 'qzspwxfbnljje', 'qzspwxfbyje',
+                       'ggfhywxcfbnljje', 'ggfhywxcfbyje', 'glfybnljje', 'glfybyje', 'qzkbfbyje', 'qzkbfbnljje',
+                       'ywzdfbyje', 'ywzdfbnljje', 'yjfybnljje', 'yjfybyje', 'cwfybyje', 'cwfybnljje',
+                       'qzlxfysryhtlbyje', 'qzlxfysryhtlbnljje', 'jtzsybnljje', 'jtzsybyje', 'eyylrbnljje', 'eyylrbyje',
+                       'jyywsrbyje', 'jyywsrbnljje', 'qzzfbzbnljje', 'qzzfbzbyje', 'jyywzcbyje', 'jyywzcbnljje',
+                       'qzhzssbnljje', 'qzhzssbyje', 'wfshdzqzqtzssbnljje', 'wfshdzqzqtzssbyje', 'wfshdzqgqtzssbyje', 'wfshdzqgqtzssbnljje',
+                       'zrzhdbkklyszcdssbnljje', 'zrzhdbkklyszcdssbyje', 'ssznjbyje', 'ssznjbnljje', 'slrzebyje', 'slrzebnljje',
+                       'jsdsfybnljje', 'jsdsfybyje', 'sjlrbyje', 'sjlrbnljje'
+                       ]
+        for record in self:
+            temp_dict_sbbinfo = record.read(_fields_sbbinfo)[0]
+            temp_dict_sbbinfo.pop('id',None)
+            temp_dict_zcfzb = record.read(_fields_zcfzb)[0]
+            temp_dict_zcfzb.pop('id', None)
+            temp_dict_lrb = record.read(_fields_lrb)[0]
+            temp_dict_lrb.pop('id', None)
+            res_dict = {'jsxgs_cwbb_xqykjzzxxVO':{'sbbinfo':temp_dict_sbbinfo,'jsxgs_cwbb_xqykjzz_zcfzb':'',
+                                                  'jsxgs_cwbb_xqykjzz_lrb':'','jsxgs_cwbb_xqykjzz_xjllb':''}}
+            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+            record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+                                         'lsh':self.lsh,'nsrsbh':self.nsrsbh,'nsqxdm':self.nsqxdm,
+                                         'skssqz':self.skssqz,'serviceId':self.serviceId,})
 
 class SBGrjysdsxx(models.Model):
     _name = "cic_taxsb.grjysdsxx"
@@ -792,440 +1024,440 @@ class SBGrjysdsxx(models.Model):
     def _compute_content(self):
         pass
 
-    # ewbhxh = fields.Char('2',default = '2',help='2')
-    # floatrow = fields.Char('1',default = '1',help='1')
-    # btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
-    # yyjse = fields.Char('已预缴税额',help='已预缴税额')
-    # lrze = fields.Char('利润总额',help='利润总额')
-    # skssqz = fields.Char('税款所属期止',help='税款所属期止')
-    # nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    # zsfs = fields.Char('征收方式',help='征收方式')
-    # cbfy = fields.Char('成本费用',help='成本费用')
-    # hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
-    # tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
-    # yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
-    # ynse = fields.Char('应纳税额',help='应纳税额')
-    # qylx = fields.Char('企业类型',help='企业类型')
-    # xm = fields.Char('姓名',help='姓名')
-    # btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
-    # srze = fields.Char('收入总额',help='收入总额')
-    # sskcs = fields.Char('速算扣除数',help='速算扣除数')
-    # sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
-    # mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
-    # sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
-    # sl = fields.Char('税率(%)',help='税率(%)')
-    # jmse = fields.Char('减免税额', help='减免税额')
-    # gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
-    # ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
-    # skssqq = fields.Char('税款所属期起',help='税款所属期起')
-    # ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
-    #
+#     # ewbhxh = fields.Char('2',default = '2',help='2')
+#     # floatrow = fields.Char('1',default = '1',help='1')
+#     # btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
+#     # yyjse = fields.Char('已预缴税额',help='已预缴税额')
+#     # lrze = fields.Char('利润总额',help='利润总额')
+#     # skssqz = fields.Char('税款所属期止',help='税款所属期止')
+#     # nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     # zsfs = fields.Char('征收方式',help='征收方式')
+#     # cbfy = fields.Char('成本费用',help='成本费用')
+#     # hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
+#     # tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
+#     # yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
+#     # ynse = fields.Char('应纳税额',help='应纳税额')
+#     # qylx = fields.Char('企业类型',help='企业类型')
+#     # xm = fields.Char('姓名',help='姓名')
+#     # btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
+#     # srze = fields.Char('收入总额',help='收入总额')
+#     # sskcs = fields.Char('速算扣除数',help='速算扣除数')
+#     # sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
+#     # mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
+#     # sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
+#     # sl = fields.Char('税率(%)',help='税率(%)')
+#     # jmse = fields.Char('减免税额', help='减免税额')
+#     # gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
+#     # ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
+#     # skssqq = fields.Char('税款所属期起',help='税款所属期起')
+#     # ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
+#     #
+#
+#     #
+#     # @api.multi
+#     # def _compute_content(self):
+#     #     _fields0 = [
+#     #         'sbzlbh',
+#     #         'ssqq',
+#     #         'ssqz',
+#     #         'nsrsbh',
+#     #         'area'
+#     #     ]
+#     #     _fields1 = [
+#     #         'ynssde',
+#     #         'zsfs',
+#     #         'qylx',
+#     #         'skssqz',
+#     #         'nsrsbh',
+#     #         'btzdwnsrsbh',
+#     #         'mbyqndks',
+#     #         'cbfy',
+#     #         'sfzjhm',
+#     #         'lrze',
+#     #         'jmse',
+#     #         'gjdq',
+#     #         'ybtse',
+#     #         'yyjse',
+#     #         'ynse',
+#     #         'srze',
+#     #         'skssqq',
+#     #         'hhqyhhrfpbl',
+#     #         'btzdwmc',
+#     #         'sskcs',
+#     #         'sfzjlx',
+#     #         'tzzjcfy',
+#     #         'xm',
+#     #         'yssdl',
+#     #         'sl',
+#     #     ]
+#     #     _fields2 = [
+#     #         'ewbhxh',
+#     #         'floatrow',
+#     #         'btzdwnsrsbh',
+#     #         'yyjse',
+#     #         'lrze',
+#     #         'skssqz',
+#     #         'nsrsbh',
+#     #         'zsfs',
+#     #         'cbfy',
+#     #         'hhqyhhrfpbl',
+#     #         'tzzjcfy',
+#     #         'yssdl',
+#     #         'ynse',
+#     #         'qylx',
+#     #         'xm',
+#     #         'btzdwmc',
+#     #         'srze',
+#     #         'sskcs',
+#     #         'sfzjhm',
+#     #         'mbyqndks',
+#     #         'sfzjlx',
+#     #         'sl',
+#     #         'jmse',
+#     #         'gjdq',
+#     #         'ybtse',
+#     #         'skssqq',
+#     #         'ynssde'
+#     #     ]
+#     #     for record in self:
+#     #         temp_dict0 = record.read(_fields0)[0]
+#     #         temp_dict0.pop('id',None)
+#     #         temp_dict1 = record.read(_fields1)[0]
+#     #         temp_dict1.pop('id',None)
+#     #         temp_dict2 = record.read(_fields2)[0]
+#     #         temp_dict2.pop('id',None)
+#     #         res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict0,
+#     #                                      'jsds_grjysds_zb':{'zbGridlbVO':temp_dict1,'zbGridlbVO':temp_dict2},
+#     #                                      'jsds_grjysds_jmssx':'',
+#     #                                      'jsds_grjysds_jcxxb_b':''}}
+#     #         xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+#     #         record.content = json.dumps({'lsh':record.lsh,
+#     #                                      'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+#     #                                      'nsrsbh':record.nsrsbh,
+#     #                                      'nsqxdm':record.nsqxdm,
+#     #                                      'skssq':record.skssq,
+#     #                                      'serviceId':record.sbzlbh+'Submit'
+#     #                                      })
 
-    #
-    # @api.multi
-    # def _compute_content(self):
-    #     _fields0 = [
-    #         'sbzlbh',
-    #         'ssqq',
-    #         'ssqz',
-    #         'nsrsbh',
-    #         'area'
-    #     ]
-    #     _fields1 = [
-    #         'ynssde',
-    #         'zsfs',
-    #         'qylx',
-    #         'skssqz',
-    #         'nsrsbh',
-    #         'btzdwnsrsbh',
-    #         'mbyqndks',
-    #         'cbfy',
-    #         'sfzjhm',
-    #         'lrze',
-    #         'jmse',
-    #         'gjdq',
-    #         'ybtse',
-    #         'yyjse',
-    #         'ynse',
-    #         'srze',
-    #         'skssqq',
-    #         'hhqyhhrfpbl',
-    #         'btzdwmc',
-    #         'sskcs',
-    #         'sfzjlx',
-    #         'tzzjcfy',
-    #         'xm',
-    #         'yssdl',
-    #         'sl',
-    #     ]
-    #     _fields2 = [
-    #         'ewbhxh',
-    #         'floatrow',
-    #         'btzdwnsrsbh',
-    #         'yyjse',
-    #         'lrze',
-    #         'skssqz',
-    #         'nsrsbh',
-    #         'zsfs',
-    #         'cbfy',
-    #         'hhqyhhrfpbl',
-    #         'tzzjcfy',
-    #         'yssdl',
-    #         'ynse',
-    #         'qylx',
-    #         'xm',
-    #         'btzdwmc',
-    #         'srze',
-    #         'sskcs',
-    #         'sfzjhm',
-    #         'mbyqndks',
-    #         'sfzjlx',
-    #         'sl',
-    #         'jmse',
-    #         'gjdq',
-    #         'ybtse',
-    #         'skssqq',
-    #         'ynssde'
-    #     ]
-    #     for record in self:
-    #         temp_dict0 = record.read(_fields0)[0]
-    #         temp_dict0.pop('id',None)
-    #         temp_dict1 = record.read(_fields1)[0]
-    #         temp_dict1.pop('id',None)
-    #         temp_dict2 = record.read(_fields2)[0]
-    #         temp_dict2.pop('id',None)
-    #         res_dict = {'jsds_sbztxxVO':{'sbbinfo':temp_dict0,
-    #                                      'jsds_grjysds_zb':{'zbGridlbVO':temp_dict1,'zbGridlbVO':temp_dict2},
-    #                                      'jsds_grjysds_jmssx':'',
-    #                                      'jsds_grjysds_jcxxb_b':''}}
-    #         xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
-    #         record.content = json.dumps({'lsh':record.lsh,
-    #                                      'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
-    #                                      'nsrsbh':record.nsrsbh,
-    #                                      'nsqxdm':record.nsqxdm,
-    #                                      'skssq':record.skssq,
-    #                                      'serviceId':record.sbzlbh+'Submit'
-    #                                      })
+# class SBFlsdsbxx(models.Model):
+#     _name = "cic_taxsb.flsdsbxx"
+#     _description = "分类所得申报表"
+#     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+#
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#
+#     ewbhxh = fields.Char(default='1')
+#     floatrow = fields.Char(default='1')
+#     bz = fields.Char('备注', help='备注')
+#     jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
+#     sfcj = fields.Boolean('是否残疾',default = False, help='True/False')
+#     sfls = fields.Boolean('是否烈属', default = False, help='True/False')
+#     zzlx = fields.Char('证照类型', help='证照类型')
+#     jzdzqx = fields.Char('居住地址(区县)',help='居住地址(区县)')
+#     rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
+#     hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
+#     sfjwry = fields.Boolean('是否境外人员', default = False, help='True/False')
+#     hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
+#     jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
+#     lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
+#     gh = fields.Char('工号', help='工号')
+#     ryzt = fields.Char('人员状态', help='人员状态')
+#     lszh = fields.Char('烈属证号', help='烈属证号')
+#     lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
+#     csrq = fields.Char('出生日期', help='出生日期')
+#     cjzh = fields.Char('残疾证号', help='残疾证号')
+#     lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
+#     lzrq = fields.Char('离职日期', help='离职日期')
+#     hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
+#     xl = fields.Char('学历', help='学历')
+#     sfgy = fields.Boolean('是否雇员',default = True, help='True/False')
+#     yjljsj = fields.Char('预计离境时间', help='预计离境时间')
+#     csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
+#     zwm = fields.Char('中文名', help='中文名')
+#     hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
+#     grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
+#     sfgl = fields.Boolean('是否孤老', default = False, help='True/False')
+#     zw = fields.Char('职务', help='职务')
+#     qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
+#     xb = fields.Char('性别', help='性别')
+#     qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
+#     khyx = fields.Char('开户银行', help='开户银行')
+#     xm = fields.Char('姓名', help='姓名')
+#     grtze = fields.Char('个人投资额', help='个人投资额')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     scrjsj = fields.Char('首次入境时间', help='首次入境时间')
+#     jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
+#     yxzh = fields.Char('银行账号', help='银行账号')
+#     dzyx = fields.Char('电子邮箱', help='电子邮箱')
+#     lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
+#     sjhm = fields.Char('手机号码', help='手机号码')
+#     gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
+#
+#     mssr = fields.Char('免税收入', help='免税收入')
+#     jzfs = fields.Char('捐赠方式', help='捐赠方式')
+#     # bz = fields.Char('备注', help='备注')
+#     # zzhm = fields.Char('证照号码', help='证照号码')
+#     # yzf = fields.Char()
+#     # zzlx = fields.Char('证照类型', help='证照类型')
+#     jmse = fields.Char('减免税额', help='减免税额')
+#     sdxm = fields.Char('所得项目', help='所得项目')
+#     sjjze = fields.Char('实际捐赠额', help='实际捐赠额')
+#     sr = fields.Char('收入', help='收入')
+#     jajsbl = fields.Char('减按计税比例', help='减按计税比例')
+#     zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+#
+#     nscount = fields.Char(default = '7')
+#     nsamount = fields.Char(default = '36010.00')
+#     gsgbze = fields.Char(default = '0')
+#     totalYbtse = fields.Char(default = '0')
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         pass
 
-class SBFlsdsbxx(models.Model):
-    _name = "cic_taxsb.flsdsbxx"
-    _description = "分类所得申报表"
-    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+# class SBZhsbsdxx(models.Model):
+#     _name = "cic_taxsb.zhsbsdxxV"
+#     _description = "个税综合所得申报表"
+#     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+#
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#
+#     ewbhxh = fields.Char(default='1')
+#     floatrow = fields.Char(default='1')
+#     bz = fields.Char('备注', help='备注')
+#     jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
+#     sfcj = fields.Boolean('是否残疾', default=False, help='True/False')
+#     sfls = fields.Boolean('是否烈属', default=False, help='True/False')
+#     zzlx = fields.Char('证照类型', help='证照类型')
+#     jzdzqx = fields.Char('居住地址(区县)', help='居住地址(区县)')
+#     rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
+#     hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
+#     sfjwry = fields.Boolean('是否境外人员', default=False, help='True/False')
+#     hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
+#     jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
+#     lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
+#     gh = fields.Char('工号', help='工号')
+#     ryzt = fields.Char('人员状态', help='人员状态')
+#     lszh = fields.Char('烈属证号', help='烈属证号')
+#     lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
+#     csrq = fields.Char('出生日期', help='出生日期')
+#     cjzh = fields.Char('残疾证号', help='残疾证号')
+#     lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
+#     rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
+#     lzrq = fields.Char('离职日期', help='离职日期')
+#     hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
+#     xl = fields.Char('学历', help='学历')
+#     yjljsj = fields.Char('预计离境时间', help='预计离境时间')
+#     csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
+#     zwm = fields.Char('中文名', help='中文名')
+#     hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
+#     grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
+#     sfgl = fields.Boolean('是否孤老', default=False, help='True/False')
+#     zw = fields.Char('职务', help='职务')
+#     qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
+#     xb = fields.Char('性别', help='性别')
+#     qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
+#     khyx = fields.Char('开户银行', help='开户银行')
+#     xm = fields.Char('姓名', help='姓名')
+#     grtze = fields.Char('个人投资额', help='个人投资额')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     scrjsj = fields.Char('首次入境时间', help='首次入境时间')
+#     jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
+#     dzyx = fields.Char('电子邮箱', help='电子邮箱')
+#     lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
+#     sjhm = fields.Char('手机号码', help='手机号码')
+#     gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
+#
+#     gh = fields.Char('工号', help='工号')
+#     jbylbxf = fields.Char('基本养老保险费', help='基本养老保险费')
+#     syylbx = fields.Char('税延养老保险', help='税延养老保险')
+#     ljzfdklx = fields.Char('累计住房贷款利息', help='累计住房贷款利息')
+#     xm = fields.Char('姓名', help='姓名')
+#     bqsr = fields.Char('本期免税收入', help='本期免税收入')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     bz = fields.Char('备注', help='备注')
+#     zzlx = fields.Char('证照类型', help='证照类型')
+#     qt = fields.Char('其他', help='其他')
+#     ljzfzj = fields.Char('累计住房租金', help='累计住房租金')
+#     jmse = fields.Char('减免税额', help='减免税额')
+#     sybxf = fields.Char('失业保险费', help='失业保险费')
+#     ljjxjy = fields.Char('累计继续教育', help='累计继续教育')
+#     syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+#     zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+#     zfgjj = fields.Char('住房公积金', help='住房公积金')
+#     qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
+#     ljznjy = fields.Char('累计子女教育', help='累计子女教育')
+#     ljsylr = fields.Char('累计赡养老人', help='累计赡养老人')
+#     jbyilbxf = fields.Char('基本医疗保险费', help='基本医疗保险费')
+#
+#     ewbhxh = fields.Char(default='1')
+#     floatrow = fields.Char(default='1')
+#     syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+#     qt = fields.Char('其他', help='其他')
+#     bz = fields.Boolean('备注', help='备注')
+#     zzlx = fields.Char('证照类型', help='证照类型')
+#     syylbx = fields.Char('税延养老保险', help='税延养老保险')
+#     jmse = fields.Char('减免税额', help='减免税额')
+#     bqmssr = fields.Char('本期免税收入', help='本期免税收入')
+#     gh = fields.Boolean('工号', help='工号')
+#     bqsr = fields.Char('本期收入', help='本期收入')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     sdxm = fields.Char('所得项目', help='所得项目')
+#     zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+#     xm = fields.Char('姓名', help='姓名')
+#
+#     ewbhxh = fields.Char(default = '1')
+#     floatrow = fields.Char(default = '1')
+#     syylbx = fields.Char('税延养老保险', help='税延养老保险')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     gh = fields.Char('工号', help='工号')
+#     syjkbx = fields.Char('商业健康保险', help='商业健康保险')
+#     rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
+#     qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
+#     qt = fields.Char('其他', help='其他')
+#     xm = fields.Char('姓名', help='姓名')
+#     jmse = fields.Char('减免税额', help='减免税额')
+#     mssr = fields.Char('免税收入', help='免税收入')
+#     ykjse = fields.Char('已扣缴税额', help='已扣缴税额')
+#     bz = fields.Char('备注', help='备注')
+#     qnycxjje = fields.Char('全年一次性奖金额', help='全年一次性奖金额')
+#     zzlx = fields.Boolean('证照类型',help='证照类型')
+#     zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
+#
+#     '''
+#     综合所得申报表	减免事项附表
+#     综合所得申报表	商业健康保险附表
+#     综合所得申报表	税延养老保险附表
+#     专项人员信息
+#     '''
+#
+#     kKjnd = fields.Char(default = '0')
+#     kRyxm = fields.Char()
+#     kZjlx = fields.Char('证件类型', help='证件类型')
+#     khyx = fields.Char('开户银行', help='开户银行')
+#     xm = fields.Char('姓名', help='姓名')
+#     grtze = fields.Char('个人投资额', help='个人投资额')
+#     zzhm = fields.Char('证照号码', help='证照号码')
+#     kPobz = fields.Selection(POBZ_SELECTION,string = '配偶标志', help='配偶标志')
+#     kPoxm = fields.Char('配偶姓名', help='配偶姓名')
+#     kPozjlx = fields.Char('配偶证件类型', help='配偶证件类型')
+#     kDsznbz = fields.Selection(DSZNBZ_SELECTION,string = '独生子女标志', help='独生子女标志')
+#     kSylrftfs = fields.Char('赡养老人分摊方式', help='赡养老人分摊方式')
+#     kSylrbndykcje = fields.Integer('养老人本年度月扣除金额', help='养老人本年度月扣除金额')
+#
+#     # 子女信息
+#     kZnxm = fields.Char('子女姓名',help='子女姓名')
+#     kZjlx = fields.Char('证件类型',help='证件类型')
+#     kZjhm = fields.Char('证件号码',help='证件号码')
+#     kCsrq = fields.Char('出生日期',help='出生日期')
+#     kGj = fields.Char('国籍',help='国籍')
+#     kDqsjyjd = fields.Char('当前受教育阶段',help='当前受教育阶段')
+#     kDqsjyjdqssj = fields.Char('当前受教育阶段起始时间',help='当前受教育阶段起始时间')
+#     kDqsjyjdjssj = fields.Char('当前受教育阶段结束时间',help='当前受教育阶段结束时间')
+#     kJyzzsj = fields.Char('教育终止时间',help='教育终止时间')
+#     kDqjdqj = fields.Char('当前就读国籍',help='当前就读国籍')
+#     kDqjdxx = fields.Char('当前就读学校',help='当前就读学校')
+#     kBrkcbl = fields.Char('本人扣除比例',help='本人扣除比例')
+#
+#     # 住房租金
+#     kProvince = fields.Char('主要工作省份', help='主要工作省份')
+#     kCity = fields.Char('主要工作城市', help='主要工作城市')
+#     kCzflx = fields.Char('出租方类型', help='出租方类型')
+#     kCzfxm = fields.Char('出租方姓名（组织名称）', help='出租方姓名（组织名称）')
+#     kCzfzjlx = fields.Char('出租方证件类型', help='出租方证件类型')
+#     kCzfzjhm = fields.Char('出租方证件号码（统一社会信用代码）', help='出租方证件号码（统一社会信用代码）')
+#     kZfzldz = fields.Char('住房坐落地址', help='住房坐落地址')
+#     kZfzlhtbh = fields.Char('租赁合同编号', help='租赁合同编号')
+#     kZlqq = fields.Char('租赁期起', help='租赁期起')
+#     kZlqz = fields.Char('租赁期止', help='租赁期止')
+#
+#     # 住房贷款 住房信息
+#     kFwzldz = fields.Char('房屋坐落地址', help='房屋坐落地址')
+#     kBrjkbz = fields.Selection(BRJKBZ_SELECTION,string = '本人借款标志 0-否 1-是', help='本人借款标志 0-否 1-是')
+#     kZfzslx = fields.Char('住房证书类型', help='住房证书类型')
+#     kZfzsh = fields.Char('住房证书号', help='住房证书号')
+#     kDklx = fields.Selection(DKLX_SELECTION,string = '贷款类型 1-公积金贷款 2-商业贷款', help='贷款类型 1-公积金贷款 2-商业贷款')
+#     kDkyh = fields.Char('贷款银行', help='贷款银行')
+#     kDkhtbh = fields.Char('贷款合同编号', help='贷款合同编号')
+#     kSchkrq = fields.Char('首次还款日期', help='首次还款日期')
+#     kDkqx = fields.Char('贷款期限(月数)', help='贷款期限(月数)')
+#
+#     # 赡养老人 被赡养人信息
+#     kXm1 = fields.Char('姓名', help='姓名')
+#     kZjlx1 = fields.Char('证件类型', help='证件类型')
+#     kZjhm1 = fields.Char('证件号码', help='证件号码')
+#     kGj1 = fields.Char('国籍', help='国籍')
+#     kGx1 = fields.Char('关系', help='关系')
+#     kCsrq1 = fields.Char('出生日期', help='出生日期')
+#
+#     # 共同赡养人信息
+#     kXm2 = fields.Char('姓名', help='姓名')
+#     kZjlx2 = fields.Char('证件类型', help='证件类型')
+#     kZjhm2 = fields.Char('证件号码', help='证件号码')
+#     kGj2 = fields.Char('国籍', help='国籍')
+#
+#     # 继续教育
+#     kJyjd = fields.Char('教育阶段', help='教育阶段')
+#     kRxsj = fields.Char('入学时间', help='入学时间')
+#     kBysj = fields.Char('毕业时间', help='毕业时间')
+#     kJxjylx = fields.Char('继续教育类型', help='继续教育类型')
+#     kFzrq = fields.Char('发证（批准）日期', help='发证（批准）日期')
+#     kZsmc = fields.Char('证书名称', help='证书名称')
+#     kZsbh = fields.Char('证书编号', help='证书编号')
+#     kFzjg = fields.Char('发证机关', help='发证机关')
+#
+#     nscount = fields.Char('纳税人数', help='纳税人数')
+#     nsamount = fields.Char('纳税金额', help='纳税金额')
+#     gsgbze = fields.Char('公司股本总额', help='公司股本总额')
+#     totalYbtse = fields.Char('应补退税额', help='应补退税额')
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         pass
 
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
-    ewbhxh = fields.Char(default='1')
-    floatrow = fields.Char(default='1')
-    bz = fields.Char('备注', help='备注')
-    jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
-    sfcj = fields.Boolean('是否残疾',default = False, help='True/False')
-    sfls = fields.Boolean('是否烈属', default = False, help='True/False')
-    zzlx = fields.Char('证照类型', help='证照类型')
-    jzdzqx = fields.Char('居住地址(区县)',help='居住地址(区县)')
-    rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
-    hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
-    sfjwry = fields.Boolean('是否境外人员', default = False, help='True/False')
-    hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
-    jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
-    lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
-    gh = fields.Char('工号', help='工号')
-    ryzt = fields.Char('人员状态', help='人员状态')
-    lszh = fields.Char('烈属证号', help='烈属证号')
-    lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
-    csrq = fields.Char('出生日期', help='出生日期')
-    cjzh = fields.Char('残疾证号', help='残疾证号')
-    lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
-    lzrq = fields.Char('离职日期', help='离职日期')
-    hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
-    xl = fields.Char('学历', help='学历')
-    sfgy = fields.Boolean('是否雇员',default = True, help='True/False')
-    yjljsj = fields.Char('预计离境时间', help='预计离境时间')
-    csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
-    zwm = fields.Char('中文名', help='中文名')
-    hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
-    grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
-    sfgl = fields.Boolean('是否孤老', default = False, help='True/False')
-    zw = fields.Char('职务', help='职务')
-    qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
-    xb = fields.Char('性别', help='性别')
-    qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
-    khyx = fields.Char('开户银行', help='开户银行')
-    xm = fields.Char('姓名', help='姓名')
-    grtze = fields.Char('个人投资额', help='个人投资额')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    scrjsj = fields.Char('首次入境时间', help='首次入境时间')
-    jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
-    yxzh = fields.Char('银行账号', help='银行账号')
-    dzyx = fields.Char('电子邮箱', help='电子邮箱')
-    lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
-    sjhm = fields.Char('手机号码', help='手机号码')
-    gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
-
-    mssr = fields.Char('免税收入', help='免税收入')
-    jzfs = fields.Char('捐赠方式', help='捐赠方式')
-    # bz = fields.Char('备注', help='备注')
-    # zzhm = fields.Char('证照号码', help='证照号码')
-    # yzf = fields.Char()
-    # zzlx = fields.Char('证照类型', help='证照类型')
-    jmse = fields.Char('减免税额', help='减免税额')
-    sdxm = fields.Char('所得项目', help='所得项目')
-    sjjze = fields.Char('实际捐赠额', help='实际捐赠额')
-    sr = fields.Char('收入', help='收入')
-    jajsbl = fields.Char('减按计税比例', help='减按计税比例')
-    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
-
-    nscount = fields.Char(default = '7')
-    nsamount = fields.Char(default = '36010.00')
-    gsgbze = fields.Char(default = '0')
-    totalYbtse = fields.Char(default = '0')
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        pass
-
-class SBZhsbsdxx(models.Model):
-    _name = "cic_taxsb.zhsbsdxxV"
-    _description = "个税综合所得申报表"
-    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
-
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
-    ewbhxh = fields.Char(default='1')
-    floatrow = fields.Char(default='1')
-    bz = fields.Char('备注', help='备注')
-    jzdzxxdz = fields.Char('居住地址(详细地址)', help='居住地址(详细地址)')
-    sfcj = fields.Boolean('是否残疾', default=False, help='True/False')
-    sfls = fields.Boolean('是否烈属', default=False, help='True/False')
-    zzlx = fields.Char('证照类型', help='证照类型')
-    jzdzqx = fields.Char('居住地址(区县)', help='居住地址(区县)')
-    rzsgrq = fields.Char('任职受雇日期', help='任职受雇日期')
-    hjszdqx = fields.Char('户籍所在地(区县)', help='户籍所在地(区县)')
-    sfjwry = fields.Boolean('是否境外人员', default=False, help='True/False')
-    hjszdsh = fields.Char('户籍所在地(省)', help='户籍所在地(省)')
-    jzdzs = fields.Char('居住地址(市)', help='居住地址(市)')
-    lxdzxxdz = fields.Char('联系地址(详细地址)', help='联系地址(详细地址)')
-    gh = fields.Char('工号', help='工号')
-    ryzt = fields.Char('人员状态', help='人员状态')
-    lszh = fields.Char('烈属证号', help='烈属证号')
-    lxdzqx = fields.Char('联系地址(区县)', help='联系地址(区县)')
-    csrq = fields.Char('出生日期', help='出生日期')
-    cjzh = fields.Char('残疾证号', help='残疾证号')
-    lxdzs = fields.Char('联系地址(市)', help='联系地址(市)')
-    rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
-    lzrq = fields.Char('离职日期', help='离职日期')
-    hjszdxxdz = fields.Char('户籍所在地(详细地址)', help='户籍所在地(详细地址)')
-    xl = fields.Char('学历', help='学历')
-    yjljsj = fields.Char('预计离境时间', help='预计离境时间')
-    csgjdq = fields.Char('出生国家(地区)', help='出生国家(地区)')
-    zwm = fields.Char('中文名', help='中文名')
-    hjszds = fields.Char('户籍所在地(市)', help='户籍所在地(市)')
-    grtzbl = fields.Char('个人投资比例(%)', help='个人投资比例(%)')
-    sfgl = fields.Boolean('是否孤老', default=False, help='True/False')
-    zw = fields.Char('职务', help='职务')
-    qtzzlx = fields.Char('其他证照类型', help='其他证照类型')
-    xb = fields.Char('性别', help='性别')
-    qtzzhm = fields.Char('其他证照号码', help='其他证照号码')
-    khyx = fields.Char('开户银行', help='开户银行')
-    xm = fields.Char('姓名', help='姓名')
-    grtze = fields.Char('个人投资额', help='个人投资额')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    scrjsj = fields.Char('首次入境时间', help='首次入境时间')
-    jzdzsh = fields.Char('居住地址(省)', help='居住地址(省)')
-    dzyx = fields.Char('电子邮箱', help='电子邮箱')
-    lxdzsh = fields.Char('联系地址(省)', help='联系地址(省)')
-    sjhm = fields.Char('手机号码', help='手机号码')
-    gjdq = fields.Char('国籍(地区)', help='国籍(地区)')
-
-    gh = fields.Char('工号', help='工号')
-    jbylbxf = fields.Char('基本养老保险费', help='基本养老保险费')
-    syylbx = fields.Char('税延养老保险', help='税延养老保险')
-    ljzfdklx = fields.Char('累计住房贷款利息', help='累计住房贷款利息')
-    xm = fields.Char('姓名', help='姓名')
-    bqsr = fields.Char('本期免税收入', help='本期免税收入')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    bz = fields.Char('备注', help='备注')
-    zzlx = fields.Char('证照类型', help='证照类型')
-    qt = fields.Char('其他', help='其他')
-    ljzfzj = fields.Char('累计住房租金', help='累计住房租金')
-    jmse = fields.Char('减免税额', help='减免税额')
-    sybxf = fields.Char('失业保险费', help='失业保险费')
-    ljjxjy = fields.Char('累计继续教育', help='累计继续教育')
-    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
-    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
-    zfgjj = fields.Char('住房公积金', help='住房公积金')
-    qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
-    ljznjy = fields.Char('累计子女教育', help='累计子女教育')
-    ljsylr = fields.Char('累计赡养老人', help='累计赡养老人')
-    jbyilbxf = fields.Char('基本医疗保险费', help='基本医疗保险费')
-
-    ewbhxh = fields.Char(default='1')
-    floatrow = fields.Char(default='1')
-    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
-    qt = fields.Char('其他', help='其他')
-    bz = fields.Boolean('备注', help='备注')
-    zzlx = fields.Char('证照类型', help='证照类型')
-    syylbx = fields.Char('税延养老保险', help='税延养老保险')
-    jmse = fields.Char('减免税额', help='减免税额')
-    bqmssr = fields.Char('本期免税收入', help='本期免税收入')
-    gh = fields.Boolean('工号', help='工号')
-    bqsr = fields.Char('本期收入', help='本期收入')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    sdxm = fields.Char('所得项目', help='所得项目')
-    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
-    xm = fields.Char('姓名', help='姓名')
-
-    ewbhxh = fields.Char(default = '1')
-    floatrow = fields.Char(default = '1')
-    syylbx = fields.Char('税延养老保险', help='税延养老保险')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    gh = fields.Char('工号', help='工号')
-    syjkbx = fields.Char('商业健康保险', help='商业健康保险')
-    rzsgcyrq = fields.Char('任职受雇从业日期', help='任职受雇从业日期')
-    qyzynj = fields.Char('企业(职业)年金', help='企业(职业)年金')
-    qt = fields.Char('其他', help='其他')
-    xm = fields.Char('姓名', help='姓名')
-    jmse = fields.Char('减免税额', help='减免税额')
-    mssr = fields.Char('免税收入', help='免税收入')
-    ykjse = fields.Char('已扣缴税额', help='已扣缴税额')
-    bz = fields.Char('备注', help='备注')
-    qnycxjje = fields.Char('全年一次性奖金额', help='全年一次性奖金额')
-    zzlx = fields.Boolean('证照类型',help='证照类型')
-    zykcdjze = fields.Char('准予扣除的捐赠额', help='准予扣除的捐赠额')
-
-    '''
-    综合所得申报表	减免事项附表
-    综合所得申报表	商业健康保险附表
-    综合所得申报表	税延养老保险附表
-    专项人员信息
-    '''
-
-    kKjnd = fields.Char(default = '0')
-    kRyxm = fields.Char()
-    kZjlx = fields.Char('证件类型', help='证件类型')
-    khyx = fields.Char('开户银行', help='开户银行')
-    xm = fields.Char('姓名', help='姓名')
-    grtze = fields.Char('个人投资额', help='个人投资额')
-    zzhm = fields.Char('证照号码', help='证照号码')
-    kPobz = fields.Selection(POBZ_SELECTION,string = '配偶标志', help='配偶标志')
-    kPoxm = fields.Char('配偶姓名', help='配偶姓名')
-    kPozjlx = fields.Char('配偶证件类型', help='配偶证件类型')
-    kDsznbz = fields.Selection(DSZNBZ_SELECTION,string = '独生子女标志', help='独生子女标志')
-    kSylrftfs = fields.Char('赡养老人分摊方式', help='赡养老人分摊方式')
-    kSylrbndykcje = fields.Integer('养老人本年度月扣除金额', help='养老人本年度月扣除金额')
-
-    # 子女信息
-    kZnxm = fields.Char('子女姓名',help='子女姓名')
-    kZjlx = fields.Char('证件类型',help='证件类型')
-    kZjhm = fields.Char('证件号码',help='证件号码')
-    kCsrq = fields.Char('出生日期',help='出生日期')
-    kGj = fields.Char('国籍',help='国籍')
-    kDqsjyjd = fields.Char('当前受教育阶段',help='当前受教育阶段')
-    kDqsjyjdqssj = fields.Char('当前受教育阶段起始时间',help='当前受教育阶段起始时间')
-    kDqsjyjdjssj = fields.Char('当前受教育阶段结束时间',help='当前受教育阶段结束时间')
-    kJyzzsj = fields.Char('教育终止时间',help='教育终止时间')
-    kDqjdqj = fields.Char('当前就读国籍',help='当前就读国籍')
-    kDqjdxx = fields.Char('当前就读学校',help='当前就读学校')
-    kBrkcbl = fields.Char('本人扣除比例',help='本人扣除比例')
-
-    # 住房租金
-    kProvince = fields.Char('主要工作省份', help='主要工作省份')
-    kCity = fields.Char('主要工作城市', help='主要工作城市')
-    kCzflx = fields.Char('出租方类型', help='出租方类型')
-    kCzfxm = fields.Char('出租方姓名（组织名称）', help='出租方姓名（组织名称）')
-    kCzfzjlx = fields.Char('出租方证件类型', help='出租方证件类型')
-    kCzfzjhm = fields.Char('出租方证件号码（统一社会信用代码）', help='出租方证件号码（统一社会信用代码）')
-    kZfzldz = fields.Char('住房坐落地址', help='住房坐落地址')
-    kZfzlhtbh = fields.Char('租赁合同编号', help='租赁合同编号')
-    kZlqq = fields.Char('租赁期起', help='租赁期起')
-    kZlqz = fields.Char('租赁期止', help='租赁期止')
-
-    # 住房贷款 住房信息
-    kFwzldz = fields.Char('房屋坐落地址', help='房屋坐落地址')
-    kBrjkbz = fields.Selection(BRJKBZ_SELECTION,string = '本人借款标志 0-否 1-是', help='本人借款标志 0-否 1-是')
-    kZfzslx = fields.Char('住房证书类型', help='住房证书类型')
-    kZfzsh = fields.Char('住房证书号', help='住房证书号')
-    kDklx = fields.Selection(DKLX_SELECTION,string = '贷款类型 1-公积金贷款 2-商业贷款', help='贷款类型 1-公积金贷款 2-商业贷款')
-    kDkyh = fields.Char('贷款银行', help='贷款银行')
-    kDkhtbh = fields.Char('贷款合同编号', help='贷款合同编号')
-    kSchkrq = fields.Char('首次还款日期', help='首次还款日期')
-    kDkqx = fields.Char('贷款期限(月数)', help='贷款期限(月数)')
-
-    # 赡养老人 被赡养人信息
-    kXm1 = fields.Char('姓名', help='姓名')
-    kZjlx1 = fields.Char('证件类型', help='证件类型')
-    kZjhm1 = fields.Char('证件号码', help='证件号码')
-    kGj1 = fields.Char('国籍', help='国籍')
-    kGx1 = fields.Char('关系', help='关系')
-    kCsrq1 = fields.Char('出生日期', help='出生日期')
-
-    # 共同赡养人信息
-    kXm2 = fields.Char('姓名', help='姓名')
-    kZjlx2 = fields.Char('证件类型', help='证件类型')
-    kZjhm2 = fields.Char('证件号码', help='证件号码')
-    kGj2 = fields.Char('国籍', help='国籍')
-
-    # 继续教育
-    kJyjd = fields.Char('教育阶段', help='教育阶段')
-    kRxsj = fields.Char('入学时间', help='入学时间')
-    kBysj = fields.Char('毕业时间', help='毕业时间')
-    kJxjylx = fields.Char('继续教育类型', help='继续教育类型')
-    kFzrq = fields.Char('发证（批准）日期', help='发证（批准）日期')
-    kZsmc = fields.Char('证书名称', help='证书名称')
-    kZsbh = fields.Char('证书编号', help='证书编号')
-    kFzjg = fields.Char('发证机关', help='发证机关')
-
-    nscount = fields.Char('纳税人数', help='纳税人数')
-    nsamount = fields.Char('纳税金额', help='纳税金额')
-    gsgbze = fields.Char('公司股本总额', help='公司股本总额')
-    totalYbtse = fields.Char('应补退税额', help='应补退税额')
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        pass
-
-class SBZf(models.Model):
-    _name = "cic_taxsb.zf"
-    _description = "作废"
-    _inherit = "cic_taxsb.base"
-
-    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
-    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'lsh',
-            'nsrsbh',
-            'sbzlbh',
-            'skssqq',
-            'skssqz',
-            'sssq',
-            'dqbm',
-            'nsqxdm'
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0]
-            temp_dict.pop('id', None)
-            record.content = json.dumps(temp_dict)
+# class SBZf(models.Model):
+#     _name = "cic_taxsb.zf"
+#     _description = "作废"
+#     _inherit = "cic_taxsb.base"
+#
+#     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
+#     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields = [
+#             'lsh',
+#             'nsrsbh',
+#             'sbzlbh',
+#             'skssqq',
+#             'skssqz',
+#             'sssq',
+#             'dqbm',
+#             'nsqxdm'
+#         ]
+#         for record in self:
+#             temp_dict = record.read(_fields)[0]
+#             temp_dict.pop('id', None)
+#             record.content = json.dumps(temp_dict)
