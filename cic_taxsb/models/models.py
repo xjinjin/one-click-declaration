@@ -162,7 +162,7 @@ class BalanceSheet(models.Model):
     _description = '资产负债表模板'
 
     sequence = fields.Integer('序号')
-    line = fields.Integer('序号', required=True, help='资产负债表的行次')
+    line = fields.Integer('序号', required=True, help='资产负债表的行次') # 整行
     balance = fields.Char('资产')
     line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯')
     ending_balance = fields.Float('期末余额')
@@ -197,7 +197,7 @@ class ProfitStatement(models.Model):
     balance = fields.Char('项目', help='报表的行次的总一个名称')
     line_num = fields.Char('行次', help='生成报表的行次')
     cumulative_occurrence_balance = fields.Float('本年累计金额', help='本年利润金额')
-    # ?
+    # 这一行第二个位置的公式
     occurrence_balance_formula = fields.Text(
         '科目范围', help='设定本行的利润的科目范围，例如1001~1012999999 结束科目尽可能大一些方便以后扩展')
     current_occurrence_balance = fields.Float('本月金额', help='本月的利润的金额')
@@ -885,413 +885,413 @@ class SBSubmit(models.Model):
     def _compute_serviceId(self):
         self.serviceId = self.sbzlbh + 'Submit'
 
-class SBXqykjzz(models.Model):
-
-    _name = "cic_taxsb.xqykjzz"
-    _description = "财务报表(小企业会计准则)月(季)"
-    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
-
-    # 申报信息
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
-    # 资产负债表
-    ## 短期借款  货币资金
-    dqjkqmye = fields.Char('期末余额', help="期末余额")
-    hbzjncye = fields.Char('年初余额', help="年初余额")
-    hbzjqmye = fields.Char('期末余额', help="期末余额")
-    dqjkncye = fields.Char('年初余额', help="年初余额")
-
-    ## 应付票据	短期投资
-    yfpjqmye = fields.Char('期末余额', help="期末余额")
-    dqtzqmye = fields.Char('期末余额', help="期末余额")
-    yfpjncye = fields.Char('年初余额', help="年初余额")
-    dqtzncye = fields.Char('年初余额', help="年初余额")
-
-    ## 应收票据	应付账款
-    yspjqmye = fields.Char('期末余额', help="期末余额")
-    yfzkncye = fields.Char('年初余额', help="年初余额")
-    yfzkqmye = fields.Char('期末余额', help="期末余额")
-    yspjncye = fields.Char('年初余额', help="年初余额")
-
-    ## 预收帐款	应收账款
-    ygszkqmye = fields.Char('应收账款##期末余额', help="应收账款##期末余额")
-    yszkqmye = fields.Char('预收帐款##期末余额', help="预收帐款##期末余额")
-    ygszkncye = fields.Char('应收账款##年初余额', help="应收账款##年初余额")
-    yszkncye = fields.Char('预收帐款##年初余额', help="预收帐款##年初余额")
-
-    ## 预付账款	应付职工薪酬
-    yfzkqmye = fields.Char('期末余额', help="期末余额")
-    yfzkncye = fields.Char('年初余额', help="年初余额")
-    yfzgxcncye = fields.Char('年初余额', help="年初余额")
-    yfzgxcqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 应收股利	应交税费
-    ysglqmye = fields.Char('期末余额', help="期末余额")
-    yjsfqmye = fields.Char('期末余额', help="期末余额")
-    yjsfncye = fields.Char('年初余额', help="年初余额")
-    ysglncye = fields.Char('年初余额', help="年初余额")
-
-    ## 应付利息	应收利息
-    yflxncye = fields.Char('年初余额', help="年初余额")
-    yslxqmye = fields.Char('期末余额', help="期末余额")
-    yslxncye = fields.Char('年初余额', help="年初余额")
-    yflxqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 其他应收款	应付利润
-    yflrncye = fields.Char('年初余额', help="年初余额")
-    qtyskncye = fields.Char('年初余额', help="年初余额")
-    qtyskqmye = fields.Char('期末余额', help="期末余额")
-    yflrqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 其他应付款	存货
-    chqmye = fields.Char('期末余额', help="期末余额")
-    qtyfkncye = fields.Char('年初余额', help="年初余额")
-    chncye = fields.Char('年初余额', help="年初余额")
-    qtyfkqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 其中：原材料	其他流动负债
-    qtldfzqmye = fields.Char('期末余额', help="期末余额")
-    qzyclncye = fields.Char('年初余额', help="年初余额")
-    qzyclqmye = fields.Char('期末余额', help="期末余额")
-    qtldfzncye = fields.Char('年初余额', help="年初余额")
-
-    ## 在产品	流动负债合计
-    zcpncye = fields.Char('年初余额', help="年初余额")
-    ldfzhjqmye = fields.Char('期末余额', help="期末余额")
-    zcpqmye = fields.Char('期末余额', help="期末余额")
-    ldfzhjncye = fields.Char('年初余额', help="年初余额")
-
-    ## 库存材料	非流动负债
-    kcclncye = fields.Char('年初余额', help="年初余额")
-    kcclqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 周转材料	长期借款
-    zzclqmye = fields.Char('期末余额', help="期末余额")
-    zqjkqmye = fields.Char('期末余额', help="期末余额")
-    zzclncye = fields.Char('年初余额', help="年初余额")
-    zqjkncye = fields.Char('年初余额', help="年初余额")
-
-    ## 其他流动资产	长期应付款
-    zqyfkncye = fields.Char('年初余额', help="年初余额")
-    qtldzcqmye = fields.Char('期末余额', help="期末余额")
-    qtldzcncye = fields.Char('年初余额', help="年初余额")
-    zqyfkqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 流动资产合计	递延收益
-    dysyqmye = fields.Char('期末余额', help="期末余额")
-    ldzchjqmye = fields.Char('期末余额', help="期末余额")
-    ldzchjncye = fields.Char('年初余额', help="年初余额")
-    dysyncye = fields.Char('年初余额', help="年初余额")
-
-    ## 非流动资产	其他非流动负债
-    qtfldfzncye = fields.Char('年初余额', help="年初余额")
-    qtfldfzqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 长期债券投资	非流动负债合计
-    fldfzhjncye = fields.Char('年初余额', help="年初余额")
-    zqzqtzncye = fields.Char('年初余额', help="年初余额")
-    zqzqtzqmye = fields.Char('期末余额', help="期末余额")
-    fldfzhjqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 长期股权投资	负债合计
-    zqgqtzqmye = fields.Char('期末余额', help="期末余额")
-    fzhjncye = fields.Char('年初余额', help="年初余额")
-    fzhjqmye = fields.Char('期末余额', help="期末余额")
-    zqgqtzncye = fields.Char('年初余额', help="年初余额")
-
-    ## 固定资产原价
-    gdzcyjncye = fields.Char('年初余额', help="年初余额")
-    gdzcyjqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 减：累计折旧
-    jljzjncye = fields.Char('年初余额', help="年初余额")
-    jljzjqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 固定资产账面价值
-    gdzczmjzncye = fields.Char('年初余额', help="年初余额")
-    gdzczmjzqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 在建工程
-    zjgcncye = fields.Char('年初余额', help="年初余额")
-    zjgcqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 工程物资
-    gcwzncye = fields.Char('年初余额', help="年初余额")
-    gcwzqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 固定资产清理
-    gdzcqlqmye = fields.Char('期末余额', help="期末余额")
-    gdzcqlncye = fields.Char('年初余额', help="年初余额")
-
-    ## 生产性生物资产	所有者权益（或股东权益）
-    scxswzcncye = fields.Char('年初余额', help="年初余额")
-    scxswzcqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 无形资产	实收资本（或股本）
-    wxzcqmye = fields.Char('期末余额', help="期末余额")
-    wxzcncye = fields.Char('年初余额', help="年初余额")
-    sszbhgbqmye = fields.Char('期末余额', help="期末余额")
-    sszbhgbncye = fields.Char('年初余额', help="年初余额")
-
-    ## 开发支出	资本公积
-    zbgjqmye = fields.Char('期末余额', help="期末余额")
-    zbgjncye = fields.Char('年初余额', help="年初余额")
-    kfzcncye = fields.Char('年初余额', help="年初余额")
-    kfzcqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 长期待摊费用	盈余公积
-    zqdtfyqmye = fields.Char('期末余额', help="期末余额")
-    zqdtfyncye = fields.Char('年初余额', help="年初余额")
-    yygjqmye = fields.Char('期末余额', help="期末余额")
-    yygjncye = fields.Char('年初余额', help="年初余额")
-
-    ## 其他非流动资产	未分配利润
-    wfplrncye = fields.Char('年初余额', help="年初余额")
-    qtfldzcncye = fields.Char('年初余额', help="年初余额")
-    wfplrqmye = fields.Char('期末余额', help="期末余额")
-    qtfldzcqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 非流动资产合计	所有者权益（或股东权益）合计
-    syzqyhjncye = fields.Char('年初余额', help="年初余额")
-    syzqyhjqmye = fields.Char('年初余额', help="年初余额")
-    fldzchjncye = fields.Char('期末余额', help="期末余额")
-    fldzchjqmye = fields.Char('期末余额', help="期末余额")
-
-    ## 资产合计	负债和所有者权益（或股东权益）总计
-    zchjncye = fields.Char('年初余额', help="年初余额")
-    zchjqmye = fields.Char('期末余额', help="期末余额")
-    fzhsyzqyhjqmye = fields.Char('期末余额', help="期末余额")
-    fzhsyzqyhjncye = fields.Char('年初余额', help="年初余额")
-
-    # 利润表
-    ## 一、营业收入
-    yyysrbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    yyysrbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 减：营业成本
-    jyycbbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    jyycbbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 营业税金及附加
-    yysjjfjbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    yysjjfjbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 其中：消费税
-    qzxfsbyje = fields.Char('本月金额', help="本月金额")
-    qzxfsbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 营业税
-    yysbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    yysbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 城市建设维护税
-    csjswhsbyje = fields.Char('本月金额', help="本月金额")
-    csjswhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 资源税
-    zysbyje = fields.Char('本月金额', help="本月金额")
-    zysbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 土地增值税
-    tdzzsbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    tdzzsbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 城镇土地使用税、房产税、车船税、印花税
-    cztdsysfcsccsyhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    cztdsysfcsccsyhsbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 教育附加、矿产资源、排污费
-    jyfjkczypwfbyje = fields.Char('本月金额', help="本月金额")
-    jyfjkczypwfbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 销售费用
-    xsfybyje = fields.Char('本月金额', help="本月金额")
-    xsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 其中：商品维修费
-    qzspwxfbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    qzspwxfbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 广告费和业务宣传费
-    ggfhywxcfbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    ggfhywxcfbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 管理费用
-    glfybnljje = fields.Char('本年累计金额', help="本年累计金额")
-    glfybyje = fields.Char('本月金额', help="本月金额")
-
-    ## 其中：开办费
-    qzkbfbyje = fields.Char('本月金额', help="本月金额")
-    qzkbfbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 业务招待费
-    ywzdfbyje = fields.Char('本月金额', help="本月金额")
-    ywzdfbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 研究费用
-    yjfybnljje = fields.Char('本年累计金额', help="本年累计金额")
-    yjfybyje = fields.Char('本月金额', help="本月金额")
-
-    ## 财务费用
-    cwfybyje = fields.Char('本月金额', help="本月金额")
-    cwfybnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 其中：利息费用(收入以-号填列)
-    qzlxfysryhtlbyje = fields.Char('本月金额', help="本月金额")
-    qzlxfysryhtlbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 加：投资收益
-    jtzsybnljje = fields.Char('本年累计金额', help="本年累计金额")
-    jtzsybyje = fields.Char('本月金额', help="本月金额")
-
-    ## 二、营业利润
-    eyylrbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    eyylrbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 加：营业外收入
-    jyywsrbyje = fields.Char('本月金额', help="本月金额")
-    jyywsrbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 其中：政府补助
-    qzzfbzbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    qzzfbzbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 减：营业外支出
-    jyywzcbyje = fields.Char('本月金额', help="本月金额")
-    jyywzcbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 其中：坏账损失
-    qzhzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    qzhzssbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 无法收回的长期债券投资损失
-    wfshdzqzqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    wfshdzqzqtzssbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 无法收回的长期股权投资损失
-    wfshdzqgqtzssbyje = fields.Char('本月金额', help="本月金额")
-    wfshdzqgqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 自然灾害等不可抗力因素造成的损失
-    zrzhdbkklyszcdssbnljje = fields.Char('本年累计金额', help="本年累计金额")
-    zrzhdbkklyszcdssbyje = fields.Char('本月金额', help="本月金额")
-
-    ## 税收滞纳金
-    ssznjbyje = fields.Char('本月金额', help="本月金额")
-    ssznjbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 三、利润总额
-    slrzebyje = fields.Char('本月金额', help="本月金额")
-    slrzebnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    ## 减：所得税费用
-    jsdsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
-    jsdsfybyje = fields.Char('本月金额', help="本月金额")
-
-    ## 四、净利润
-    sjlrbyje = fields.Char('本月金额', help="本月金额")
-    sjlrbnljje = fields.Char('本年累计金额', help="本年累计金额")
-
-    # 现金流量表
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        _fields_sbbinfo = ['sbzlbh','ssqq','ssqz','nsrsbh','area','nsqxdm']
-        _fields_zcfzb = ['dqjkqmye','hbzjncye','hbzjqmye','dqjkncye','yfpjqmye','dqtzqmye','yfpjncye','dqtzncye',
-                         'yspjqmye', 'yfzkncye', 'yfzkqmye','yspjncye','ygszkqmye', 'yszkqmye', 'ygszkncye','yszkncye',
-                         'yfzkqmye', 'yfzkncye', 'yfzgxcncye', 'yfzgxcqmye','ysglqmye', 'yjsfqmye', 'yjsfncye', 'ysglncye',
-                         'yflxncye', 'yslxqmye', 'yslxncye', 'yflxqmye','yflrncye', 'qtyskncye', 'qtyskqmye', 'yflrqmye',
-                         'chqmye', 'qtyfkncye', 'chncye', 'qtyfkqmye','qtldfzqmye', 'qzyclncye', 'qzyclqmye', 'qtldfzncye',
-                         'zcpncye', 'ldfzhjqmye', 'zcpqmye', 'ldfzhjncye','kcclncye', 'kcclqmye', 'zzclqmye', 'zqjkqmye',
-                         'zzclncye', 'zqjkncye', 'zqyfkncye', 'qtldzcqmye','qtldzcncye', 'zqyfkqmye', 'dysyqmye', 'ldzchjqmye',
-                         'ldzchjncye', 'dysyncye', 'qtfldfzncye', 'qtfldfzqmye','fldfzhjncye', 'zqzqtzncye', 'zqzqtzqmye', 'fldfzhjqmye',
-                         'zqgqtzqmye', 'fzhjncye', 'fzhjqmye', 'zqgqtzncye','gdzcyjncye', 'gdzcyjqmye', 'jljzjncye', 'jljzjqmye',
-                         'gdzczmjzncye', 'gdzczmjzqmye', 'zjgcncye', 'zjgcqmye','gcwzncye', 'gcwzqmye', 'gdzcqlqmye', 'gdzcqlncye',
-                         'scxswzcncye', 'scxswzcqmye', 'wxzcqmye', 'wxzcncye','sszbhgbqmye', 'sszbhgbncye', 'zbgjqmye', 'zbgjncye',
-                         'kfzcncye', 'kfzcqmye', 'zqdtfyqmye', 'zqdtfyncye','yygjqmye', 'yygjncye', 'wfplrncye', 'qtfldzcncye',
-                         'wfplrqmye', 'qtfldzcqmye', 'syzqyhjncye', 'syzqyhjqmye','fldzchjncye', 'fldzchjqmye', 'zchjncye', 'zchjqmye',
-                         'fzhsyzqyhjqmye', 'fzhsyzqyhjncye'
-                         ]
-        _fields_lrb = ['yyysrbnljje','yyysrbyje','jyycbbnljje','jyycbbyje','yysjjfjbnljje','yysjjfjbyje',
-                       'qzxfsbyje', 'qzxfsbnljje', 'yysbnljje', 'yysbyje', 'csjswhsbyje', 'csjswhsbnljje',
-                       'zysbyje', 'zysbnljje', 'tdzzsbnljje', 'tdzzsbyje', 'cztdsysfcsccsyhsbnljje', 'cztdsysfcsccsyhsbyje',
-                       'jyfjkczypwfbyje', 'jyfjkczypwfbnljje', 'xsfybyje', 'xsfybnljje', 'qzspwxfbnljje', 'qzspwxfbyje',
-                       'ggfhywxcfbnljje', 'ggfhywxcfbyje', 'glfybnljje', 'glfybyje', 'qzkbfbyje', 'qzkbfbnljje',
-                       'ywzdfbyje', 'ywzdfbnljje', 'yjfybnljje', 'yjfybyje', 'cwfybyje', 'cwfybnljje',
-                       'qzlxfysryhtlbyje', 'qzlxfysryhtlbnljje', 'jtzsybnljje', 'jtzsybyje', 'eyylrbnljje', 'eyylrbyje',
-                       'jyywsrbyje', 'jyywsrbnljje', 'qzzfbzbnljje', 'qzzfbzbyje', 'jyywzcbyje', 'jyywzcbnljje',
-                       'qzhzssbnljje', 'qzhzssbyje', 'wfshdzqzqtzssbnljje', 'wfshdzqzqtzssbyje', 'wfshdzqgqtzssbyje', 'wfshdzqgqtzssbnljje',
-                       'zrzhdbkklyszcdssbnljje', 'zrzhdbkklyszcdssbyje', 'ssznjbyje', 'ssznjbnljje', 'slrzebyje', 'slrzebnljje',
-                       'jsdsfybnljje', 'jsdsfybyje', 'sjlrbyje', 'sjlrbnljje'
-                       ]
-        for record in self:
-            temp_dict_sbbinfo = record.read(_fields_sbbinfo)[0]
-            temp_dict_sbbinfo.pop('id',None)
-            temp_dict_zcfzb = record.read(_fields_zcfzb)[0]
-            temp_dict_zcfzb.pop('id', None)
-            temp_dict_lrb = record.read(_fields_lrb)[0]
-            temp_dict_lrb.pop('id', None)
-            res_dict = {'jsxgs_cwbb_xqykjzzxxVO':{'sbbinfo':temp_dict_sbbinfo,'jsxgs_cwbb_xqykjzz_zcfzb':'',
-                                                  'jsxgs_cwbb_xqykjzz_lrb':'','jsxgs_cwbb_xqykjzz_xjllb':''}}
-            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
-            record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
-                                         'lsh':self.lsh,'nsrsbh':self.nsrsbh,'nsqxdm':self.nsqxdm,
-                                         'skssqz':self.skssqz,'serviceId':self.serviceId,})
-
-class SBGrjysdsxx(models.Model):
-    _name = "cic_taxsb.grjysdsxx"
-    _description = "个人经营所得A类"
-    _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
-
-    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-    ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-    nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-    area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
-    # 个人经营所得A类 个人所得税生产经营所得纳税申报表(a表)
-    ewbhxh = fields.Char(default='1')
-    # ewbhxh = fields.Char(default='2')
-    floatrow = fields.Char(default='1')
-    ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
-    zsfs = fields.Char('征收方式',help='征收方式')
-    qylx = fields.Char('企业类型',help='企业类型')
-    skssqz = fields.Char('税款所属期止',help='税款所属期止')
-    # nsrsbh = fields.Char('纳税人识别号',help='纳税人识别号')
-    btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
-    mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
-    cbfy = fields.Char('成本费用',help='成本费用')
-    sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
-    lrze = fields.Char('利润总额',help='利润总额')
-    jmse = fields.Char('减免税额',help='减免税额')
-    gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
-    ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
-    yyjse = fields.Char('已预缴税额',help='已预缴税额')
-    ynse = fields.Char('应纳税额',help='应纳税额')
-    srze = fields.Char('收入总额',help='收入总额')
-    skssqq = fields.Char('税款所属期起',help='税款所属期起')
-    hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
-    btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
-    sskcs = fields.Char('速算扣除数',help='速算扣除数')
-    sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
-    tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
-    xm = fields.Char('姓名',help='姓名')
-    yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
-    sl = fields.Char('税率(%)',help='税率(%)')
-
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    @api.multi
-    def _compute_content(self):
-        pass
+# class SBXqykjzz(models.Model):
+#
+#     _name = "cic_taxsb.xqykjzz"
+#     _description = "财务报表(小企业会计准则)月(季)"
+#     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+#
+#     # 申报信息
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#
+#     # 资产负债表
+#     ## 短期借款  货币资金
+#     dqjkqmye = fields.Char('期末余额', help="期末余额")
+#     hbzjncye = fields.Char('年初余额', help="年初余额")
+#     hbzjqmye = fields.Char('期末余额', help="期末余额")
+#     dqjkncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 应付票据	短期投资
+#     yfpjqmye = fields.Char('期末余额', help="期末余额")
+#     dqtzqmye = fields.Char('期末余额', help="期末余额")
+#     yfpjncye = fields.Char('年初余额', help="年初余额")
+#     dqtzncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 应收票据	应付账款
+#     yspjqmye = fields.Char('期末余额', help="期末余额")
+#     yfzkncye = fields.Char('年初余额', help="年初余额")
+#     yfzkqmye = fields.Char('期末余额', help="期末余额")
+#     yspjncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 预收帐款	应收账款
+#     ygszkqmye = fields.Char('应收账款##期末余额', help="应收账款##期末余额")
+#     yszkqmye = fields.Char('预收帐款##期末余额', help="预收帐款##期末余额")
+#     ygszkncye = fields.Char('应收账款##年初余额', help="应收账款##年初余额")
+#     yszkncye = fields.Char('预收帐款##年初余额', help="预收帐款##年初余额")
+#
+#     ## 预付账款	应付职工薪酬
+#     yfzkqmye = fields.Char('期末余额', help="期末余额")
+#     yfzkncye = fields.Char('年初余额', help="年初余额")
+#     yfzgxcncye = fields.Char('年初余额', help="年初余额")
+#     yfzgxcqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 应收股利	应交税费
+#     ysglqmye = fields.Char('期末余额', help="期末余额")
+#     yjsfqmye = fields.Char('期末余额', help="期末余额")
+#     yjsfncye = fields.Char('年初余额', help="年初余额")
+#     ysglncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 应付利息	应收利息
+#     yflxncye = fields.Char('年初余额', help="年初余额")
+#     yslxqmye = fields.Char('期末余额', help="期末余额")
+#     yslxncye = fields.Char('年初余额', help="年初余额")
+#     yflxqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 其他应收款	应付利润
+#     yflrncye = fields.Char('年初余额', help="年初余额")
+#     qtyskncye = fields.Char('年初余额', help="年初余额")
+#     qtyskqmye = fields.Char('期末余额', help="期末余额")
+#     yflrqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 其他应付款	存货
+#     chqmye = fields.Char('期末余额', help="期末余额")
+#     qtyfkncye = fields.Char('年初余额', help="年初余额")
+#     chncye = fields.Char('年初余额', help="年初余额")
+#     qtyfkqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 其中：原材料	其他流动负债
+#     qtldfzqmye = fields.Char('期末余额', help="期末余额")
+#     qzyclncye = fields.Char('年初余额', help="年初余额")
+#     qzyclqmye = fields.Char('期末余额', help="期末余额")
+#     qtldfzncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 在产品	流动负债合计
+#     zcpncye = fields.Char('年初余额', help="年初余额")
+#     ldfzhjqmye = fields.Char('期末余额', help="期末余额")
+#     zcpqmye = fields.Char('期末余额', help="期末余额")
+#     ldfzhjncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 库存材料	非流动负债
+#     kcclncye = fields.Char('年初余额', help="年初余额")
+#     kcclqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 周转材料	长期借款
+#     zzclqmye = fields.Char('期末余额', help="期末余额")
+#     zqjkqmye = fields.Char('期末余额', help="期末余额")
+#     zzclncye = fields.Char('年初余额', help="年初余额")
+#     zqjkncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 其他流动资产	长期应付款
+#     zqyfkncye = fields.Char('年初余额', help="年初余额")
+#     qtldzcqmye = fields.Char('期末余额', help="期末余额")
+#     qtldzcncye = fields.Char('年初余额', help="年初余额")
+#     zqyfkqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 流动资产合计	递延收益
+#     dysyqmye = fields.Char('期末余额', help="期末余额")
+#     ldzchjqmye = fields.Char('期末余额', help="期末余额")
+#     ldzchjncye = fields.Char('年初余额', help="年初余额")
+#     dysyncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 非流动资产	其他非流动负债
+#     qtfldfzncye = fields.Char('年初余额', help="年初余额")
+#     qtfldfzqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 长期债券投资	非流动负债合计
+#     fldfzhjncye = fields.Char('年初余额', help="年初余额")
+#     zqzqtzncye = fields.Char('年初余额', help="年初余额")
+#     zqzqtzqmye = fields.Char('期末余额', help="期末余额")
+#     fldfzhjqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 长期股权投资	负债合计
+#     zqgqtzqmye = fields.Char('期末余额', help="期末余额")
+#     fzhjncye = fields.Char('年初余额', help="年初余额")
+#     fzhjqmye = fields.Char('期末余额', help="期末余额")
+#     zqgqtzncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 固定资产原价
+#     gdzcyjncye = fields.Char('年初余额', help="年初余额")
+#     gdzcyjqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 减：累计折旧
+#     jljzjncye = fields.Char('年初余额', help="年初余额")
+#     jljzjqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 固定资产账面价值
+#     gdzczmjzncye = fields.Char('年初余额', help="年初余额")
+#     gdzczmjzqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 在建工程
+#     zjgcncye = fields.Char('年初余额', help="年初余额")
+#     zjgcqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 工程物资
+#     gcwzncye = fields.Char('年初余额', help="年初余额")
+#     gcwzqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 固定资产清理
+#     gdzcqlqmye = fields.Char('期末余额', help="期末余额")
+#     gdzcqlncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 生产性生物资产	所有者权益（或股东权益）
+#     scxswzcncye = fields.Char('年初余额', help="年初余额")
+#     scxswzcqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 无形资产	实收资本（或股本）
+#     wxzcqmye = fields.Char('期末余额', help="期末余额")
+#     wxzcncye = fields.Char('年初余额', help="年初余额")
+#     sszbhgbqmye = fields.Char('期末余额', help="期末余额")
+#     sszbhgbncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 开发支出	资本公积
+#     zbgjqmye = fields.Char('期末余额', help="期末余额")
+#     zbgjncye = fields.Char('年初余额', help="年初余额")
+#     kfzcncye = fields.Char('年初余额', help="年初余额")
+#     kfzcqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 长期待摊费用	盈余公积
+#     zqdtfyqmye = fields.Char('期末余额', help="期末余额")
+#     zqdtfyncye = fields.Char('年初余额', help="年初余额")
+#     yygjqmye = fields.Char('期末余额', help="期末余额")
+#     yygjncye = fields.Char('年初余额', help="年初余额")
+#
+#     ## 其他非流动资产	未分配利润
+#     wfplrncye = fields.Char('年初余额', help="年初余额")
+#     qtfldzcncye = fields.Char('年初余额', help="年初余额")
+#     wfplrqmye = fields.Char('期末余额', help="期末余额")
+#     qtfldzcqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 非流动资产合计	所有者权益（或股东权益）合计
+#     syzqyhjncye = fields.Char('年初余额', help="年初余额")
+#     syzqyhjqmye = fields.Char('年初余额', help="年初余额")
+#     fldzchjncye = fields.Char('期末余额', help="期末余额")
+#     fldzchjqmye = fields.Char('期末余额', help="期末余额")
+#
+#     ## 资产合计	负债和所有者权益（或股东权益）总计
+#     zchjncye = fields.Char('年初余额', help="年初余额")
+#     zchjqmye = fields.Char('期末余额', help="期末余额")
+#     fzhsyzqyhjqmye = fields.Char('期末余额', help="期末余额")
+#     fzhsyzqyhjncye = fields.Char('年初余额', help="年初余额")
+#
+#     # 利润表
+#     ## 一、营业收入
+#     yyysrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     yyysrbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 减：营业成本
+#     jyycbbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     jyycbbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 营业税金及附加
+#     yysjjfjbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     yysjjfjbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 其中：消费税
+#     qzxfsbyje = fields.Char('本月金额', help="本月金额")
+#     qzxfsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 营业税
+#     yysbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     yysbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 城市建设维护税
+#     csjswhsbyje = fields.Char('本月金额', help="本月金额")
+#     csjswhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 资源税
+#     zysbyje = fields.Char('本月金额', help="本月金额")
+#     zysbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 土地增值税
+#     tdzzsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     tdzzsbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 城镇土地使用税、房产税、车船税、印花税
+#     cztdsysfcsccsyhsbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     cztdsysfcsccsyhsbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 教育附加、矿产资源、排污费
+#     jyfjkczypwfbyje = fields.Char('本月金额', help="本月金额")
+#     jyfjkczypwfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 销售费用
+#     xsfybyje = fields.Char('本月金额', help="本月金额")
+#     xsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 其中：商品维修费
+#     qzspwxfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     qzspwxfbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 广告费和业务宣传费
+#     ggfhywxcfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     ggfhywxcfbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 管理费用
+#     glfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     glfybyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 其中：开办费
+#     qzkbfbyje = fields.Char('本月金额', help="本月金额")
+#     qzkbfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 业务招待费
+#     ywzdfbyje = fields.Char('本月金额', help="本月金额")
+#     ywzdfbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 研究费用
+#     yjfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     yjfybyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 财务费用
+#     cwfybyje = fields.Char('本月金额', help="本月金额")
+#     cwfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 其中：利息费用(收入以-号填列)
+#     qzlxfysryhtlbyje = fields.Char('本月金额', help="本月金额")
+#     qzlxfysryhtlbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 加：投资收益
+#     jtzsybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     jtzsybyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 二、营业利润
+#     eyylrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     eyylrbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 加：营业外收入
+#     jyywsrbyje = fields.Char('本月金额', help="本月金额")
+#     jyywsrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 其中：政府补助
+#     qzzfbzbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     qzzfbzbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 减：营业外支出
+#     jyywzcbyje = fields.Char('本月金额', help="本月金额")
+#     jyywzcbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 其中：坏账损失
+#     qzhzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     qzhzssbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 无法收回的长期债券投资损失
+#     wfshdzqzqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     wfshdzqzqtzssbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 无法收回的长期股权投资损失
+#     wfshdzqgqtzssbyje = fields.Char('本月金额', help="本月金额")
+#     wfshdzqgqtzssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 自然灾害等不可抗力因素造成的损失
+#     zrzhdbkklyszcdssbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     zrzhdbkklyszcdssbyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 税收滞纳金
+#     ssznjbyje = fields.Char('本月金额', help="本月金额")
+#     ssznjbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 三、利润总额
+#     slrzebyje = fields.Char('本月金额', help="本月金额")
+#     slrzebnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     ## 减：所得税费用
+#     jsdsfybnljje = fields.Char('本年累计金额', help="本年累计金额")
+#     jsdsfybyje = fields.Char('本月金额', help="本月金额")
+#
+#     ## 四、净利润
+#     sjlrbyje = fields.Char('本月金额', help="本月金额")
+#     sjlrbnljje = fields.Char('本年累计金额', help="本年累计金额")
+#
+#     # 现金流量表
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         _fields_sbbinfo = ['sbzlbh','ssqq','ssqz','nsrsbh','area','nsqxdm']
+#         _fields_zcfzb = ['dqjkqmye','hbzjncye','hbzjqmye','dqjkncye','yfpjqmye','dqtzqmye','yfpjncye','dqtzncye',
+#                          'yspjqmye', 'yfzkncye', 'yfzkqmye','yspjncye','ygszkqmye', 'yszkqmye', 'ygszkncye','yszkncye',
+#                          'yfzkqmye', 'yfzkncye', 'yfzgxcncye', 'yfzgxcqmye','ysglqmye', 'yjsfqmye', 'yjsfncye', 'ysglncye',
+#                          'yflxncye', 'yslxqmye', 'yslxncye', 'yflxqmye','yflrncye', 'qtyskncye', 'qtyskqmye', 'yflrqmye',
+#                          'chqmye', 'qtyfkncye', 'chncye', 'qtyfkqmye','qtldfzqmye', 'qzyclncye', 'qzyclqmye', 'qtldfzncye',
+#                          'zcpncye', 'ldfzhjqmye', 'zcpqmye', 'ldfzhjncye','kcclncye', 'kcclqmye', 'zzclqmye', 'zqjkqmye',
+#                          'zzclncye', 'zqjkncye', 'zqyfkncye', 'qtldzcqmye','qtldzcncye', 'zqyfkqmye', 'dysyqmye', 'ldzchjqmye',
+#                          'ldzchjncye', 'dysyncye', 'qtfldfzncye', 'qtfldfzqmye','fldfzhjncye', 'zqzqtzncye', 'zqzqtzqmye', 'fldfzhjqmye',
+#                          'zqgqtzqmye', 'fzhjncye', 'fzhjqmye', 'zqgqtzncye','gdzcyjncye', 'gdzcyjqmye', 'jljzjncye', 'jljzjqmye',
+#                          'gdzczmjzncye', 'gdzczmjzqmye', 'zjgcncye', 'zjgcqmye','gcwzncye', 'gcwzqmye', 'gdzcqlqmye', 'gdzcqlncye',
+#                          'scxswzcncye', 'scxswzcqmye', 'wxzcqmye', 'wxzcncye','sszbhgbqmye', 'sszbhgbncye', 'zbgjqmye', 'zbgjncye',
+#                          'kfzcncye', 'kfzcqmye', 'zqdtfyqmye', 'zqdtfyncye','yygjqmye', 'yygjncye', 'wfplrncye', 'qtfldzcncye',
+#                          'wfplrqmye', 'qtfldzcqmye', 'syzqyhjncye', 'syzqyhjqmye','fldzchjncye', 'fldzchjqmye', 'zchjncye', 'zchjqmye',
+#                          'fzhsyzqyhjqmye', 'fzhsyzqyhjncye'
+#                          ]
+#         _fields_lrb = ['yyysrbnljje','yyysrbyje','jyycbbnljje','jyycbbyje','yysjjfjbnljje','yysjjfjbyje',
+#                        'qzxfsbyje', 'qzxfsbnljje', 'yysbnljje', 'yysbyje', 'csjswhsbyje', 'csjswhsbnljje',
+#                        'zysbyje', 'zysbnljje', 'tdzzsbnljje', 'tdzzsbyje', 'cztdsysfcsccsyhsbnljje', 'cztdsysfcsccsyhsbyje',
+#                        'jyfjkczypwfbyje', 'jyfjkczypwfbnljje', 'xsfybyje', 'xsfybnljje', 'qzspwxfbnljje', 'qzspwxfbyje',
+#                        'ggfhywxcfbnljje', 'ggfhywxcfbyje', 'glfybnljje', 'glfybyje', 'qzkbfbyje', 'qzkbfbnljje',
+#                        'ywzdfbyje', 'ywzdfbnljje', 'yjfybnljje', 'yjfybyje', 'cwfybyje', 'cwfybnljje',
+#                        'qzlxfysryhtlbyje', 'qzlxfysryhtlbnljje', 'jtzsybnljje', 'jtzsybyje', 'eyylrbnljje', 'eyylrbyje',
+#                        'jyywsrbyje', 'jyywsrbnljje', 'qzzfbzbnljje', 'qzzfbzbyje', 'jyywzcbyje', 'jyywzcbnljje',
+#                        'qzhzssbnljje', 'qzhzssbyje', 'wfshdzqzqtzssbnljje', 'wfshdzqzqtzssbyje', 'wfshdzqgqtzssbyje', 'wfshdzqgqtzssbnljje',
+#                        'zrzhdbkklyszcdssbnljje', 'zrzhdbkklyszcdssbyje', 'ssznjbyje', 'ssznjbnljje', 'slrzebyje', 'slrzebnljje',
+#                        'jsdsfybnljje', 'jsdsfybyje', 'sjlrbyje', 'sjlrbnljje'
+#                        ]
+#         for record in self:
+#             temp_dict_sbbinfo = record.read(_fields_sbbinfo)[0]
+#             temp_dict_sbbinfo.pop('id',None)
+#             temp_dict_zcfzb = record.read(_fields_zcfzb)[0]
+#             temp_dict_zcfzb.pop('id', None)
+#             temp_dict_lrb = record.read(_fields_lrb)[0]
+#             temp_dict_lrb.pop('id', None)
+#             res_dict = {'jsxgs_cwbb_xqykjzzxxVO':{'sbbinfo':temp_dict_sbbinfo,'jsxgs_cwbb_xqykjzz_zcfzb':'',
+#                                                   'jsxgs_cwbb_xqykjzz_lrb':'','jsxgs_cwbb_xqykjzz_xjllb':''}}
+#             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(dict_to_xml(res_dict))
+#             record.content = json.dumps({'bizXml':base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8"),
+#                                          'lsh':self.lsh,'nsrsbh':self.nsrsbh,'nsqxdm':self.nsqxdm,
+#                                          'skssqz':self.skssqz,'serviceId':self.serviceId,})
+
+# class SBGrjysdsxx(models.Model):
+#     _name = "cic_taxsb.grjysdsxx"
+#     _description = "个人经营所得A类"
+#     _inherit = ['cic_taxsb.base', 'cic_taxsb.submit']
+#
+#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     ssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
+#     ssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
+#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
+#     area = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
+#
+#     # 个人经营所得A类 个人所得税生产经营所得纳税申报表(a表)
+#     ewbhxh = fields.Char(default='1')
+#     # ewbhxh = fields.Char(default='2')
+#     floatrow = fields.Char(default='1')
+#     ynssde = fields.Char('应纳税所得额',help='应纳税所得额')
+#     zsfs = fields.Char('征收方式',help='征收方式')
+#     qylx = fields.Char('企业类型',help='企业类型')
+#     skssqz = fields.Char('税款所属期止',help='税款所属期止')
+#     # nsrsbh = fields.Char('纳税人识别号',help='纳税人识别号')
+#     btzdwnsrsbh = fields.Char('被投资单位纳税人识别号',help='被投资单位纳税人识别号')
+#     mbyqndks = fields.Char('弥补以前年度亏损',help='弥补以前年度亏损')
+#     cbfy = fields.Char('成本费用',help='成本费用')
+#     sfzjhm = fields.Char('身份证件号码',help='身份证件号码')
+#     lrze = fields.Char('利润总额',help='利润总额')
+#     jmse = fields.Char('减免税额',help='减免税额')
+#     gjdq = fields.Char('国籍(地区)',help='国籍(地区)')
+#     ybtse = fields.Char('应补(退)税额',help='应补(退)税额')
+#     yyjse = fields.Char('已预缴税额',help='已预缴税额')
+#     ynse = fields.Char('应纳税额',help='应纳税额')
+#     srze = fields.Char('收入总额',help='收入总额')
+#     skssqq = fields.Char('税款所属期起',help='税款所属期起')
+#     hhqyhhrfpbl = fields.Char('合伙企业合伙人分配比例(%)',help='合伙企业合伙人分配比例(%)')
+#     btzdwmc = fields.Char('被投资单位名称',help='被投资单位名称')
+#     sskcs = fields.Char('速算扣除数',help='速算扣除数')
+#     sfzjlx = fields.Char('身份证件类型',help='身份证件类型')
+#     tzzjcfy = fields.Char('投资者减除费用',help='投资者减除费用')
+#     xm = fields.Char('姓名',help='姓名')
+#     yssdl = fields.Char('应税所得率(%)',help='应税所得率(%)')
+#     sl = fields.Char('税率(%)',help='税率(%)')
+#
+#     content = fields.Text('报文内容', compute='_compute_content')
+#
+#     @api.multi
+#     def _compute_content(self):
+#         pass
 
 #     # ewbhxh = fields.Char('2',default = '2',help='2')
 #     # floatrow = fields.Char('1',default = '1',help='1')
