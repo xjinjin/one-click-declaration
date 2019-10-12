@@ -158,29 +158,29 @@ class BalanceSheet(models.Model):
     """
 
     _name = "balance.sheet"
-    _order = "sequence,id"
+    # _order = "sequence,id"
     _description = '资产负债表模板'
 
-    sequence = fields.Integer('序号')
-    line = fields.Integer('序号', required=True, help='资产负债表的行次') # 整行
+    # sequence = fields.Integer('序号') # 保留字段  可修改的排序，可以在列表视图里通过拖拽进行排序
+    line = fields.Integer('序号', required=True, help='资产负债表的行次') # 整行 ewbhxh
     balance = fields.Char('资产')
-    line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯')
+    # line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯')
     ending_balance = fields.Float('期末余额')
-    balance_formula = fields.Text(
-        '科目范围', help='设定本行的资产负债表的科目范围，例如1001~1012999999 结束科目尽可能大一些方便以后扩展')
+    # balance_formula = fields.Text(
+    #     '科目范围', help='设定本行的资产负债表的科目范围，例如1001~1012999999 结束科目尽可能大一些方便以后扩展')
     beginning_balance = fields.Float('年初余额')
 
     balance_two = fields.Char('负债和所有者权益')
-    line_num_two = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯')
+    # line_num_two = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯')
     ending_balance_two = fields.Float('期末余额')
-    balance_two_formula = fields.Text(
-        '科目范围', help='设定本行的资产负债表的科目范围，例如1001~1012999999 结束科目尽可能大一些方便以后扩展')
+    # balance_two_formula = fields.Text(
+    #     '科目范围', help='设定本行的资产负债表的科目范围，例如1001~1012999999 结束科目尽可能大一些方便以后扩展')
     beginning_balance_two = fields.Float('年初余额', help='报表行本年的年余额')
-    company_id = fields.Many2one(
-        'res.company',
-        string='公司',
-        change_default=True,
-        default=lambda self: self.env['res.company']._company_default_get())
+    # company_id = fields.Many2one(
+    #     'res.company',
+    #     string='公司',
+    #     change_default=True,
+    #     default=lambda self: self.env['res.company']._company_default_get())
 
 class ProfitStatement(models.Model):
     """利润表模板
@@ -242,6 +242,7 @@ class CreateBalanceSheetWizard(models.TransientModel):
         """
         return self.env['finance.period'].get_date_now_period_id()
 
+    # 通过self.period_id拿到的就是finance.period（1，）这条记录。domain：可选，用于在客户端筛选数据的domain表达式
     period_id = fields.Many2one('finance.period', string='会计期间', domain=_default_period_domain,
                                 default=_default_period_id, help='用来设定报表的期间')
 
@@ -282,7 +283,8 @@ class CreateBalanceSheetWizard(models.TransientModel):
         return return_vals
 
     def balance_sheet_create(self, balance_sheet_obj, year_begain_field, current_period_field):
-        balance_sheet_obj.write(
+        balance_sheet_obj.write( # balance_sheet 单行的期末和年初值修改（负债表先调用完）
+            #  fabs() 方法返回数字的绝对值
             {'beginning_balance': fabs(self.deal_with_balance_formula(balance_sheet_obj.balance_formula,
                                                                       self.period_id, year_begain_field)),
              'ending_balance': fabs(self.deal_with_balance_formula(balance_sheet_obj.balance_formula,
@@ -295,18 +297,18 @@ class CreateBalanceSheetWizard(models.TransientModel):
     @api.multi
     def create_balance_sheet(self):
         """ 资产负债表的创建 """
-        balance_wizard = self.env['create.trial.balance.wizard'].create(
-            {'period_id': self.period_id.id}) # 新增一条记录
-        balance_wizard.create_trial_balance()
-        view_id = self.env.ref('finance.balance_sheet_tree_wizard').id # 获取XML的ID
-        balance_sheet_objs = self.env['balance.sheet'].search([])
-        year_begain_field = ['year_init_debit', 'year_init_credit']
+        # balance_wizard = self.env['create.trial.balance.wizard'].create(
+        #     {'period_id': self.period_id.id}) # 新增一条记录
+        # balance_wizard.create_trial_balance()
+        # view_id = self.env.ref('finance.balance_sheet_tree_wizard').id # 获取XML的ID
+        balance_sheet_objs = self.env['balance.sheet'].search([]) # search:domain表达式，为空时返回所有记录
+        year_begain_field = ['year_init_debit', 'year_init_credit'] # 年初，资产、负债
         current_period_field = [
-            'ending_balance_debit', 'ending_balance_credit']
-        for balance_sheet_obj in balance_sheet_objs:
-            self.balance_sheet_create(
+            'ending_balance_debit', 'ending_balance_credit'] # 期末，资产、负债
+        for balance_sheet_obj in balance_sheet_objs: # 资产负债表（先调用），每条记录对应一行，所有记录合成一整张表
+            self.balance_sheet_create( # 每行的期末和年初余额调用
                 balance_sheet_obj, year_begain_field, current_period_field)
-        force_company = self._context.get('force_company')
+        force_company = self._context.get('force_company') #
         if not force_company:
             force_company = self.env.user.company_id.id
         company_row = self.env['res.company'].browse(force_company)
