@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data>
+      <record model="ir.actions.act_window" id="cic_taxsb.action_window_shenbao">
+          <field name="name">申报模板</field>
+          <field name="res_model">cic_taxsb.shenbaosheet</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+      <record model="ir.actions.act_window" id="cic_taxsb.action_window_shenbao_cell">
+          <field name="name">申报单元格模板</field>
+          <field name="res_model">cic_taxsb.shenbaosheet.cell</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+
+      <act_window id="action_create_shenbaosheet_wizard"
+   name="创建申报表"
+   res_model="create.shenbaosheet.wizard"
+   view_mode="form" view_id="cic_taxsb.view_form_create_shenbaosheet_wizard" target="new" />
+
+      <menuitem name="申报" id="cic_taxsb.menu_root"/>
+
+
+      <menuitem name="报表" id="cic_taxsb.menu_1" parent="cic_taxsb.menu_root"/>
+
+
+      <menuitem name="申报表模板" id="cic_taxsb.menu_shenbao_list" parent="cic_taxsb.menu_1"
+              sequence="5" action="cic_taxsb.action_window_shenbao"/>
+      <menuitem name="申报表单元格模板" id="cic_taxsb.menu_shenbao_cell_list" parent="cic_taxsb.menu_1"
+              sequence="15" action="cic_taxsb.action_window_shenbao_cell"/>
+      <menuitem name="创建申报表" id="cic_taxsb.menu_create_shenbao_list" parent="cic_taxsb.menu_1"
+              sequence="25" action="cic_taxsb.action_create_shenbaosheet_wizard"/>
+  </data>
+</odoo>
