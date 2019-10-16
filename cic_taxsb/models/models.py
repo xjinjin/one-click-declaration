@@ -640,7 +640,6 @@ class ShenBaoSheet(models.Model):
     sequence = fields.Integer('序号') # 排序使用 _order
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码') # 分地区
     tagname = fields.Char('报文标签')
-    # line = fields.Integer('行号', required=True, help='申报表的行')  # 行号，一行两个行次
     cells = fields.One2many('cic_taxsb.shenbaosheet.cell', 'sheet_id', string='单元格设置') # 单元格设置
     template = fields.Text('模板', help='备用的模板信息')
 
@@ -658,7 +657,7 @@ class ShenBaoCell(models.Model):
     sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') #
     sequence = fields.Integer('序号') # 排序
     line = fields.Integer('行号', required=True, help='申报表的行') # 行号，一行两个行次
-    # line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
+    line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
     tagname = fields.Char('报文标签') #
     get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
 
@@ -681,8 +680,8 @@ class CreateShenbaoSheetWizard(models.TransientModel):
         """ 申报表的创建 """
         for record in self:
             temp_dict = {}
-            # for cell in record.sheet_id.cells: # 资产负债表对象对应的所有单元格对象
-            for cell in env.cells: # 资产负债表对象对应的所有单元格对象
+            for cell in record.sheet_id.cells: # 资产负债表对象对应的所有单元格对象
+            # for cell in env.cells: # 资产负债表对象对应的所有单元格对象
                 if cell.line in temp_dict:
                     key = cell.tagname
                     value = exec(cell.get_value_func, locals={})
