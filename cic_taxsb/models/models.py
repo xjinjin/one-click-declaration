@@ -674,14 +674,15 @@ class CreateShenbaoSheetWizard(models.TransientModel):
     startdate = fields.Date('开始日期', help='开始日期') # 2019-09-01
     enddate = fields.Date('截止日期', help='截止日期')   # 2019-09-30
     xml = fields.Text('XML报文')
-    # {'dqbm': '32',  'sheet_id': 32}
+    # {'dqbm': '32',  'sheet_id': 32,  'startdate': '2019-09-01',  'enddate': '2019-09-30'}
 
     @api.multi
     def create_shenbao_sheet(self):
         """ 申报表的创建 """
         for record in self:
             temp_dict = {}
-            for cell in record.sheet_id.cells:
+            # for cell in record.sheet_id.cells: # 资产负债表对象对应的所有单元格对象
+            for cell in env.cells: # 资产负债表对象对应的所有单元格对象
                 if cell.line in temp_dict:
                     key = cell.tagname
                     value = exec(cell.get_value_func, locals={})
