@@ -628,17 +628,21 @@ class ShenBaoSheet(models.Model):
     _name = "cic_taxsb.shenbaosheet"
     _order = "sequence,id"
     _description = '申报表模板'
+    # _parent_store = True
 
-    name = fields.Char('名称')  # 一行
+    parent_id = fields.Many2one('cic_taxsb.shenbaosheet', string='Parent Tag')
+    # parent_left = fields.Integer('Parent Left', index=True)
+    # parent_right = fields.Integer('Parent Right', index=True)
+    child_ids = fields.One2many('cic_taxsb.shenbaosheet', 'parent_id', 'Child Tags')
+
+    name = fields.Char('名称')
     description = fields.Text('说明') # 说明
     sequence = fields.Integer('序号') # 排序使用 _order
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码') # 分地区
-    tagname = fields.Char('报文标签') # tagname  是第二层的标签zcfzbGridlbVO   也就是一行的
+    tagname = fields.Char('报文标签')
+    # line = fields.Integer('行号', required=True, help='申报表的行')  # 行号，一行两个行次
     cells = fields.One2many('cic_taxsb.shenbaosheet.cell', 'sheet_id', string='单元格设置') # 单元格设置
-    template = fields.Text('模板', help='备用的模板信息') # ？
-    # {'name': 'zcfzbGridlbVO', 'description': 'zcfzbGridlbVO', 'dqbm': '32', 'tagname': 'zcfzbGridlbVO'}
-    # {'name': 'zcfzbGridlbVO', 'description': 'zcfzbGridlbVO', 'dqbm': '32', 'tagname': 'zcfzbGridlbVO'}
-
+    template = fields.Text('模板', help='备用的模板信息')
 
 class ShenBaoCell(models.Model):
     """申报表单元格定义模板
@@ -654,10 +658,10 @@ class ShenBaoCell(models.Model):
     sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') #
     sequence = fields.Integer('序号') # 排序
     line = fields.Integer('行号', required=True, help='申报表的行') # 行号，一行两个行次
-    line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
+    # line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
     tagname = fields.Char('报文标签') #
-    get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码') #
-    # {'sheet_id': 1,  'line': 1, 'tagname': 'dqjkqmye'}
+    get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
+
 
 class CreateShenbaoSheetWizard(models.TransientModel):
     """创建申报报文的向导"""
@@ -665,11 +669,12 @@ class CreateShenbaoSheetWizard(models.TransientModel):
     _description = '申报表的向导'
 
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表')
+    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') # 32
     account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息')
-    startdate = fields.Date('开始日期', help='开始日期')
-    enddate = fields.Date('截止日期', help='截止日期')
+    startdate = fields.Date('开始日期', help='开始日期') # 2019-09-01
+    enddate = fields.Date('截止日期', help='截止日期')   # 2019-09-30
     xml = fields.Text('XML报文')
+    # {'dqbm': '32',  'sheet_id': 32}
 
     @api.multi
     def create_shenbao_sheet(self):
