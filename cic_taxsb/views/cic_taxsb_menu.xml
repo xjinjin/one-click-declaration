@@ -11,6 +11,11 @@
           <field name="res_model">cic_taxsb.shenbaosheet.cell</field>
           <field name="view_mode">tree,form</field>
       </record>
+      <record model="ir.actions.act_window" id="cic_taxsb.djxx">
+          <field name="name">登记信息</field>
+          <field name="res_model">cic_taxsb.djxx</field>
+          <field name="view_mode">tree,form</field>
+      </record>
 
       <act_window id="action_create_shenbaosheet_wizard"
    name="创建申报表"
@@ -29,5 +34,7 @@
               sequence="15" action="cic_taxsb.action_window_shenbao_cell"/>
       <menuitem name="创建申报表" id="cic_taxsb.menu_create_shenbao_list" parent="cic_taxsb.menu_1"
               sequence="25" action="cic_taxsb.action_create_shenbaosheet_wizard"/>
+      <menuitem name="登记信息" id="cic_taxsb.djxx" parent="cic_taxsb.menu_1"
+              sequence="35" action="cic_taxsb.djxx"/>
   </data>
 </odoo>

@@ -26,6 +26,7 @@
         'views/cic_taxsb_menu.xml',
         'views/cic_taxsb_shenbaosheet_view.xml',
         'views/cic_taxsb_shenbaosheet_cell_view.xml',
+        'views/cic_taxsb_djxx.xml',
         'views/views.xml',
         'views/templates.xml',
     ],
