@@ -26,6 +26,7 @@
                             <field name="name" />
                             <field name="dqbm" />
                             <field name="tagname" />
+                            <field name="parent_id" />
                         </group>
                         <group>
                             <field name="sequence" />
