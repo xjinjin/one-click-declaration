@@ -34,7 +34,18 @@
                             <field name="template" />
                         </group>
                     </group>
-                    <group><field name="cells" /></group>
+                    <group>
+                    <field name="cells" nolabel="1" mode="tree,kanban" >
+                        <tree string="Invoice Lines" editable="bottom">
+                            <field name="sheet_id"/>
+                            <field name="sequence"/>
+                            <field name="line"/>
+                            <field name="line_num"/>
+                            <field name="tagname"/>
+                            <field name="get_value_func"/>
+                        </tree>
+                    </field>
+                    </group>
                  </sheet>
              </form>
          </field>
