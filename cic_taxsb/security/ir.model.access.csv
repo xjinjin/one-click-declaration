@@ -2,4 +2,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cic_taxsb_djxx,cic_taxsb_djxx,model_cic_taxsb_djxx,,1,1,1,1
 access_cic_taxsb_cshjs,cic_taxsb_cshjs,model_cic_taxsb_cshjs,,1,1,1,1
 access_cic_taxsb_csh,cic_taxsb_csh,model_cic_taxsb_csh,,1,1,1,1
-access_cic_taxsb_grjysdsxx,cic_taxsb_grjysdsxx,model_cic_taxsb_grjysdsxx,,1,1,1,1
+access_cic_taxsb_shenbaosheet,cic_taxsb_shenbaosheet,model_cic_taxsb_shenbaosheet,,1,1,1,1
+access_cic_taxsb_shenbaosheet_cell,cic_taxsb_shenbaosheet_cell,model_cic_taxsb_shenbaosheet_cell,,1,1,1,1
+access_create_shenbaosheet_wizard,create_shenbaosheet_wizard,model_create_shenbaosheet_wizard,,1,1,1,1
