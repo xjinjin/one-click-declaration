@@ -730,7 +730,7 @@ class CreateShenbaoSheetWizard(models.TransientModel):
         ShenBaoCell：创建单元格。sheet_id表示属于那个表
         CreateShenbaoSheetWizard：创建xml。sheet_id表示属于那个xml
         """
-
+        res = self.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
         for record in self: # 大表 'cic_taxsb.shenbaosheet(32, 34, 35, 36)'
             two_temp_dict = {}
             one_temp_dict = {record.sheet_id.tagname:two_temp_dict}
@@ -749,6 +749,29 @@ class CreateShenbaoSheetWizard(models.TransientModel):
                     for cell in forms.cells: # 所有的单元格对象
                         key = cell.tagname
                         # value = '111'
+                        '''zcfzb = res.get('资产负债表')
+                        def get_value():
+                            # dqjkqmye_value = zcfzb.get('line33CurrentEnd')
+                            # dqjkncye_value = zcfzb.get('line33CurrentBegin')
+                            if cell.tagname[-4:] == ncye:
+                                BeginOREnd = 'CurrentBegin'
+                            if cell.tagname[-4:] == qmye:
+                                BeginOREnd = 'CurrentEnd'
+                            value = zcfzb.get('line'+cell.line_num+BeginOREnd)
+                            return value
+                        get_value()'''
+
+                        '''lrb = res.get('利润表')
+                        def get_value():
+                            # 'line1CurrentPrior': 385474.33,
+                            # 'line1CurrentCurrent': 0.0,
+                            if cell.tagname[-4:] == 'byje':
+                                PriorORCurren = 'CurrentBegin'
+                            if cell.tagname[-6:] == 'bnljje':
+                                PriorORCurren = 'CurrentEnd'
+                            value = zcfzb.get('line'+cell.line_num+PriorORCurren)
+                            return value
+                        get_value()'''
                         value = exec(cell.get_value_func, locals={'res':res,'cell':cell})
                         if str(cell.line) not in big_cells_dict:
                             big_cells_dict[str(cell.line)] = {'ewbhxh':cell.line}
