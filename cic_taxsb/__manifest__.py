@@ -17,11 +17,18 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail','cic_ocr_report'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
+        'views/cic_taxsb_create_shenbaosheet_wizard.xml',
+        'views/cic_taxsb_menu.xml',
+        'views/cic_taxsb_shenbaosheet_view.xml',
+        'views/cic_taxsb_shenbaosheet_cell_view.xml',
+        'views/cic_taxsb_djxx.xml',
+        'views/cic_taxsb_csh.xml',
+        'views/cic_taxsb_cshjs.xml',
         'views/views.xml',
         'views/templates.xml',
     ],

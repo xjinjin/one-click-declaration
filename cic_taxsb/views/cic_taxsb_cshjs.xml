@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_tree_cshjs" model="ir.ui.view">
+         <field name="name">江苏初始化树形图</field>
+         <field name="model">cic_taxsb.cshjs</field>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="nsrsbh" />
+                 <field name="skssqq" />
+                 <field name="skssqz" />
+                 <field name="sssq" />
+             </tree>
+         </field>
+    </record>
+
+    <record id="view_form_cshjs" model="ir.ui.view">
+         <field name="name">江苏初始化表单</field>
+         <field name="model">cic_taxsb.cshjs</field>
+         <field name="arch" type="xml">
+             <form string="cshjs">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="nsrsbh" />
+                            <field name="sbzlbh" />
+                            <field name="sssq" />
+                        </group>
+                        <group>
+                            <field name="skssqq" />
+                            <field name="skssqz" />
+                            <field name="nsqxdm" />
+                        </group>
+                    </group>
+                    <group><field name="content" /></group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_form_create_shenbaosheet_wizard" model="ir.ui.view">
+         <field name="name">添加报表</field>
+         <field name="model">create.shenbaosheet.wizard</field>
+         <field name="arch" type="xml">
+             <form string="Create shenbao">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="sheet_id" />
+                            <field name="startdate" />
+                            <field name="account_id" />
+                        </group>
+                        <group>
+                            <field name="dqbm" />
+                            <field name="enddate" />
+                            <field name="xml" />
+                            <div></div>
+                            <div style="text-align: right;width:190px">
+                                <button name="create_shenbao_sheet" type="object"
+                                string="创建申报表" />
+                            </div>
+                        </group>
+                    </group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>
