@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="" model="ir.ui.view">
+    <record id="view_tree_djxx" model="ir.ui.view">
          <field name="name">登记信息</field>
          <field name="model">cic_taxsb.djxx</field>
          <field name="arch" type="xml">
