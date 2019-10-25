@@ -10,173 +10,6 @@ import json
 from math import fabs
 import calendar
 
-"""
-    xmldict
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-    Convert xml to python dictionaries.
-"""
-import datetime
-
-def xml_to_dict(root_or_str, strict=True):
-    """
-    Converts `root_or_str` which can be parsed xml or a xml string to dict.
-    """
-    root = root_or_str
-    if isinstance(root, str):
-        import xml.etree.cElementTree as ElementTree
-        root = ElementTree.XML(root_or_str)
-    return {root.tag: _from_xml(root, strict)}
-
-def dict_to_xml(dict_xml):
-    """
-    Converts `dict_xml` which is a python dict to corresponding xml.
-    """
-    return _to_xml(dict_xml)
-
-# Functions below this line are implementation details.
-# Unless you are changing code, don't bother reading.
-# The functions above constitute the user interface.
-
-def _to_xml(el):
-    """
-    Converts `el` to its xml representation.
-    """
-    val = None
-    if isinstance(el, dict):
-        val = _dict_to_xml(el)
-    elif isinstance(el, bool):
-        val = str(el).lower()
-    else:
-        val = el
-    if val is None: val = 'null'
-    return val
-
-def _extract_attrs(els):
-    """
-    Extracts attributes from dictionary `els`. Attributes are keys which start
-    with '@'
-    """
-    if not isinstance(els, dict):
-        return ''
-    return ''.join(' %s="%s"' % (key[1:], value) for key, value in els.items()
-                   if key.startswith('@'))
-
-def _dict_to_xml(els):
-    """
-    Converts `els` which is a python dict to corresponding xml.
-    """
-    def process_content(tag, content):
-        attrs = _extract_attrs(content)
-        text = isinstance(content, dict) and content.get('#text', '') or ''
-        return '<%s%s>%s%s</%s>' % (tag, attrs, _to_xml(content), text, tag)
-
-    tags = []
-    for tag, content in els.items():
-        # Text and attributes
-        if tag.startswith('@') or tag == '#text' or tag == '#value':
-            continue
-        elif isinstance(content, list):
-            for el in content:
-                tags.append(process_content(tag, el))
-        elif isinstance(content, dict):
-            tags.append(process_content(tag, content))
-        else:
-            tags.append('<%s>%s</%s>' % (tag, _to_xml(content), tag))
-    return ''.join(tags)
-
-def _str_to_datetime(date_str):
-    try:
-        val = datetime.datetime.strptime(date_str,  "%Y-%m-%dT%H:%M:%SZ")
-    except ValueError:
-        val = date_str
-    return val
-
-def _str_to_boolean(bool_str):
-    if bool_str.lower() != 'false' and bool(bool_str):
-        return True
-    return False
-
-def _from_xml(el, strict):
-    """
-    Extracts value of xml element element `el`.
-    """
-    val = None
-    # Parent node.
-    if len(el):
-        val = {}
-        for e in el:
-            tag = e.tag
-            v = _from_xml(e, strict)
-            if tag in val:
-                # Multiple elements share this tag, make them a list
-                if not isinstance(val[tag], list):
-                    val[tag] = [val[tag]]
-                val[tag].append(v)
-            else:
-                # First element with this tag
-                val[tag] = v
-    # Simple node.
-    else:
-        attribs = el.items()
-        # An element with attributes.
-        if attribs and strict:
-            val = dict(('@%s' % k, v) for k, v in dict(attribs).items())
-            if el.text:
-                converted = _val_and_maybe_convert(el)
-                val['#text'] = el.text
-                if converted != el.text:
-                    val['#value'] = converted
-        elif el.text:
-            # An element with no subelements but text.
-            val = _val_and_maybe_convert(el)
-        elif attribs:
-            val = dict(attribs)
-    return val
-
-def _val_and_maybe_convert(el):
-    """
-    Converts `el.text` if `el` has attribute `type` with valid value.
-    """
-    text = el.text.strip()
-    data_type = el.get('type')
-    convertor = _val_and_maybe_convert.convertors.get(data_type)
-    if convertor:
-        return convertor(text)
-    else:
-        return text
-_val_and_maybe_convert.convertors = {
-    'boolean': _str_to_boolean,
-    'datetime': _str_to_datetime,
-    'integer': int
-}
-
-class taxsbBase(models.Model):
-    _name = "cic_taxsb.base"
-    _description = "嘉商通总账系统申报接口API基础类"
-
-    host = fields.Char('主机',default='211.151.124.80')
-    port = fields.Integer('端口',default=6006)
-    path = fields.Char('接口地址',default='remote/callServer')
-    appkey = fields.Char('appKey',default="68c8c236c8484b35b149019d590ff0b0")
-    token = fields.Char('token',default="7f182e426e1a5508c40bbdfa")
-    content = fields.Text('jsonData',default='{}')
-
-    @api.one
-    def post(self, content=None):
-        url = "http://{}:{}/{}".format(self.host,self.port,self.path)
-        content = content or self.content
-        params = {
-            "appKey": self.appkey,
-            "token": hmac.new(bytes(self.token,'utf-8'),msg=bytes(content,'utf-8'),digestmod=sha256).hexdigest(),
-            "jsonData": content
-        }
-        headers = {'Content-type': 'application/x-www-form-urlencoded',
-                   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'}
-        res = requests.post(url,data=params,headers=headers)
-        if res.status_code == 200:
-            return res.json()
-        else:
-            return res.text
 
 # 地区代码
 DQBM_SELECTION = [
@@ -371,6 +204,175 @@ SBZFJGFHDM_SELECTION = [
     ('Z0000', '作废成功'),
     ('Z1000', '作废失败')
 ]
+
+
+"""
+    xmldict
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    Convert xml to python dictionaries.
+"""
+import datetime
+
+def xml_to_dict(root_or_str, strict=True):
+    """
+    Converts `root_or_str` which can be parsed xml or a xml string to dict.
+    """
+    root = root_or_str
+    if isinstance(root, str):
+        import xml.etree.cElementTree as ElementTree
+        root = ElementTree.XML(root_or_str)
+    return {root.tag: _from_xml(root, strict)}
+
+def dict_to_xml(dict_xml):
+    """
+    Converts `dict_xml` which is a python dict to corresponding xml.
+    """
+    return _to_xml(dict_xml)
+
+# Functions below this line are implementation details.
+# Unless you are changing code, don't bother reading.
+# The functions above constitute the user interface.
+
+def _to_xml(el):
+    """
+    Converts `el` to its xml representation.
+    """
+    val = None
+    if isinstance(el, dict):
+        val = _dict_to_xml(el)
+    elif isinstance(el, bool):
+        val = str(el).lower()
+    else:
+        val = el
+    if val is None: val = 'null'
+    return val
+
+def _extract_attrs(els):
+    """
+    Extracts attributes from dictionary `els`. Attributes are keys which start
+    with '@'
+    """
+    if not isinstance(els, dict):
+        return ''
+    return ''.join(' %s="%s"' % (key[1:], value) for key, value in els.items()
+                   if key.startswith('@'))
+
+def _dict_to_xml(els):
+    """
+    Converts `els` which is a python dict to corresponding xml.
+    """
+    def process_content(tag, content):
+        attrs = _extract_attrs(content)
+        text = isinstance(content, dict) and content.get('#text', '') or ''
+        return '<%s%s>%s%s</%s>' % (tag, attrs, _to_xml(content), text, tag)
+
+    tags = []
+    for tag, content in els.items():
+        # Text and attributes
+        if tag.startswith('@') or tag == '#text' or tag == '#value':
+            continue
+        elif isinstance(content, list):
+            for el in content:
+                tags.append(process_content(tag, el))
+        elif isinstance(content, dict):
+            tags.append(process_content(tag, content))
+        else:
+            tags.append('<%s>%s</%s>' % (tag, _to_xml(content), tag))
+    return ''.join(tags)
+
+def _str_to_datetime(date_str):
+    try:
+        val = datetime.datetime.strptime(date_str,  "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        val = date_str
+    return val
+
+def _str_to_boolean(bool_str):
+    if bool_str.lower() != 'false' and bool(bool_str):
+        return True
+    return False
+
+def _from_xml(el, strict):
+    """
+    Extracts value of xml element element `el`.
+    """
+    val = None
+    # Parent node.
+    if len(el):
+        val = {}
+        for e in el:
+            tag = e.tag
+            v = _from_xml(e, strict)
+            if tag in val:
+                # Multiple elements share this tag, make them a list
+                if not isinstance(val[tag], list):
+                    val[tag] = [val[tag]]
+                val[tag].append(v)
+            else:
+                # First element with this tag
+                val[tag] = v
+    # Simple node.
+    else:
+        attribs = el.items()
+        # An element with attributes.
+        if attribs and strict:
+            val = dict(('@%s' % k, v) for k, v in dict(attribs).items())
+            if el.text:
+                converted = _val_and_maybe_convert(el)
+                val['#text'] = el.text
+                if converted != el.text:
+                    val['#value'] = converted
+        elif el.text:
+            # An element with no subelements but text.
+            val = _val_and_maybe_convert(el)
+        elif attribs:
+            val = dict(attribs)
+    return val
+
+def _val_and_maybe_convert(el):
+    """
+    Converts `el.text` if `el` has attribute `type` with valid value.
+    """
+    text = el.text.strip()
+    data_type = el.get('type')
+    convertor = _val_and_maybe_convert.convertors.get(data_type)
+    if convertor:
+        return convertor(text)
+    else:
+        return text
+_val_and_maybe_convert.convertors = {
+    'boolean': _str_to_boolean,
+    'datetime': _str_to_datetime,
+    'integer': int
+}
+
+class taxsbBase(models.Model):
+    _name = "cic_taxsb.base"
+    _description = "嘉商通总账系统申报接口API基础类"
+
+    host = fields.Char('主机',default='211.151.124.80')
+    port = fields.Integer('端口',default=6006)
+    path = fields.Char('接口地址',default='remote/callServer')
+    appkey = fields.Char('appKey',default="68c8c236c8484b35b149019d590ff0b0")
+    token = fields.Char('token',default="7f182e426e1a5508c40bbdfa")
+    content = fields.Text('jsonData',default='{}')
+
+    @api.one
+    def post(self, content=None):
+        url = "http://{}:{}/{}".format(self.host,self.port,self.path)
+        content = content or self.content
+        params = {
+            "appKey": self.appkey,
+            "token": hmac.new(bytes(self.token,'utf-8'),msg=bytes(content,'utf-8'),digestmod=sha256).hexdigest(),
+            "jsonData": content
+        }
+        headers = {'Content-type': 'application/x-www-form-urlencoded',
+                   'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'}
+        res = requests.post(url,data=params,headers=headers)
+        if res.status_code == 200:
+            return res.json()
+        else:
+            return res.text
 
 class SBDjxx(models.Model):
     _name = "cic_taxsb.djxx"
@@ -643,16 +645,16 @@ class SBSubmit(models.Model):
     _description = "提交申报数据,税种不同，报文不同"
 
     # 和xml报文一起组成字典content,这几个字段是提交必填项。单独出来
-    lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
+    lsh = fields.Char('申报提交得流水号 必传',default=uuid.uuid4(),  help="申报提交得流水号 必传")
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
     skssqz = fields.Char('税款所属期止', help='税款所属期止')
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='29806', help="参考代码表  平台申报开放API规范2.0(1)文档")
     serviceId = fields.Char(compute='_compute_serviceId',string = '申报种类编号(自动生成)',
                             help='申报种类编号加Submit就是serviceId，例如：10101Submit')
-    @api.onchange('sbzlbh')
+    @api.depends('sbzlbh')
     def _compute_serviceId(self):
         self.serviceId = self.sbzlbh + 'Submit'
-
 
 class ShenBaoSheet(models.Model):
     """申报表模板
@@ -678,19 +680,11 @@ class ShenBaoSheet(models.Model):
     cells = fields.One2many('cic_taxsb.shenbaosheet.cell', 'sheet_id', string='单元格设置') # 单元格设置
     template = fields.Text('模板', help='备用的模板信息')
 
-    # {'name': '江苏-小企业会计准则-财务报表',  'description': 'jsxgs_cwbb_xqykjzzxxVO', 'dqbm': '32', 'tagname': 'jsxgs_cwbb_xqykjzzxxVO'}
-    # {'parent_id': 33,'name': '利润表',  'description': '利润表', 'dqbm': '32', 'tagname': 'jsxgs_cwbb_xqykjzz_lrb'}
-    # {'parent_id': 33,'name': '现金流量表',  'description': '现金流量表', 'dqbm': '32', 'tagname': 'jsxgs_cwbb_xqykjzz_xjllb'}
-    # {'parent_id': 33,'name': '申报信息',  'description': '申报信息', 'dqbm': '32', 'tagname': 'sbbinfo'}
-    # {'parent_id': 34,'name': '利润表的行',  'description': '利润表的行', 'dqbm': '32', 'tagname': 'lrbGridlbVO'}
-
 class ShenBaoCell(models.Model):
     """申报表单元格定义模板
     模板用来定义最终输出的 申报的报文格式,
      单元格所在行号，名称，取数接口
-
     """
-
     _name = "cic_taxsb.shenbaosheet.cell"
     _order = "sequence,id"
     _description = '申报表单元格模板'
@@ -701,26 +695,27 @@ class ShenBaoCell(models.Model):
     line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
     tagname = fields.Char('报文标签') #
     get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
-    # {'sheet_id': 36, 'tagname': 'sbzlbh'}
-    # {'sheet_id': 37,'line': 1, 'tagname': 'yyysrbnljje'}
-    # {'sheet_id': 37,'line': 1, 'tagname': 'yyysrbyje'}
-    # {'sheet_id': 37,'line': 2, 'tagname': 'jyycbbnljje'}
-
+    key = fields.Char('取值的key')
+    # value = fields.Float(string = '取得的值',digits=(10,2))
+    value = fields.Text(string = '取得的值')
+    temp_dict = fields.Text('temp_dict')
 
 class CreateShenbaoSheetWizard(models.TransientModel):
     """创建申报报文的向导"""
     _name = "create.shenbaosheet.wizard"
     _description = '申报表的向导'
+    _inherit = ['cic_taxsb.submit','cic_taxsb.base']
 
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') # 32
-    account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息')
-    startdate = fields.Date('开始日期', help='开始日期') # 2019-09-01
-    enddate = fields.Date('截止日期', help='截止日期')   # 2019-09-30
+    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') # 39
+    account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息') # 100
+    startdate = fields.Date('开始日期',required=True, help='开始日期') # 2019-09-01
+    enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
     xml = fields.Text('XML报文')
-    temp_dict = fields.Text('生成的字典')
-    # {'dqbm': '32',  'sheet_id': 33,  'startdate': '2019-09-01',  'enddate': '2019-09-30'}
-
+    content = fields.Text('报文内容', compute='_compute_content')
+    # {'dqbm': '32', 'sheet_id': 39,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
+    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-09-30', 'sbzlbh': '29806'}
+    # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
     def create_shenbao_sheet(self):
         """
@@ -730,8 +725,10 @@ class CreateShenbaoSheetWizard(models.TransientModel):
         ShenBaoCell：创建单元格。sheet_id表示属于那个表
         CreateShenbaoSheetWizard：创建xml。sheet_id表示属于那个xml
         """
-        res = self.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
-        for record in self: # 大表 'cic_taxsb.shenbaosheet(32, 34, 35, 36)'
+        for record in self: # xml
+            res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
+                                                                         record.enddate)
+            # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
             two_temp_dict = {}
             one_temp_dict = {record.sheet_id.tagname:two_temp_dict}
 
@@ -743,89 +740,49 @@ class CreateShenbaoSheetWizard(models.TransientModel):
             此3种情况分别讨论，组成一个字典（one_temp_dict）即可。
             有行对象，有单元格对象，前面两个对象都没有。有先后顺序
             '''
-            for forms in record.sheet_id.child_ids: # 大表的4个小表对象
-                if forms.child_ids:       # 有行对象  代表：单元格--行--表
+            for forms in record.sheet_id.child_ids: # xml的4个小表对象
+                if forms.child_ids: # 资产负债表、利润表
                     big_cells_dict = {}
-                    for cell in forms.cells: # 所有的单元格对象
+                    for cell in forms.cells:
                         key = cell.tagname
-                        # value = '111'
-                        '''zcfzb = res.get('资产负债表')
-                        def get_value():
-                            # dqjkqmye_value = zcfzb.get('line33CurrentEnd')
-                            # dqjkncye_value = zcfzb.get('line33CurrentBegin')
-                            if cell.tagname[-4:] == ncye:
-                                BeginOREnd = 'CurrentBegin'
-                            if cell.tagname[-4:] == qmye:
-                                BeginOREnd = 'CurrentEnd'
-                            value = zcfzb.get('line'+cell.line_num+BeginOREnd)
-                            return value
-                        get_value()'''
-
-                        '''lrb = res.get('利润表')
-                        def get_value():
-                            # 'line1CurrentPrior': 385474.33,
-                            # 'line1CurrentCurrent': 0.0,
-                            if cell.tagname[-4:] == 'byje':
-                                PriorORCurren = 'CurrentBegin'
-                            if cell.tagname[-6:] == 'bnljje':
-                                PriorORCurren = 'CurrentEnd'
-                            value = zcfzb.get('line'+cell.line_num+PriorORCurren)
-                            return value
-                        get_value()'''
-                        value = exec(cell.get_value_func, locals={'res':res,'cell':cell})
+                        exec(cell.get_value_func,{'res':res,'cell':cell})
+                        value = cell.value
                         if str(cell.line) not in big_cells_dict:
                             big_cells_dict[str(cell.line)] = {'ewbhxh':cell.line}
                             big_cells_dict[str(cell.line)][key] = value
                         else:
                             big_cells_dict[str(cell.line)][key] = value
-                    form_line_cell_list = list(big_cells_dict.values())  # 返回列表，包含所有字典的值
                     #  [{'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}]
+                    form_line_cell_list = list(big_cells_dict.values())  # 返回列表，包含所有字典的值
                     # {"lrbGridlbVO": [{"jyycbbyje": "","jyycbbnljje": "","ewbhxh": "2"},{}]}
                     form_line_cell_dict = {forms.child_ids.tagname:form_line_cell_list}
                     # {'jsxgs_cwbb_xqykjzz_lrb':{"lrbGridlbVO": [{},{}]}}
                     two_temp_dict[forms.tagname] = form_line_cell_dict
-                elif forms.cells:     # 有单元格对象    代表：单元格--表
+                elif forms.cells:     # 申报信息
                     form_cell_dict = {} # {"nsqxdm": "1","ssqq": "2019-01-01"}
                     for cell in forms.cells:
                         key = cell.tagname
-                        # value = '111'
-                        value = exec(cell.get_value_func, locals={'res': res, 'cell': cell})
+                        exec(cell.get_value_func,{'record':record,'cell':cell})
+                        value = cell.value
                         form_cell_dict[key] = value
                     two_temp_dict[forms.tagname] = form_cell_dict # {'sbbinfo':{"nsqxdm": "1","ssqq": "2019-01-01"}}
-                else:               # 空对象          代表：表
+                else:               # 现金流量表
                     two_temp_dict[forms.tagname] = ''
-            record.temp_dict = one_temp_dict
             record.xml = dict_to_xml(one_temp_dict)
 
-# class SBZf(models.Model):
-#     _name = "cic_taxsb.zf"
-#     _description = "作废"
-#     _inherit = "cic_taxsb.base"
-#
-#     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
-#     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
-#     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码',default='10101', help="参考代码表  平台申报开放API规范2.0(1)文档")
-#     skssqq = fields.Char('税款所属期起', help="税款所属期起:('2019-08-01')")
-#     skssqz = fields.Char('税款所属期止', help="税款所属期止:('2019-08-31')")
-#     sssq = fields.Char('税款所属期', help="税款所属期(2019-08)")
-#     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
-#     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-#
-#     content = fields.Text('报文内容', compute='_compute_content')
-#
-#     @api.multi
-#     def _compute_content(self):
-#         _fields = [
-#             'lsh',
-#             'nsrsbh',
-#             'sbzlbh',
-#             'skssqq',
-#             'skssqz',
-#             'sssq',
-#             'dqbm',
-#             'nsqxdm'
-#         ]
-#         for record in self:
-#             temp_dict = record.read(_fields)[0]
-#             temp_dict.pop('id', None)
-#             record.content = json.dumps(temp_dict)
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'lsh',
+            'serviceId',
+            'nsrsbh',
+            'nsqxdm',
+            'skssq'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+            # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
+            temp_dict.pop('id',None)            # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+            xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(record.xml)
+            temp_dict['bizXml'] = base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")
+            record.content = json.dumps(temp_dict)
