@@ -39,7 +39,8 @@ class itsAPIMixin(models.Model):
     nsrsbh = fields.Char('纳税人识别号',default='91310118MA1JLFH42X')
 
     @api.one
-    def request(self):
+    def request(self, sid=None):
+        self.sid = sid or str(time.time())
         url = self.api_url
         inputstr = self.input
         inputmi = encrypt(inputstr, self.privatekey)
