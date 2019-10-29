@@ -11,17 +11,17 @@
           <field name="res_model">cic_taxsb.shenbaosheet.cell</field>
           <field name="view_mode">tree,form</field>
       </record>
-      <record model="ir.actions.act_window" id="action_cic_taxsb.djxx">
+      <record model="ir.actions.act_window" id="cic_taxsb.action_djxx">
           <field name="name">登记信息</field>
           <field name="res_model">cic_taxsb.djxx</field>
           <field name="view_mode">tree,form</field>
       </record>
-      <record model="ir.actions.act_window" id="action_cic_taxsb.cshjs">
+      <record model="ir.actions.act_window" id="cic_taxsb.action_cshjs">
           <field name="name">江苏初始化</field>
           <field name="res_model">cic_taxsb.cshjs</field>
           <field name="view_mode">tree,form</field>
       </record>
-      <record model="ir.actions.act_window" id="action_cic_taxsb.csh">
+      <record model="ir.actions.act_window" id="cic_taxsb.action_csh">
           <field name="name">初始化往期数据</field>
           <field name="res_model">cic_taxsb.csh</field>
           <field name="view_mode">tree,form</field>
@@ -31,6 +31,11 @@
    name="创建申报表"
    res_model="create.shenbaosheet.wizard"
    view_mode="form" view_id="cic_taxsb.view_form_create_shenbaosheet_wizard" target="new" />
+
+        <act_window id="action_create_xml_wizard"
+   name="创建xml"
+   res_model="create.xml.obj.wizard"
+   view_mode="form" view_id="cic_taxsb.view_form_create_xml_wizard" target="new" />
 
       <menuitem name="申报" id="cic_taxsb.menu_root"/>
 
@@ -45,12 +50,14 @@
               sequence="15" action="cic_taxsb.action_window_shenbao_cell"/>
       <menuitem name="创建申报表" id="cic_taxsb.menu_create_shenbao_list" parent="cic_taxsb.menu_2"
               sequence="25" action="cic_taxsb.action_create_shenbaosheet_wizard"/>
+      <menuitem name="上传xml文件" id="cic_taxsb.menu_create_xml_list" parent="cic_taxsb.menu_2"
+              sequence="35" action="cic_taxsb.action_create_xml_wizard"/>
 
-      <menuitem name="登记信息" id="menu_cic_taxsb.djxx" parent="cic_taxsb.menu_1"
-              sequence="5" action="action_cic_taxsb.djxx"/>
-      <menuitem name="江苏初始化" id="menu_cic_taxsb.cshjs" parent="cic_taxsb.menu_1"
-              sequence="15" action="action_cic_taxsb.cshjs"/>
-      <menuitem name="初始化往期数据" id="menu_cic_taxsb.csh" parent="cic_taxsb.menu_1"
-              sequence="25" action="action_cic_taxsb.csh"/>
+      <menuitem name="登记信息" id="cic_taxsb.menu_djxx" parent="cic_taxsb.menu_1"
+              sequence="5" action="cic_taxsb.action_djxx"/>
+      <menuitem name="江苏初始化" id="cic_taxsb.menu_cshjs" parent="cic_taxsb.menu_1"
+              sequence="15" action="cic_taxsb.action_cshjs"/>
+      <menuitem name="初始化往期数据" id="cic_taxsb.menu_csh" parent="cic_taxsb.menu_1"
+              sequence="25" action="cic_taxsb.action_csh"/>
   </data>
 </odoo>
