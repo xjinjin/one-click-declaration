@@ -23,6 +23,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/cic_taxsb_create_shenbaosheet_wizard.xml',
+        'views/cic_taxsb_create_xml_wizard.xml',
         'views/cic_taxsb_menu.xml',
         'views/cic_taxsb_shenbaosheet_view.xml',
         'views/cic_taxsb_shenbaosheet_cell_view.xml',

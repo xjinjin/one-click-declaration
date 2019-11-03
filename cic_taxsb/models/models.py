@@ -9,6 +9,7 @@ import requests
 import json
 from math import fabs
 import calendar
+import os
 
 
 # 地区代码
@@ -422,7 +423,7 @@ class SBDjxx(models.Model):
             'kjzd',
             'nsrzgdm',
             'qyyf',
-            'qynf' 
+            'qynf'
         ]
         for record in self:
             temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
@@ -786,3 +787,64 @@ class CreateShenbaoSheetWizard(models.TransientModel):
             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(record.xml)
             temp_dict['bizXml'] = base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")
             record.content = json.dumps(temp_dict)
+
+class CreateXmlObjWizard(models.TransientModel):
+    """上传xml文件，创建表与单元格对象"""
+    _name = "create.xml.obj.wizard"
+    _description = '创建xml的向导'
+
+    name = fields.Char(string = '申报提交xml报文',required=True, help = '增值税一般纳税人申报表接口(月报).xml')
+    description = fields.Text(string ='说明',default = '财务报表涉及到行次问题，不能使用此功能',readonly = True)
+    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
+    file = fields.Binary(string="Upload Xml File")
+
+    @api.one
+    def create_xml_obj(self):
+        # 客户端输入文件名自动创建xml结构的对象，xml--forms--lines--cells。之后在服务端调用创建表向导即可。
+        xml = str(base64.b64decode(self.file), encoding='utf-8')
+        file_name_no_extend, extension_name = os.path.splitext(self.name)
+
+        shenbaosheetcell = self.env['cic_taxsb.shenbaosheet.cell']  # 单元格
+        shenbaosheet = self.env['cic_taxsb.shenbaosheet']  # 表
+
+        xml_dict = xml_to_dict(xml)
+        # {'jsxgs_zzs_ybnsrxxVO':{'sbbinfo':{'sbzlbh':'10101',...},'jsxgs_zzs_ybnsr_sbb':{'sbbGridlbVO':[{'ewbhxh':'1',...},...]},'jsxgs_zzs_ybnsr_scqy15':None,...}}
+        # print(list(xml_dict.keys())[0]) #   xml_dict.keys():dict_keys(['jsxgs_zzs_ybnsrxxVO'])
+        xml_name = list(xml_dict.keys())[0]  # jsxgs_zzs_ybnsrxxVO
+        forms_name = list(list(xml_dict.values())[0].keys())  # ['sbbinfo', 'jsxgs_zzs_ybnsr_sbb',...]
+        # xml 创建xml
+        xml_obj = shenbaosheet.create(
+            {'name': file_name_no_extend, 'description': file_name_no_extend, 'dqbm': self.dqbm, 'tagname': xml_name})
+        xml_id = xml_obj.id
+        # forms
+        for form_name in forms_name:  # ['sbbinfo', 'jsxgs_zzs_ybnsr_sbb',...]
+            # 创建表
+            form_obj = shenbaosheet.create(
+                {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm, 'tagname': form_name})
+            form_id = form_obj.id
+            # 非空表 有两种情况    1.{'sbzlbh':'10101',...}     2.{'sbbGridlbVO':[{'ewbhxh':'1',...},...]}
+            if xml_dict[xml_name][form_name]:
+                # xml--form--line--cell   1.字典的value是列表  {'sbbGridlbVO':[{'ewbhxh':'1',...},...]}
+                if isinstance(list(xml_dict[xml_name][form_name].values())[0], list):
+                    # 创建行
+                    line_name = list(xml_dict[xml_name][form_name].keys())[0]
+                    shenbaosheet.create({'parent_id': form_id, 'name': line_name, 'description': line_name, 'dqbm': self.dqbm,
+                         'tagname': line_name})
+                    # 创建单元格 [{'ewbhxh':'1',...},...]
+                    for cell_dict in xml_dict[xml_name][form_name][line_name]:
+                        cell_line_num = int(cell_dict['ewbhxh'])
+                        cell_name_list = list(cell_dict.keys())
+                        # ['ewbhxh', 'yybjsffjsqbz', 'yybjs']
+                        for cell_name in cell_name_list:
+                            if cell_name != 'ewbhxh':
+                                shenbaosheetcell.create(
+                                    {'sheet_id': form_id, 'line': cell_line_num, 'tagname': cell_name})
+                # xml--form--cell   2.字典 ps:直接else就可以，只是让逻辑更清晰   {'sbzlbh':'10101',...}
+                if isinstance(xml_dict[xml_name][form_name], dict):
+                    # 创建单元格
+                    cell_name_list = list(xml_dict[xml_name][form_name].keys())
+                    for cell_name in cell_name_list:
+                        shenbaosheetcell.create({'sheet_id': form_id, 'tagname': cell_name})
+            # # 空表 只需要创建表对象即可
+            # else:
+            #     pass
