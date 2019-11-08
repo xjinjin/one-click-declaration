@@ -649,7 +649,7 @@ class SBSubmit(models.Model):
     lsh = fields.Char(string = '申报提交得流水号 必传',help="申报提交得流水号 必传")
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-    skssqz = fields.Char('税款所属期止', help='税款所属期止')
+    skssq = fields.Char('税款所属期止 年-月份（2019-05）', help='税款所属期止 年-月份（2019-05）')
     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='29806', help="参考代码表  平台申报开放API规范2.0(1)文档")
     serviceId = fields.Char(compute='_compute_serviceId',string = '申报种类编号(自动生成)',
                             help='申报种类编号加Submit就是serviceId，例如：10101Submit')
