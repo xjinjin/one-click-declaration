@@ -571,7 +571,7 @@ class SBZf(models.Model):
     skssq = fields.Char('税款所属期', help="税款所属期:('2019-06')")
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', default='32', help="参考代码表  平台申报开放API规范2.0(1)文档")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
-
+    # {'lsh':'','nsrsbh':'','sbzlbh':'','skssqq':'','skssqz':'','skssq':'','dqbm':'','nsqxdm':''}
     content = fields.Text('报文内容', compute='_compute_content')
 
     @api.multi
@@ -621,7 +621,7 @@ class SBStatus(models.Model):
     kjnd = fields.Char('年份', help="年份(2019)")
     kjqj = fields.Char('月份', help="月份(01)  申报得税款所属期止 的 月份")
     lsh = fields.Char('申报提交得流水号 必传', help="申报提交得流水号 必传")
-
+    # {'sbzlbh':'','nsrsbh':'','sbname':'','kjnd':'','kjqj':'','lsh':''}
     content = fields.Text('报文内容', compute='_compute_content')
 
     @api.multi
@@ -646,13 +646,19 @@ class SBSubmit(models.Model):
     _description = "提交申报数据,税种不同，报文不同"
 
     # 和xml报文一起组成字典content,这几个字段是提交必填项。单独出来
-    lsh = fields.Char('申报提交得流水号 必传',default=uuid.uuid4(),  help="申报提交得流水号 必传")
+    lsh = fields.Char(string = '申报提交得流水号 必传',help="申报提交得流水号 必传")
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
     nsqxdm = fields.Selection(NSQXDM_SELECTION, string='纳税期限代码', default='1', help="参考代码表  平台申报开放API规范2.0(1)文档")
     skssqz = fields.Char('税款所属期止', help='税款所属期止')
     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', default='29806', help="参考代码表  平台申报开放API规范2.0(1)文档")
     serviceId = fields.Char(compute='_compute_serviceId',string = '申报种类编号(自动生成)',
                             help='申报种类编号加Submit就是serviceId，例如：10101Submit')
+
+    @api.multi
+    def create_lsh(self):
+        for record in self:
+            record.lsh = uuid.uuid4()
+
     @api.depends('sbzlbh')
     def _compute_serviceId(self):
         self.serviceId = self.sbzlbh + 'Submit'
@@ -715,8 +721,8 @@ class CreateShenbaoSheetWizard(models.TransientModel):
     enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
     xml = fields.Text('XML报文')
     content = fields.Text('报文内容', compute='_compute_content')
-    # {'dqbm': '32', 'sheet_id': 39,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
-    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-09-30', 'sbzlbh': '29806'}
+    # {'dqbm': '32', 'sheet_id': 108,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
+    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
     # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
     def create_shenbao_sheet(self):
