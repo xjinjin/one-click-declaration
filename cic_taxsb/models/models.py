@@ -715,10 +715,11 @@ class CreateShenbaoSheetWizard(models.TransientModel):
     _inherit = ['cic_taxsb.submit','cic_taxsb.base']
 
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表') # 39
-    account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息') # 100
+    sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表',required=True) # 39
+    account_id = fields.Many2one('cic_ocr_report.account', '账套', required=True,help='对应总账系统的账套信息') # 100
     startdate = fields.Date('开始日期',required=True, help='开始日期') # 2019-09-01
     enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
+
     xml = fields.Text('XML报文')
     content = fields.Text('报文内容', compute='_compute_content')
     # {'dqbm': '32', 'sheet_id': 108,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
@@ -830,9 +831,9 @@ class CreateShenbaoSheetWizard(models.TransientModel):
                     big_cells_dict = {}
                     for cell in forms.cells:
                         key = cell.tagname
-                        exec(cell.get_value_func,{'res':res,'cell':cell})
-                        value = cell.value
-                        # value = '110'
+                        # exec(cell.get_value_func,{'res':res,'cell':cell})
+                        # value = cell.value
+                        value = '110'
                         if str(cell.line) not in big_cells_dict:
                             big_cells_dict[str(cell.line)] = {'ewbhxh': cell.line}
                             big_cells_dict[str(cell.line)][key] = value
@@ -848,9 +849,9 @@ class CreateShenbaoSheetWizard(models.TransientModel):
                     form_cell_dict = {} # {"nsqxdm": "1","ssqq": "2019-01-01"}
                     for cell in forms.cells:
                         key = cell.tagname
-                        exec(cell.get_value_func,{'record':record,'cell':cell})
-                        value = cell.value
-                        # value = '110'
+                        # exec(cell.get_value_func,{'record':record,'cell':cell})
+                        # value = cell.value
+                        value = '110'
                         form_cell_dict[key] = value
                     two_temp_dict[forms.tagname] = form_cell_dict # {'sbbinfo':{"nsqxdm": "1","ssqq": "2019-01-01"}}
 
