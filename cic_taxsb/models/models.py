@@ -831,9 +831,9 @@ class CreateShenbaoSheetWizard(models.TransientModel):
                     big_cells_dict = {}
                     for cell in forms.cells:
                         key = cell.tagname
-                        # exec(cell.get_value_func,{'res':res,'cell':cell})
-                        # value = cell.value
-                        value = '110'
+                        exec(cell.get_value_func,{'res':res,'cell':cell})
+                        value = cell.value
+                        # value = '110'
                         if str(cell.line) not in big_cells_dict:
                             big_cells_dict[str(cell.line)] = {'ewbhxh': cell.line}
                             big_cells_dict[str(cell.line)][key] = value
@@ -849,9 +849,9 @@ class CreateShenbaoSheetWizard(models.TransientModel):
                     form_cell_dict = {} # {"nsqxdm": "1","ssqq": "2019-01-01"}
                     for cell in forms.cells:
                         key = cell.tagname
-                        # exec(cell.get_value_func,{'record':record,'cell':cell})
-                        # value = cell.value
-                        value = '110'
+                        exec(cell.get_value_func,{'record':record,'cell':cell})
+                        value = cell.value
+                        # value = '110'
                         form_cell_dict[key] = value
                     two_temp_dict[forms.tagname] = form_cell_dict # {'sbbinfo':{"nsqxdm": "1","ssqq": "2019-01-01"}}
 
