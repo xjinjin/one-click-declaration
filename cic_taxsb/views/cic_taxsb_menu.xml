@@ -37,6 +37,11 @@
    res_model="create.xml.obj.wizard"
    view_mode="form" view_id="cic_taxsb.view_form_create_xml_wizard" target="new" />
 
+        <act_window id="action_create_json_wizard"
+   name="创建json"
+   res_model="unite.create.json.obj.wizard"
+   view_mode="form" view_id="cic_taxsb.view_form_create_json_wizard" target="new" />
+
       <menuitem name="申报" id="cic_taxsb.menu_root"/>
 
 
@@ -52,6 +57,9 @@
               sequence="25" action="cic_taxsb.action_create_shenbaosheet_wizard"/>
       <menuitem name="上传xml文件" id="cic_taxsb.menu_create_xml_list" parent="cic_taxsb.menu_2"
               sequence="35" action="cic_taxsb.action_create_xml_wizard"/>
+      <menuitem name="上传json文件" id="cic_taxsb.menu_create_json_list" parent="cic_taxsb.menu_2"
+              sequence="45" action="cic_taxsb.action_create_json_wizard"/>
+
 
       <menuitem name="登记信息" id="cic_taxsb.menu_djxx" parent="cic_taxsb.menu_1"
               sequence="5" action="cic_taxsb.action_djxx"/>
