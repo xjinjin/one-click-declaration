@@ -10,6 +10,7 @@ import json
 from math import fabs
 import calendar
 import os
+import re
 
 
 # 地区代码
@@ -704,10 +705,10 @@ class ShenBaoCell(models.Model):
     line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
     tagname = fields.Char('报文标签') #
     get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
-    key = fields.Char('取值的key')
+    key = fields.Char('取值的key')  # 测试用
     # value = fields.Float(string = '取得的值',digits=(10,2))
     value = fields.Text(string = '取得的值')
-    temp_dict = fields.Text('temp_dict')
+    temp_dict = fields.Text('temp_dict') # 没用
 
 class CreateShenbaoSheetWizard(models.TransientModel):
     """创建申报报文的向导"""
@@ -1076,473 +1077,121 @@ class CreateXmlObjWizard(models.TransientModel):
                     {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,'tagname': form_name, 'structure': '1'})
 
 # 统一报文，json
-'''
-# 增值税一般纳税人交付报文_V20191018.json
-{'doc':
-     {'taxParam':{},
-      'ybData':
-          {'sbList':{},
-           'zzssyyybnsrzb':{'zbGrid':{'zbGridlbVO':[{"lmc": "第一列","ewblxh":"1",},{}]},'slxxForm':{}},
-           'zzssyyybnsr01bqxsqkmxb':{'bqxsqkmxbGrid':{'bqxsqkmxbGridlbVO':[{"ewbhxh":"1","hmc":"13%税率的货物及加工修理修配劳务"},{},]}},
-           'zzssyyybnsr02bqjxsemxb':{'bqjxsemxbGrid':{'bqjxsemxbGridlbVO':[{"ewbhxh":"1","xmmc":"（一）认证相符的增值税专用发票","lc":"1=2+3",},{}]}},
-           'zzssyyybnsr03ysfwkcxmmx':{'ysfwkcxmmxGrid':{'ysfwkcxmmxGridlbVO':[{"ewbhxh":"1","lc":"1","xmmc":"13%税率的项目",},{},]}},
-           'zzssyyybnsr04bqjxsemxb':{'bqjxsemxbGrid':{'bqjxsemxbGridlbVO':[{"ewbhxh":"1","hmc":"增值税税控系统专用设备费及技术维护费",},{},]}},
-           'zzsjmssbmxb':{'zzsjmssbmxbjsxmGrid':{'zzsjmssbmxbjsxmGridlbVO':[{"ewbhxh": "1",},{}]},'zzsjmssbmxbmsxmGrid':{'zzsjmssbmxbmsxmGridlbVO':[{"ewbhxh": "1","msxmdmjmc": "合计",},{}]}},
-           'dxqyfzjgzzshznsxxcdd':{'yjnzzsqxGrid':{'yjnzzsqxGridlbVO':[{"ewbhxh": "1","xm": "征税项目(小计)",},{},]},'qdjxseqkGrid':{'qdjxseqkGridlbVO':[{},{},]}},
-           'qtkspzmxb':{},
-           'hznsqyzzsfpb':{'hznsqyzzsfpbForm':{},'hznsqyzzsfpbGrid':{'fzjgybhwjlwxssrHj':'','hznsqyzzsfpbGridlbVO':[{"ewbhxh": 1,},{}]},'slxx':{}},
-           'dkdjsstyjksdkqd':{'dkdjsstyjksdkqdGrid':{'dkdjsstyjksdkqdGridlb':[{},],'seHj':''}}
-           }
-      }
- }
 
-# 增值税小规模交附报文_V20191025.json
-{'doc':
-     {'taxParam':{"sz":"zzsxgm",},
-      'xgmData':{'sbList':{},
-                 'zzssyyxgmnsr':{'zzsxgmGrid':{'zzsxgmGridlb':[{"ewblxh":"1","lmc":"货物及劳务-本期数",},{},{}]},
-                                 'slxxForm':{}},
-                 'zzsxgmflzl':{'flzlForm':{}},
-                 'zzsjmssbmxb':{'zzsjmssbmxbjsxmGrid':{'zzsjmssbmxbjsxmGridlbVO':[{"ewbhxh":"1","hmc":"合计",}]},
-                                'zzsjmssbmxbmsxmGrid':{'zzsjmssbmxbmsxmGridlbVO':[{"ewbhxh":"1","hmc":"合计",},{}]}},
-                 'zzsxgmxsbdcqkb':{},
-                 'zzsxgmkcxmqd':{'kcxmqdmx':[{}]}
-                 }
-      }
- }
-
-# 附加税交付报文_V20191015.json
-{'doc':{'taxParam':{"sz":"fjs",},
-        'fjsslxxForm':{},
-        'fjsnsrxxForm':{},
-        'fjsData':{'fjssbb':{'sbxxGrid':{'sbxxJbxxGridlbVO':{},
-                                         'sbxxhjGridlbVO':{},
-                                         'sbxxGridlbVO':[{"ewbhxh":"1","zsxmMc":"城市维护建设税","zspmMc":"市区（增值税附征）","zsxmDm":"10109","zspmDm":"101090101",},{},{}]}
-                             }
-                   }
-        }
- }
-'''
+comment_re = re.compile(
+    '(^)?[^\S\n]*/(?:\*(.*?)\*/[^\S\n]*|/[^\n]*)($)?',
+    re.DOTALL | re.MULTILINE
+)
 
 class UniteCreateJsonObjWizard(models.TransientModel):
-    """上传xml文件，xml所需对象"""
+    """上传json文件"""
     _name = "unite.create.json.obj.wizard"
     _description = '创建json的向导'
 
+    name = fields.Char(string='json统一报文',  help='附加税交付报文_V20191015.json')
     file = fields.Binary(string="Upload Json File")
 
     @api.one
     def create_json_obj(self):
-        json_file_str = str(base64.b64decode(self.file), encoding='utf-8')
-        print(json_file_str)
+        # bytes--->str
+        content = base64.b64decode(self.file).decode('utf-8')
+        # 清除注释
+        match = comment_re.search(content)
+        while match:
+            # single line comment
+            content = content[:match.start()] + content[match.end():]
+            match = comment_re.search(content)
+        # 字典
+        content_dict = eval(content)
 
-# class UniteShenBaoSheet(models.Model):
-#     """申报表模板
-#     模板用来定义最终输出的 申报的报文格式,
-#     分地区报表类型，利用定义每个单元格的模式来实现对任何种类表格的取数和生成报文需要
-#     """
-#
-#     _name = "cic_taxsb.shenbaosheet"
-#     _order = "sequence,id"
-#     _description = '申报表模板'
-#     # _parent_store = True
-#
-#     parent_id = fields.Many2one('cic_taxsb.shenbaosheet', string='Parent Tag',ondelete='cascade')
-#     # parent_left = fields.Integer('Parent Left', index=True)
-#     # parent_right = fields.Integer('Parent Right', index=True)
-#     child_ids = fields.One2many('cic_taxsb.shenbaosheet', 'parent_id', 'Child Tags')
-#
-#     name = fields.Char('名称')
-#     description = fields.Text('说明') # 说明
-#     structure = fields.Char('表的结构编码')
-#     sequence = fields.Integer('序号') # 排序使用 _order
-#     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码') # 分地区
-#     tagname = fields.Char('报文标签')
-#     cells = fields.One2many('cic_taxsb.shenbaosheet.cell', 'sheet_id', string='单元格设置') # 单元格设置
-#     template = fields.Text('模板', help='备用的模板信息')
-#
-# class UniteShenBaoCell(models.Model):
-#     """申报表单元格定义模板
-#     模板用来定义最终输出的 申报的报文格式,
-#      单元格所在行号，名称，取数接口
-#     """
-#     _name = "cic_taxsb.shenbaosheet.cell"
-#     _order = "sequence,id"
-#     _description = '申报表单元格模板'
-#
-#     sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表',ondelete='cascade') #
-#     sequence = fields.Integer('序号') # 排序
-#     line = fields.Integer('行号', help='申报表的行') # 行号，一行两个行次
-#     line_num = fields.Char('行次', help='此处行次并不是出报表的实际的行数,只是显示用的用来符合国人习惯') # 行次
-#     tagname = fields.Char('报文标签') #
-#     get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
-#     key = fields.Char('取值的key')
-#     # value = fields.Float(string = '取得的值',digits=(10,2))
-#     value = fields.Text(string = '取得的值')
-#     temp_dict = fields.Text('temp_dict')
-#
-# class UniteCreateShenbaoSheetWizard(models.TransientModel):
-#     """创建申报报文的向导"""
-#     _name = "create.shenbaosheet.wizard"
-#     _description = '申报表的向导'
-#     _inherit = ['cic_taxsb.submit','cic_taxsb.base']
-#
-#     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-#     sheet_id = fields.Many2one('cic_taxsb.shenbaosheet', '申报表',required=True) # 39
-#     account_id = fields.Many2one('cic_ocr_report.account', '账套', required=True,help='对应总账系统的账套信息') # 100
-#     startdate = fields.Date('开始日期',required=True, help='开始日期') # 2019-09-01
-#     enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
-#
-#     xml = fields.Text('XML报文')
-#     content = fields.Text('报文内容', compute='_compute_content')
-#     # {'dqbm': '32', 'sheet_id': 108,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
-#     # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
-#     # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
-#     @api.multi
-#     def create_shenbao_sheet(self):
-#         """
-#         申报表的创建函数
-#         ShenBaoSheet：创建xml，parent_id和child_ids表示3个对象之间的关系，cells代表所有的单元格
-#         ShenBaoCell：创建单元格。sheet_id表示属于那个表
-#         CreateShenbaoSheetWizard：创建xml。sheet_id表示属于那个xml
-#         """
-#         for record in self: # xml
-#             res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
-#                                                                          record.enddate)
-#             # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
-#             two_temp_dict = {}
-#             one_temp_dict = {record.sheet_id.tagname:two_temp_dict}
-#
-#             '''
-#             组织成标准的字典模式：one_temp_dict = {'jsxgs_cwbb_xqykjzzxxVO': {'jsxgs_cwbb_xqykjzz_zcfzb': {'zcfzbGridlbVO': [{'a':'a'},{'a':'a'}..]}, 'sbbinfo': {'a':'a'}, 'jsxgs_cwbb_xqykjzz_xjllb': null, 'jsxgs_cwbb_xqykjzz_lrb': {'lrbGridlbVO': [{'a':'a'},{'a':'a'}..]}}}
-#             1. {'form_name': null}
-#             2. {'form_name': {'':'',..}}
-#             3. {form_name:{'line_name':[{'ewbhxh':'1',...},...]}}
-#             4. {form_name:{'line_name':[{'ewbhxh':'1','floatrow':'1',...},...]}}
-#             5. {form_name:{'line_name':{'ewbhxh':'1','floatrow':'1',...}}}
-#             6. {form_name:{'line_name':{'ewbhxh':'1',...}}}
-#             7. {form_name:{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}
-#             8. {form_name:{'items_name':{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}}
-#             此8种情况分别讨论，组成一个字典（one_temp_dict）即可。
-#             xml_name,form_name,line_name,cell_name      (form--cell)
-#             xml_name,form_name,[items_name],item_name,cell_name       (form--item_name--cell)
-#             '''
-#             for forms in record.sheet_id.child_ids: # xml的表对象
-#
-#                 # 8. {form_name:{'items_name':{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}}
-#                 if forms.structure == '8':
-#                     items_dict = {}
-#                     for item in forms.child_ids.child_ids:
-#                         item_dict = {}
-#                         for cell in item.cells:
-#                             key = cell.tagname
-#                             # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                             # value = cell.value
-#                             value = '110'
-#                             item_dict[key] = value
-#                         items_dict[item.tagname] = item_dict
-#                     two_temp_dict[forms.tagname] = {forms.child_ids.tagname:items_dict}
-#
-#                 # 7. {form_name:{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}
-#                 elif forms.structure == '7':
-#                     form_dict = {}
-#                     for item in forms.child_ids:
-#                         item_dict = {}
-#                         for cell in item.cells:
-#                             key = cell.tagname
-#                             # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                             # value = cell.value
-#                             value = '110'
-#                             item_dict[key] = value
-#                         form_dict[item.tagname] = item_dict
-#                     two_temp_dict[forms.tagname] = form_dict
-#
-#                 # 6. {form_name:{'line_name':{'ewbhxh':'1',...}}}
-#                 elif forms.structure == '6':
-#                     line_dict = {'ewbhxh':'1'}
-#                     form_dict = {forms.child_ids.tagname:line_dict}
-#                     for cell in forms.cells:
-#                         key = cell.tagname
-#                         # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                         # value = cell.value
-#                         value = '110'
-#                         line_dict[key] = value
-#                     two_temp_dict[forms.tagname] = form_dict
-#
-#                 # 5. {form_name:{'line_name':{'ewbhxh':'1','floatrow':'1',...}}}
-#                 elif forms.structure == '5':
-#                     line_dict = {'ewbhxh':'1','floatrow':'1'}
-#                     form_dict = {forms.child_ids.tagname:line_dict}
-#                     for cell in forms.cells:
-#                         key = cell.tagname
-#                         # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                         # value = cell.value
-#                         value = '110'
-#                         line_dict[key] = value
-#                     two_temp_dict[forms.tagname] = form_dict
-#
-#                 # 4. {form_name:{'line_name':[{'ewbhxh':'1','floatrow':'1',...},...]}}
-#                 elif forms.structure == '4':
-#                     big_cells_dict = {}
-#                     for cell in forms.cells:
-#                         key = cell.tagname
-#                         # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                         # value = cell.value
-#                         value = '110'
-#                         if str(cell.line) not in big_cells_dict:
-#                             big_cells_dict[str(cell.line)] = {'ewbhxh': cell.line,'floatrow':'1'}
-#                             big_cells_dict[str(cell.line)][key] = value
-#                         else:
-#                             big_cells_dict[str(cell.line)][key] = value
-#                     #  [{'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}]
-#                     # {"lrbGridlbVO": [{"jyycbbyje": "","jyycbbnljje": "","ewbhxh": "2"},{}]}
-#                     # {'jsxgs_cwbb_xqykjzz_lrb':{"lrbGridlbVO": [{},{}]}}
-#                     two_temp_dict[forms.tagname] = {forms.child_ids.tagname: list(big_cells_dict.values())}
-#
-#                 # 3. {form_name:{'line_name':[{'ewbhxh':'1',...},...]}}
-#                 elif forms.structure == '3':
-#                     big_cells_dict = {}
-#                     for cell in forms.cells:
-#                         key = cell.tagname
-#                         # exec(cell.get_value_func,{'res':res,'cell':cell})
-#                         # value = cell.value
-#                         value = '110'
-#                         if str(cell.line) not in big_cells_dict:
-#                             big_cells_dict[str(cell.line)] = {'ewbhxh': cell.line}
-#                             big_cells_dict[str(cell.line)][key] = value
-#                         else:
-#                             big_cells_dict[str(cell.line)][key] = value
-#                     #  [{'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}, {'a': 'a', 'b': 'b'}]
-#                     # {"lrbGridlbVO": [{"jyycbbyje": "","jyycbbnljje": "","ewbhxh": "2"},{}]}
-#                     # {'jsxgs_cwbb_xqykjzz_lrb':{"lrbGridlbVO": [{},{}]}}
-#                     two_temp_dict[forms.tagname] = {forms.child_ids.tagname: list(big_cells_dict.values())}
-#
-#                 # 2. {'form_name': {'':'',..}}
-#                 elif forms.structure == '2':     # 申报信息.表没有行对象
-#                     form_cell_dict = {} # {"nsqxdm": "1","ssqq": "2019-01-01"}
-#                     for cell in forms.cells:
-#                         key = cell.tagname
-#                         # exec(cell.get_value_func,{'record':record,'cell':cell})
-#                         # value = cell.value
-#                         value = '110'
-#                         form_cell_dict[key] = value
-#                     two_temp_dict[forms.tagname] = form_cell_dict # {'sbbinfo':{"nsqxdm": "1","ssqq": "2019-01-01"}}
-#
-#                 # 1. {'form_name': null}
-#                 else:               # 现金流量表
-#                     two_temp_dict[forms.tagname] = ''
-#             record.xml = dict_to_xml(one_temp_dict)
-#
-#     @api.multi
-#     def _compute_content(self):
-#         _fields = [
-#             'lsh',
-#             'serviceId',
-#             'nsrsbh',
-#             'nsqxdm',
-#             'skssq'
-#         ]
-#         for record in self:
-#             temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-#             # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
-#             temp_dict.pop('id',None)            # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-#             xmlStr = '<?xml version="1.0" encoding="UTF-8"?>{}'.format(record.xml)
-#             temp_dict['bizXml'] = base64.b64encode(xmlStr.encode('utf-8')).decode("utf-8")
-#             record.content = json.dumps(temp_dict)
-#
-# class UniteCreateJsonObjWizard(models.TransientModel):
-#     """上传json文件，创建xml所需对象"""
-#     _name = "create.json.obj.wizard"
-#     _description = '创建json对象的向导'
-#
-#     name = fields.Char(string = '申报提交json报文',required=True, help = '增值税一般纳税人交付报文_V20191018.json')
-#     description = fields.Text(string ='说明',default = '统一json报文文件提交',readonly = True)
-#     # dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-#     file = fields.Binary(string="Upload Xml File")
-#
-#     @api.one
-#     def create_json_obj(self):
-#         xml = str(base64.b64decode(self.file), encoding='utf-8')
-#         file_name_no_extend, extension_name = os.path.splitext(self.name)
-#
-#         shenbaosheetcell = self.env['cic_taxsb.shenbaosheet.cell']  # 单元格
-#         shenbaosheet = self.env['cic_taxsb.shenbaosheet']  # 表
-#
-#         xml_dict = xml_to_dict(xml)
-#
-#         # xml 创建xml
-#         xml_name = list(xml_dict.keys())[0]  # jsxgs_zzs_ybnsrxxVO
-#         xml_obj = shenbaosheet.create(
-#             {'name': file_name_no_extend, 'description': file_name_no_extend, 'dqbm': self.dqbm, 'tagname': xml_name})
-#         xml_id = xml_obj.id
-#
-#         '''
-#             1. {'form_name': null}
-#             2. {'form_name': {'':'',..}}
-#             3. {form_name:{'line_name':[{'ewbhxh':'1',...},...]}}
-#             4. {form_name:{'line_name':[{'ewbhxh':'1','floatrow':'1',...},...]}}
-#             5. {form_name:{'line_name':{'ewbhxh':'1','floatrow':'1',...}}}
-#             6. {form_name:{'line_name':{'ewbhxh':'1',...}}}
-#             7. {form_name:{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}
-#             8. {form_name:{'items_name':{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}}'''
-#         # {'jsxgs_zzs_ybnsrxxVO':{'sbbinfo':{'sbzlbh':'10101',...},'jsxgs_zzs_ybnsr_sbb':{'sbbGridlbVO':[{'ewbhxh':'1',...},...]},'jsxgs_zzs_ybnsr_scqy15':None,...}}
-#         # print(list(xml_dict.keys())[0]) #   xml_dict.keys():dict_keys(['jsxgs_zzs_ybnsrxxVO'])
-#
-#         forms_name = list(list(xml_dict.values())[0].keys())  # ['sbbinfo', 'jsxgs_zzs_ybnsr_sbb',...]
-#         for form_name in forms_name:
-#             # 2-8
-#             if isinstance(xml_dict[xml_name][form_name],dict):
-#                 # 5,6,7,8
-#                 if isinstance(list(xml_dict[xml_name][form_name].values())[0],dict):
-#                     # 8. {form_name:{'items_name':{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}}
-#                     if isinstance(list(list(xml_dict[xml_name][form_name].values())[0].values())[0],dict):
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '8'})
-#                         form_id = form_obj.id
-#                         # 创建items
-#                         items_name = list(xml_dict[xml_name][form_name].keys())[0]
-#                         items_obj = shenbaosheet.create(
-#                             {'parent_id': form_id, 'name': items_name, 'description': items_name, 'dqbm': self.dqbm,
-#                              'tagname': items_name})
-#                         items_id = items_obj.id
-#                         # 创建item
-#                         item_name_list = list(xml_dict[xml_name][form_name][items_name].keys())
-#                         for item_name in item_name_list:
-#                             item_obj = shenbaosheet.create(
-#                                 {'parent_id': items_id, 'name': item_name, 'description': item_name, 'dqbm': self.dqbm,
-#                                  'tagname': item_name})
-#                             item_id = item_obj.id
-#                             # 创建单元格     与item关联    无行号
-#                             cell_name_list = list(xml_dict[xml_name][form_name][items_name][item_name].keys())
-#                             for cell_name in cell_name_list:
-#                                 shenbaosheetcell.create({'sheet_id': item_id, 'tagname': cell_name})
-#
-#                     # 7. {form_name:{'item_name':{'cell_name':'cell_value',...},'item_name':{'cell_name':'cell_value',...},..}}
-#                     elif len(list(xml_dict[xml_name][form_name].keys())) > 1:
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '7'})
-#                         form_id = form_obj.id
-#                         # 创建item
-#                         item_name_list = list(xml_dict[xml_name][form_name].keys())
-#                         for item_name in item_name_list:
-#                             item_obj = shenbaosheet.create(
-#                                 {'parent_id': form_id, 'name': item_name, 'description': item_name, 'dqbm': self.dqbm,
-#                                  'tagname': item_name})
-#                             item_id = item_obj.id
-#                             # 创建单元格     与item关联    无行号
-#                             cell_name_list = list(xml_dict[xml_name][form_name][item_name].keys())
-#                             for cell_name in cell_name_list:
-#                                 shenbaosheetcell.create(
-#                                     {'sheet_id': item_id, 'tagname': cell_name})
-#
-#                     # 6. {form_name:{'line_name':{'ewbhxh':'1',...}}}
-#                     elif 'floatrow' not in list(xml_dict[xml_name][form_name].values())[0]:
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '6'})
-#                         form_id = form_obj.id
-#                         # 创建行
-#                         line_name = list(xml_dict[xml_name][form_name].keys())[0]
-#                         shenbaosheet.create(
-#                             {'parent_id': form_id, 'name': line_name, 'description': line_name, 'dqbm': self.dqbm,
-#                              'tagname': line_name})
-#                         # 创建单元格     与表关联    无行号
-#                         cell_name_list = list(xml_dict[xml_name][form_name][line_name].keys())
-#                         for cell_name in cell_name_list:
-#                             if cell_name != 'ewbhxh':
-#                                 shenbaosheetcell.create(
-#                                     {'sheet_id': form_id, 'tagname': cell_name})
-#
-#                     # 5. {form_name:{'line_name':{'ewbhxh':'1','floatrow':'1',...}}}
-#                     elif 'floatrow' in list(xml_dict[xml_name][form_name].values())[0]:
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '5'})
-#                         form_id = form_obj.id
-#                         # 创建行
-#                         line_name = list(xml_dict[xml_name][form_name].keys())[0]
-#                         shenbaosheet.create(
-#                             {'parent_id': form_id, 'name': line_name, 'description': line_name, 'dqbm': self.dqbm,
-#                              'tagname': line_name})
-#                         # 创建单元格     与表关联    无行号
-#                         cell_name_list = list(xml_dict[xml_name][form_name][line_name].keys())
-#                         for cell_name in cell_name_list:
-#                             if cell_name not in ['ewbhxh', 'floatrow']:
-#                                 shenbaosheetcell.create(
-#                                     {'sheet_id': form_id, 'tagname': cell_name})
-#                     else:
-#                         pass
-#
-#                 # 3,4
-#                 elif isinstance(list(xml_dict[xml_name][form_name].values())[0],list):
-#                     # 4. {form_name:{'line_name':[{'ewbhxh':'1','floatrow':'1',...},...]}}
-#                     # 2层字典里一个v,v是列表，v里的字典里有'floatrow'
-#                     if len(list(xml_dict[xml_name][form_name].values())) == 1 \
-#                             and isinstance(list(xml_dict[xml_name][form_name].values())[0], list) \
-#                             and 'floatrow' in list(xml_dict[xml_name][form_name].values())[0][0]:
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '4'})
-#                         form_id = form_obj.id
-#                         # 创建行
-#                         line_name = list(xml_dict[xml_name][form_name].keys())[0]
-#                         shenbaosheet.create(
-#                             {'parent_id': form_id, 'name': line_name, 'description': line_name, 'dqbm': self.dqbm,
-#                              'tagname': line_name})
-#                         # 创建单元格     与表关联    有行号
-#                         for cell_dict in xml_dict[xml_name][form_name][line_name]:
-#                             cell_line_num = int(cell_dict['ewbhxh'])
-#                             cell_name_list = list(cell_dict.keys())
-#                             for cell_name in cell_name_list:
-#                                 if cell_name not in ['ewbhxh', 'floatrow']:
-#                                     shenbaosheetcell.create(
-#                                         {'sheet_id': form_id, 'line': cell_line_num, 'tagname': cell_name})
-#
-#                     # 3. {form_name:{'line_name':[{'ewbhxh':'1',...},...]}}
-#                     # 2层字典里一个v,v是列表，v里的字典里没有'floatrow'
-#                     if len(list(xml_dict[xml_name][form_name].values())) == 1 \
-#                             and isinstance(list(xml_dict[xml_name][form_name].values())[0], list) \
-#                             and 'floatrow' not in list(xml_dict[xml_name][form_name].values())[0][0]:
-#                         # 创建表
-#                         form_obj = shenbaosheet.create(
-#                             {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                              'tagname': form_name, 'structure': '3'})
-#                         form_id = form_obj.id
-#                         # 创建行
-#                         line_name = list(xml_dict[xml_name][form_name].keys())[0]
-#                         shenbaosheet.create(
-#                             {'parent_id': form_id, 'name': line_name, 'description': line_name, 'dqbm': self.dqbm,
-#                              'tagname': line_name})
-#                         # 创建单元格     与表关联    有行号
-#                         for cell_dict in xml_dict[xml_name][form_name][line_name]:
-#                             cell_line_num = int(cell_dict['ewbhxh'])
-#                             cell_name_list = list(cell_dict.keys())
-#                             for cell_name in cell_name_list:
-#                                 if cell_name != 'ewbhxh':
-#                                     shenbaosheetcell.create(
-#                                         {'sheet_id': form_id, 'line': cell_line_num, 'tagname': cell_name})
-#
-#                 # 2
-#                 else:  # 2. {'form_name': {'':'',..}}
-#                     # 创建表
-#                     form_obj = shenbaosheet.create(
-#                         {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,
-#                          'tagname': form_name, 'structure': '2'})
-#                     form_id = form_obj.id
-#                     # 创建单元格     与表关联    无行号
-#                     cell_name_list = list(xml_dict[xml_name][form_name].keys())
-#                     for cell_name in cell_name_list:
-#                         shenbaosheetcell.create({'sheet_id': form_id, 'tagname': cell_name})
-#
-#             # 1.
-#             else: # {'form_name': null}
-#                 # 创建表
-#                 shenbaosheet.create(
-#                     {'parent_id': xml_id, 'name': form_name, 'description': form_name, 'dqbm': self.dqbm,'tagname': form_name, 'structure': '1'})
+        file_name_no_extend, extension_name = os.path.splitext(self.name)
+        shenbaosheetcell = self.env['cic_taxsb.shenbaosheet.cell']
+        shenbaosheet = self.env['cic_taxsb.shenbaosheet']
+
+        level_one_key = list(content_dict.keys())[0]
+        level_one_key_obj = shenbaosheet.create({'name': file_name_no_extend, 'tagname': level_one_key})
+        level_one_key_id = level_one_key_obj.id
+
+        level_two_dict = content_dict[level_one_key]
+        level_two_keys = list(level_two_dict.keys())
+        for level_two_key in level_two_keys:
+            level_two_key_obj = shenbaosheet.create({'parent_id': level_one_key_id, 'tagname': level_two_key})
+            level_two_key_id = level_two_key_obj.id
+
+            level_three_dict = level_two_dict[level_two_key]
+            if isinstance(list(level_three_dict.values())[0],dict):
+                # 创建第三层的keys
+                level_three_keys = list(level_three_dict.keys())
+                for level_three_key in level_three_keys:
+                    level_three_key_obj = shenbaosheet.create({'parent_id': level_two_key_id, 'tagname': level_three_key})
+                    level_three_key_id = level_three_key_obj.id
+                    level_four_dict = level_three_dict[level_three_key]
+                    level_four_keys = list(level_four_dict.keys())
+                    # 第三层的values=第四层的dict,第四层的values的情况: 1.单元格  2.dict  3.list
+                    if isinstance(list(level_four_dict.values())[0],dict):
+                        for level_four_key in level_four_keys:
+                            level_four_key_obj = shenbaosheet.create({'parent_id': level_three_key_id, 'tagname': level_four_key})
+                            level_four_key_id = level_four_key_obj.id
+                            level_five_dict = level_four_dict[level_four_key]
+                            level_five_keys = list(level_five_dict.keys())
+                            # 第5层的values的分类：1.[]  2.{}  3.''  4.''+[]
+                            for level_five_key in level_five_keys:
+                                level_five_key_obj = shenbaosheet.create({'parent_id': level_four_key_id, 'tagname': level_five_key})
+                                level_five_key_id = level_five_key_obj.id
+                                pass
+                    elif isinstance(list(level_four_dict.values())[0],list):
+                        for level_four_key in level_four_keys:
+                            level_four_key_obj = shenbaosheet.create({'parent_id': level_three_key_id, 'tagname': level_four_key})
+                            level_four_key_id = level_four_key_obj.id
+
+                            level_five_list_dict = level_four_dict[level_four_key][0]
+                            level_five_list_dict_keys = list(level_five_list_dict.keys())
+                            for level_five_list_dict_key in level_five_list_dict_keys:
+                                shenbaosheetcell.create({'sheet_id': level_four_key_id,'tagname': level_five_list_dict_key})  # line value get_value_func
+                    else:
+                        for level_four_key in level_four_keys:
+                            shenbaosheetcell.create({'sheet_id': level_three_key_id, 'tagname': level_four_key})  # line value get_value_func
+            else:
+                level_three_keys = list(level_three_dict.keys())
+                for level_three_key in level_three_keys:
+                    if level_three_key == 'sz':
+                        shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_three_key,'value':level_three_dict['sz']})
+                    else:
+                        shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_three_key}) # line value get_value_func
+
+class UniteShenBaoSheet(models.Model):
+    """统一申报表模板
+    模板用来定义最终输出的 申报的报文格式
+    """
+
+    _name = "cic_taxsb.uniteshenbaosheet"
+    _order = "sequence,id"
+    _description = '统一申报表模板'
+    # _parent_store = True
+
+    parent_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', string='Parent Tag',ondelete='cascade')
+    # parent_left = fields.Integer('Parent Left', index=True)
+    # parent_right = fields.Integer('Parent Right', index=True)
+    child_ids = fields.One2many('cic_taxsb.uniteshenbaosheet', 'parent_id', 'Child Tags')
+
+    name = fields.Char('名称')
+    description = fields.Text('说明') # 说明
+    sequence = fields.Integer('序号') # 排序使用 _order
+    tagname = fields.Char('报文标签')
+    cells = fields.One2many('cic_taxsb.uniteshenbaosheet.cell', 'sheet_id', string='单元格设置') # 单元格设置
+
+class UniteShenBaoCell(models.Model):
+    """统一申报表单元格定义模板
+    模板用来定义最终输出的 申报的报文格式
+    """
+    _name = "cic_taxsb.uniteshenbaosheet.cell"
+    _order = "sequence,id"
+    _description = '统一申报表单元格模板'
+
+    sheet_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', '统一申报表',ondelete='cascade')
+    sequence = fields.Integer('序号')
+    line = fields.Integer('行号', help='统一申报表的行')
+    tagname = fields.Char('报文标签')
+    get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
+    value = fields.Text(string = '单元格的值')
+

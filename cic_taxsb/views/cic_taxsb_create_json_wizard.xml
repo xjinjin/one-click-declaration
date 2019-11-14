@@ -8,6 +8,7 @@
                  <sheet>
                     <group>
                         <group>
+                            <field name="name" />
                             <field name="file" />
                             <div></div>
                             <div style="text-align: right;width:190px">
