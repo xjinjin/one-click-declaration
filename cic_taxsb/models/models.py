@@ -1103,7 +1103,7 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
     # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
     # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
-    def create_shenbao_sheet(self):
+    def create_uniteshenbao_sheet(self):
         '''根据统一报文对象，创建统一报文格式'''
         for record in self:
             res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
