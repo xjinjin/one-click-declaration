@@ -1083,8 +1083,89 @@ comment_re = re.compile(
     re.DOTALL | re.MULTILINE
 )
 
+cell_stable_value = ['lmc','ewblxh','hmc','xmmc','lc','jmxzdmjmc','msxmdmjmc','zsxmMc','zspmMc','zsxmDm','zspmDm']
+
+class UniteCreateShenbaoSheetWizard(models.TransientModel):
+    """根据统一报文对象，创建统一报文格式"""
+    _name = "create.uniteshenbaosheet.wizard"
+    _description = '申报表的向导'
+    _inherit = ['cic_taxsb.submit','cic_taxsb.base']
+
+    # dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
+    sheet_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', '申报表',required=True)
+    account_id = fields.Many2one('cic_ocr_report.account', '账套', required=True,help='对应总账系统的账套信息')
+    startdate = fields.Date('开始日期',required=True, help='开始日期') # 2019-09-01
+    enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
+
+    ujson = fields.Text('统一报文')
+    content = fields.Text('报文内容', compute='_compute_content')
+    # {'dqbm': '32', 'sheet_id': 108,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
+    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
+    # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
+    @api.multi
+    def create_shenbao_sheet(self):
+        '''根据统一报文对象，创建统一报文格式'''
+        for record in self:
+            res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
+                                                                         record.enddate)
+            # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
+
+            level_two_dict = {}
+            # 构造level_two_dict
+            for level_two_obj in record.sheet_id.child_ids:
+                # 判断2层对象是否有cells
+                if not level_two_obj.cells:
+
+                    level_three_dict = {}
+                    for level_three_obj in level_two_obj.child_ids:
+                        # 判断3层对象是否有cells
+                        if not level_three_obj.cells:
+                            pass
+                        else:
+                            level_four_dict = {}
+                            for cell in level_three_obj.cells:
+                                if cell.value:
+                                    level_four_dict[cell.tagname] = cell.value
+                                else:
+                                    # exec(cell.get_value_func,{'res':res,'cell':cell})
+                                    # value = cell.value
+                                    value = '110'
+                                    level_four_dict[cell.tagname] = value
+                            level_three_dict[level_three_obj.tagname] = level_four_dict
+                    level_two_dict[level_two_obj.tagname] = level_three_dict
+                else:
+                    level_three_dict = {}
+                    for cell in level_two_obj.cells:
+                        if cell.value:
+                            level_three_dict[cell.tagname] = cell.value
+                        else:
+                            # exec(cell.get_value_func,{'res':res,'cell':cell})
+                            # value = cell.value
+                            value = '110'
+                            level_three_dict[cell.tagname] = value
+                    level_two_dict[level_two_obj.tagname] = level_three_dict
+
+            level_one_dict = {record.sheet_id.tagname: level_two_dict}
+            record.ujson = level_one_dict
+
+    @api.multi
+    def _compute_content(self):
+        _fields = [
+            'lsh',
+            'serviceId',
+            'nsrsbh',
+            'nsqxdm',
+            'skssq'
+        ]
+        for record in self:
+            temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+            # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
+            temp_dict.pop('id',None)            # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+            temp_dict['bizXml'] = base64.b64encode(record.ujson.encode('utf-8')).decode("utf-8")
+            record.content = json.dumps(temp_dict)
+
 class UniteCreateJsonObjWizard(models.TransientModel):
-    """上传json文件"""
+    """上传统一报文json文件，创建统一报文对象（自动增加项暂未考虑）"""
     _name = "unite.create.json.obj.wizard"
     _description = '创建json的向导'
 
@@ -1108,37 +1189,67 @@ class UniteCreateJsonObjWizard(models.TransientModel):
         shenbaosheetcell = self.env['cic_taxsb.shenbaosheet.cell']
         shenbaosheet = self.env['cic_taxsb.shenbaosheet']
 
+        # 创建第一层keys
         level_one_key = list(content_dict.keys())[0]
         level_one_key_obj = shenbaosheet.create({'name': file_name_no_extend, 'tagname': level_one_key})
         level_one_key_id = level_one_key_obj.id
 
+        # 创建第二层keys
         level_two_dict = content_dict[level_one_key]
         level_two_keys = list(level_two_dict.keys())
         for level_two_key in level_two_keys:
             level_two_key_obj = shenbaosheet.create({'parent_id': level_one_key_id, 'tagname': level_two_key})
             level_two_key_id = level_two_key_obj.id
 
+            # 第三层的values分类：     1.dict      2.cell
+            # 创建第三层的keys
             level_three_dict = level_two_dict[level_two_key]
             if isinstance(list(level_three_dict.values())[0],dict):
-                # 创建第三层的keys
                 level_three_keys = list(level_three_dict.keys())
                 for level_three_key in level_three_keys:
                     level_three_key_obj = shenbaosheet.create({'parent_id': level_two_key_id, 'tagname': level_three_key})
                     level_three_key_id = level_three_key_obj.id
+
+                    # 第四层的的values分类:    1.cell  2.dict  3.list
+                    # 创建第四层的keys
                     level_four_dict = level_three_dict[level_three_key]
                     level_four_keys = list(level_four_dict.keys())
-                    # 第三层的values=第四层的dict,第四层的values的情况: 1.单元格  2.dict  3.list
                     if isinstance(list(level_four_dict.values())[0],dict):
                         for level_four_key in level_four_keys:
                             level_four_key_obj = shenbaosheet.create({'parent_id': level_three_key_id, 'tagname': level_four_key})
                             level_four_key_id = level_four_key_obj.id
+
+                            # 第五层的的values分类:    1.list  2.dict  3.cell
+                            # 创建第五层的keys
                             level_five_dict = level_four_dict[level_four_key]
                             level_five_keys = list(level_five_dict.keys())
-                            # 第5层的values的分类：1.[]  2.{}  3.''  4.''+[]
                             for level_five_key in level_five_keys:
-                                level_five_key_obj = shenbaosheet.create({'parent_id': level_four_key_id, 'tagname': level_five_key})
-                                level_five_key_id = level_five_key_obj.id
-                                pass
+                                if isinstance(level_five_dict[level_five_key], list):
+                                    level_five_key_obj = shenbaosheet.create({'parent_id': level_four_key_id, 'tagname': level_five_key})
+                                    level_five_key_id = level_five_key_obj.id
+
+                                    level_six_list = level_five_dict[level_five_key]
+                                    for level_seven_dict in level_six_list:
+                                        level_seven_keys = list(level_seven_dict.keys())
+                                        for level_seven_key in level_seven_keys:
+                                            if level_seven_key in cell_stable_value:
+                                                shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key,'value':level_seven_dict[level_seven_key]})
+                                            shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key})
+                                # 第五层的的values分类:  2.dict
+                                elif isinstance(level_five_dict[level_five_key], dict):
+                                    level_five_key_obj = shenbaosheet.create({'parent_id': level_four_key_id, 'tagname': level_five_key})
+                                    level_five_key_id = level_five_key_obj.id
+                                    # 创建第六层的单元格
+                                    level_six_dict = level_five_dict[level_five_key]
+                                    level_six_keys = list(level_six_dict.keys())
+                                    for level_six_key in level_six_keys:
+                                        shenbaosheetcell.create({'sheet_id': level_five_key_id,'tagname': level_six_key})  # line value get_value_func
+                                # 第五层的的values分类:    3.cell
+                                else:
+                                    shenbaosheetcell.create({'sheet_id': level_four_key_id,'tagname': level_five_key})  # line value get_value_func
+
+                    # 第四层的的values分类:    3.list
+                    # 创建第四层的keys，创建单元格
                     elif isinstance(list(level_four_dict.values())[0],list):
                         for level_four_key in level_four_keys:
                             level_four_key_obj = shenbaosheet.create({'parent_id': level_three_key_id, 'tagname': level_four_key})
@@ -1148,9 +1259,13 @@ class UniteCreateJsonObjWizard(models.TransientModel):
                             level_five_list_dict_keys = list(level_five_list_dict.keys())
                             for level_five_list_dict_key in level_five_list_dict_keys:
                                 shenbaosheetcell.create({'sheet_id': level_four_key_id,'tagname': level_five_list_dict_key})  # line value get_value_func
+
+                    # 第四层的的values分类:    1.cell  创建单元格
                     else:
                         for level_four_key in level_four_keys:
                             shenbaosheetcell.create({'sheet_id': level_three_key_id, 'tagname': level_four_key})  # line value get_value_func
+
+            # 第三层的values分类： 2.cell   创建单元格 固定值写入value
             else:
                 level_three_keys = list(level_three_dict.keys())
                 for level_three_key in level_three_keys:
