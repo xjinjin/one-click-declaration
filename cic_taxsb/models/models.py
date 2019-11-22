@@ -1093,7 +1093,7 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
 
     # dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
     sheet_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', '申报表',required=True)
-    account_id = fields.Many2one('cic_ocr_report.account', '账套', required=True,help='对应总账系统的账套信息')
+    account_id = fields.Many2one('cic_ocr_report.account', '账套',help='对应总账系统的账套信息')
     startdate = fields.Date('开始日期',required=True, help='开始日期') # 2019-09-01
     enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
 
@@ -1104,7 +1104,7 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
     # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
     def create_uniteshenbao_sheet(self):
-        '''根据统一报文对象，创建统一报文格式'''
+        '''根据统一报文对象，创建统一报文格式. dict/json ?'''
         for record in self:
             res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
                                                                          record.enddate)
@@ -1115,13 +1115,47 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
             for level_two_obj in record.sheet_id.child_ids:
                 # 判断2层对象是否有cells
                 if not level_two_obj.cells:
-
+                    # 2层对象没有cells
                     level_three_dict = {}
                     for level_three_obj in level_two_obj.child_ids:
                         # 判断3层对象是否有cells
                         if not level_three_obj.cells:
-                            pass
+                            # 3层对象没有cells
+                            level_four_dict = {}
+                            for level_four_obj in level_three_obj.child_ids:
+                                # 构建第四层字典   # 第5层的字典：单元格，字典，单元格+列表
+                                if not level_four_obj.cells:
+                                    # 4层对象没有cells
+                                    level_five_dict = {}
+                                    for level_five_obj in level_four_obj.child_ids:
+                                        pass
+                                    level_four_dict[level_four_obj.tagname] = level_five_dict
+                                else:
+                                    # 4层对象有cells
+                                    level_five_dict = {}
+                                    for level_five_obj in level_four_obj.child_ids:
+                                        level_seven_dict = {}
+                                        for cell in level_five_obj.cells:
+                                            if cell.value:
+                                                level_seven_dict[cell.tagname] = cell.value
+                                            else:
+                                                # exec(cell.get_value_func,{'res':res,'cell':cell})
+                                                # value = cell.value
+                                                value = '110'
+                                                level_seven_dict[cell.tagname] = value
+                                        level_five_dict[level_five_obj.tagname] = [].append(level_seven_dict)
+                                    for cell in level_four_obj.cells:
+                                        if cell.value:
+                                            level_five_dict[cell.tagname] = cell.value
+                                        else:
+                                            # exec(cell.get_value_func,{'res':res,'cell':cell})
+                                            # value = cell.value
+                                            value = '110'
+                                            level_five_dict[cell.tagname] = value
+                                    level_four_dict[level_four_obj.tagname] = level_five_dict
+                            level_three_dict[level_three_obj.tagname] = level_four_dict
                         else:
+                            # 3层对象有cells
                             level_four_dict = {}
                             for cell in level_three_obj.cells:
                                 if cell.value:
@@ -1134,6 +1168,7 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
                             level_three_dict[level_three_obj.tagname] = level_four_dict
                     level_two_dict[level_two_obj.tagname] = level_three_dict
                 else:
+                    # 2层对象有cells
                     level_three_dict = {}
                     for cell in level_two_obj.cells:
                         if cell.value:
