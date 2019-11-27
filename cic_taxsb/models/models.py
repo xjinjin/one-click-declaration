@@ -1083,7 +1083,7 @@ comment_re = re.compile(
     re.DOTALL | re.MULTILINE
 )
 
-cell_stable_value = ['lmc','ewblxh','hmc','xmmc','lc','jmxzdmjmc','msxmdmjmc','zsxmMc','zspmMc','zsxmDm','zspmDm']
+cell_stable_value = ['lmc','ewblxh','ewbhxh','hmc','xmmc','lc','jmxzdmjmc','msxmdmjmc','zsxmMc','zspmMc','zsxmDm','zspmDm']
 
 class UniteCreateShenbaoSheetWizard(models.TransientModel):
     """根据统一报文对象，创建统一报文格式"""
@@ -1098,16 +1098,16 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
     enddate = fields.Date('截止日期',required=True, help='截止日期')   # 2019-09-30
 
     ujson = fields.Text('统一报文')
-    content = fields.Text('报文内容', compute='_compute_content')
-    # {'dqbm': '32', 'sheet_id': 108,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
+    # content = fields.Text('报文内容', compute='_compute_content')
+    
+    # {'sheet_id': 44,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
     # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
     # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
     def create_uniteshenbao_sheet(self):
         '''根据统一报文对象，创建统一报文格式. dict/json ?'''
         for record in self:
-            res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,
-                                                                         record.enddate)
+            # res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,record.enddate)
             # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
 
             level_two_dict = {}
@@ -1149,9 +1149,9 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
                                                         level_seven_dict[str(cell.line)][key] = cell.value
                                                     else:
                                                         level_seven_dict[str(cell.line)][key] = value
-                                        if not level_six_dict:
+                                        if level_six_dict:
                                             level_five_dict[level_five_obj.tagname] = level_six_dict
-                                        if not level_seven_dict:
+                                        if level_seven_dict:
                                             level_five_dict[level_five_obj.tagname] = list(level_seven_dict.values())
                                     level_four_dict[level_four_obj.tagname] = level_five_dict
                                 else:
@@ -1220,23 +1220,24 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
                     level_two_dict[level_two_obj.tagname] = level_three_dict
 
             level_one_dict = {record.sheet_id.tagname: level_two_dict}
-            record.ujson = json.dumps(level_one_dict)
+            # record.ujson = json.dumps(level_one_dict)
+            record.ujson = level_one_dict
 
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'lsh',
-            'serviceId',
-            'nsrsbh',
-            'nsqxdm',
-            'skssq'
-        ]
-        for record in self:
-            temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-            # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
-            temp_dict.pop('id',None)            # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-            temp_dict['bizXml'] = base64.b64encode(record.ujson.encode('utf-8')).decode("utf-8")
-            record.content = json.dumps(temp_dict)
+    # @api.multi
+    # def _compute_content(self):
+    #     _fields = [
+    #         'lsh',
+    #         'serviceId',
+    #         'nsrsbh',
+    #         'nsqxdm',
+    #         'skssq'
+    #     ]
+    #     for record in self:
+    #         temp_dict = record.read(_fields)[0] # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+    #         # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
+    #         temp_dict.pop('id',None)            # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+    #         temp_dict['bizXml'] = base64.b64encode(record.ujson.encode('utf-8')).decode("utf-8")
+    #         record.content = json.dumps(temp_dict)
 
 class UniteCreateJsonObjWizard(models.TransientModel):
     """上传统一报文json文件，创建统一报文对象（自动增加项暂未考虑）"""
@@ -1260,8 +1261,8 @@ class UniteCreateJsonObjWizard(models.TransientModel):
         content_dict = eval(content)
 
         file_name_no_extend, extension_name = os.path.splitext(self.name)
-        shenbaosheetcell = self.env['cic_taxsb.shenbaosheet.cell']
-        shenbaosheet = self.env['cic_taxsb.shenbaosheet']
+        shenbaosheetcell = self.env['cic_taxsb.uniteshenbaosheet.cell']
+        shenbaosheet = self.env['cic_taxsb.uniteshenbaosheet']
 
         # 创建第一层keys
         level_one_key = list(content_dict.keys())[0]
@@ -1305,12 +1306,16 @@ class UniteCreateJsonObjWizard(models.TransientModel):
                                     level_six_list = level_five_dict[level_five_key]
                                     for level_seven_dict in level_six_list:
                                         level_seven_keys = list(level_seven_dict.keys())
-                                        if 'ewbhxh' in level_seven_dict:
-                                            line = int(level_seven_dict['ewbhxh'])
+                                        if 'ewbhxh' in level_seven_dict or 'ewblxh' in level_seven_dict:
+                                            if level_seven_dict.get('ewbhxh') == '合计':
+                                                line = 0
+                                            else:
+                                                line = int(level_seven_dict.get('ewbhxh',0)) or int(level_seven_dict.get('ewblxh',0))
                                             for level_seven_key in level_seven_keys:
                                                 if level_seven_key in cell_stable_value:
                                                     shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key,'line':line,'value':level_seven_dict[level_seven_key]})
-                                                shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key,'line':line})
+                                                else:
+                                                    shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key,'line':line})
                                         else:
                                             for level_seven_key in level_seven_keys:
                                                 shenbaosheetcell.create({'sheet_id': level_five_key_id, 'tagname': level_seven_key})
@@ -1388,4 +1393,3 @@ class UniteShenBaoCell(models.Model):
     tagname = fields.Char('报文标签')
     get_value_func = fields.Text('取值函数', help='设定本单元格的取数函数代码')
     value = fields.Text(string = '单元格的值')
-
