@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cic_taxsb_djxx,cic_taxsb_djxx,model_cic_taxsb_djxx,,1,1,1,1
+access_cic_taxsb_cshjs,cic_taxsb_cshjs,model_cic_taxsb_cshjs,,1,1,1,1
+access_cic_taxsb_csh,cic_taxsb_csh,model_cic_taxsb_csh,,1,1,1,1
+access_cic_taxsb_shenbaosheet,cic_taxsb_shenbaosheet,model_cic_taxsb_shenbaosheet,,1,1,1,1
+access_cic_taxsb_uniteshenbaosheet,cic_taxsb_uniteshenbaosheet,model_cic_taxsb_uniteshenbaosheet,,1,1,1,1
+access_cic_taxsb_shenbaosheet_cell,cic_taxsb_shenbaosheet_cell,model_cic_taxsb_shenbaosheet_cell,,1,1,1,1
+access_cic_taxsb_uniteshenbaosheet_cell,cic_taxsb_uniteshenbaosheet_cell,model_cic_taxsb_uniteshenbaosheet_cell,,1,1,1,1
+access_create_shenbaosheet_wizard,create_shenbaosheet_wizard,model_create_shenbaosheet_wizard,,1,1,1,1
+access_create_uniteshenbaosheet_wizard,create_uniteshenbaosheet_wizard,model_create_uniteshenbaosheet_wizard,,1,1,1,1
+access_create_xml_obj_wizard,create_xml_obj_wizard,model_create_xml_obj_wizard,,1,1,1,1
+access_unite_create_json_obj_wizard,unite_create_json_obj_wizard,model_unite_create_json_obj_wizard,,1,1,1,1
+access_cic_taxsb_status,cic_taxsb_status,model_cic_taxsb_status,,1,1,1,1
+access_cic_taxsb_zf,cic_taxsb_zf,model_cic_taxsb_zf,,1,1,1,1
+access_cic_taxsb_submit_wizard,cic_taxsb_submit_wizard,model_cic_taxsb_submit_wizard,,1,1,1,1

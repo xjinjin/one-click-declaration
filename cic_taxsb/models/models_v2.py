@@ -370,9 +370,15 @@ class SBStatus(models.Model):
             temp_dict.pop('id', None)
             record.content = json.dumps(temp_dict)
 
-class SBSubmit(models.Model):
-    _name = "cic_taxsb.submit"
-    _description = "申报提交接口,用于客户提交申报请求报文"
+cell_stable_value = ['lmc', 'ewblxh', 'ewbhxh', 'hmc', 'xmmc', 'lc', 'jmxzdmjmc', 'msxmdmjmc', 'zcxmmc', 'zsxmMc',
+                     'zspmMc', 'zsxmDm', 'zspmDm', 'xm']
+class SBSubmitWizard(models.TransientModel):
+    """
+    申报提交接口,用于客户提交申报请求报文
+    根据统一报文对象，创建统一报文格式
+    """
+    _name = "cic_taxsb.submit.wizard"
+    _description = '申报提交向导'
     _inherit = "cic_taxsb.base"
 
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
@@ -381,12 +387,21 @@ class SBSubmit(models.Model):
     skssqq = fields.Char('所属期起 yyyy-MM-dd', help='所属期起 yyyy-MM-dd')
     skssqz = fields.Char('所属期止 yyyy-MM-dd', help='所属期止 yyyy-MM-dd')
 
+    sheet_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', '申报表', required=True)
+    account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息')
+
     serviceId = fields.Char('服务方法标识', default='S003', help="服务方法标识")
 
+    create_dict = fields.Text('统一报文')
     content = fields.Text('报文内容', compute='_compute_content')
+
+    # {'sheet_id': 44,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
+    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
+    # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
 
     @api.multi
     def _compute_content(self):
+
         _fields = [
             'nsrsbh',
             'sbzlbh',
@@ -395,43 +410,17 @@ class SBSubmit(models.Model):
             'skssqz'
         ]
         for record in self:
-            temp_dict = record.read(_fields)[0]  # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-            # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
-            temp_dict.pop('id', None)  # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-            content = ''
-            temp_dict['bizXml'] = base64.b64encode(content.encode('utf-8')).decode("utf-8")
-            record.content = json.dumps(temp_dict)
+            if not record.ujson:
+                temp_dict = record.read(_fields)[0]  # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+                # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
+                temp_dict.pop('id', None)  # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
+                content = json.dumps(record.ujson)
+                temp_dict['bizXml'] = base64.b64encode(content.encode('utf-8')).decode("utf-8")
+                record.content = json.dumps(temp_dict)
 
-comment_re = re.compile(
-    '(^)?[^\S\n]*/(?:\*(.*?)\*/[^\S\n]*|/[^\n]*)($)?',
-    re.DOTALL | re.MULTILINE
-)
-
-cell_stable_value = ['lmc', 'ewblxh', 'ewbhxh', 'hmc', 'xmmc', 'lc', 'jmxzdmjmc', 'msxmdmjmc', 'zcxmmc', 'zsxmMc',
-                     'zspmMc', 'zsxmDm', 'zspmDm', 'xm']
-
-
-class UniteCreateShenbaoSheetWizard(models.TransientModel):
-    """根据统一报文对象，创建统一报文格式"""
-    _name = "create.uniteshenbaosheet.wizard"
-    _description = '申报表的向导'
-    _inherit = ['cic_taxsb.submit', 'cic_taxsb.base']
-
-    # dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', required=True, help='地区编码')
-    sheet_id = fields.Many2one('cic_taxsb.uniteshenbaosheet', '申报表', required=True)
-    account_id = fields.Many2one('cic_ocr_report.account', '账套', help='对应总账系统的账套信息')
-    startdate = fields.Date('开始日期', required=True, help='开始日期')  # 2019-09-01
-    enddate = fields.Date('截止日期', required=True, help='截止日期')  # 2019-09-30
-
-    ujson = fields.Text('统一报文')
-    content = fields.Text('报文内容', compute='_compute_content')
-
-    # {'sheet_id': 44,'account_id': 100, 'startdate': '2019-09-01', 'enddate': '2019-09-30'}
-    # {'nsrsbh': '91320214MA1NYKMBXK', 'nsqxdm': '1','skssqz': '2019-07-01', 'sbzlbh': '29806'}
-    # {'appkey': '3ccb2aab00e149eab2b9567fbf508217', 'token': '515d582419d2ee937d2f8084'}
     @api.multi
     def create_uniteshenbao_sheet(self):
-        '''根据统一报文对象，创建统一报文格式. dict/json ?'''
+        '''根据统一报文对象，创建统一报文格式. dict'''
         for record in self:
             # res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,record.enddate)
             # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
@@ -590,33 +579,12 @@ class UniteCreateShenbaoSheetWizard(models.TransientModel):
                     level_two_dict[level_two_obj.tagname] = level_three_dict
 
             level_one_dict = {record.sheet_id.tagname: level_two_dict}
-            # record.ujson = json.dumps(level_one_dict)
-            record.ujson = level_one_dict
+            record.create_dict = level_one_dict
 
-    @api.multi
-    def _compute_content(self):
-        _fields = [
-            'lsh',
-            'serviceId',
-            'nsrsbh',
-            'nsqxdm',
-            'skssq'
-        ]
-        for record in self:
-            if record.ujson:
-                temp_dict = record.read(_fields)[0]  # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-                # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
-                temp_dict.pop('id', None)  # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-                ujson = json.dumps(eval(record.ujson))
-                temp_dict['bizXml'] = base64.b64encode(ujson.encode('utf-8')).decode("utf-8")
-                record.content = json.dumps(temp_dict)
-
-    @api.multi
-    def test(self):
-        for record in self:
-            return [type(record.ujson), type(eval(record.ujson)), record.ujson, eval(record.ujson)]
-
-
+comment_re = re.compile(
+    '(^)?[^\S\n]*/(?:\*(.*?)\*/[^\S\n]*|/[^\n]*)($)?',
+    re.DOTALL | re.MULTILINE
+)
 class UniteCreateJsonObjWizard(models.TransientModel):
     """上传统一报文json文件，创建统一报文对象（自动增加项暂未考虑）"""
     _name = "unite.create.json.obj.wizard"
@@ -958,7 +926,6 @@ class UniteCreateJsonObjWizard(models.TransientModel):
                         else:
                             shenbaosheetcell.create(
                                 {'sheet_id': level_two_key_id, 'tagname': level_three_key})  # line value get_value_func
-
 
 class UniteShenBaoSheet(models.Model):
     """统一申报表模板
