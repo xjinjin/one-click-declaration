@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_tree_djxx" model="ir.ui.view">
+         <field name="name">登记信息</field>
+         <field name="model">cic_taxsb.djxx</field>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="qymc" />
+                 <field name="dqbm" />
+                 <field name="cwlxr" />
+                 <field name="cwlxrlxfs" />
+                 <field name="qynf" />
+                 <field name="qyyf" />
+             </tree>
+         </field>
+    </record>
+
+    <record id="view_form_" model="ir.ui.view">
+         <field name="name">登记信息表单</field>
+         <field name="model">cic_taxsb.djxx</field>
+         <field name="arch" type="xml">
+             <form string="Djxx">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="nsrsbh" />
+                            <field name="cwlxr" />
+                            <field name="dscsdlmm" />
+                            <field name="dsdlmm" />
+                            <field name="gscamm" />
+                            <field name="gsnsmm" />
+                            <field name="gsnsyhm" />
+                            <field name="qynf" />
+                            <field name="nsrzgdm" />
+                        </group>
+                        <group>
+                            <field name="qymc" />
+                            <field name="dqbm" />
+                            <field name="cwlxrlxfs" />
+                            <field name="dsdlfs" />
+                            <field name="dsdlyhm" />
+                            <field name="gsdlfs" />
+                            <field name="gsnsrsbh" />
+                            <field name="kjzd" />
+                            <field name="qyyf" />
+                        </group>
+                    </group>
+                    <group><field name="content" /></group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>

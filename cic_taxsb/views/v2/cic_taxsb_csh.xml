@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_tree_csh" model="ir.ui.view">
+         <field name="name">初始化往期数据树形图</field>
+         <field name="model">cic_taxsb.csh</field>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="nsrsbh" />
+                 <field name="skssqq" />
+                 <field name="skssqz" />
+             </tree>
+         </field>
+    </record>
+
+    <record id="view_form_csh" model="ir.ui.view">
+         <field name="name">初始化往期数据表单</field>
+         <field name="model">cic_taxsb.csh</field>
+         <field name="arch" type="xml">
+             <form string="csh">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="nsrsbh" />
+                            <field name="sbzlbh" />
+                        </group>
+                        <group>
+                            <field name="skssqq" />
+                            <field name="skssqz" />
+                            <field name="nsqxdm" />
+                        </group>
+                    </group>
+                    <group><field name="content" /></group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>

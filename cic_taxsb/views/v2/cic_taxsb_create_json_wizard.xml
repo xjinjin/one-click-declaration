@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_form_create_json_wizard" model="ir.ui.view">
+         <field name="name">上传json文件</field>
+         <field name="model">unite.create.json.obj.wizard</field>
+         <field name="arch" type="xml">
+             <form string="Create json">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="file" />
+                            <div></div>
+                            <div style="text-align: right;width:190px">
+                                <button name="create_json_obj" type="object"
+                                string="上传" />
+                            </div>
+                        </group>
+                    </group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>

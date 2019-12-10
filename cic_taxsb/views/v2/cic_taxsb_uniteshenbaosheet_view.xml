@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <record id="view_tree_uniteshenbaosheet" model="ir.ui.view">
+         <field name="name">uniteshenbaosheet Tree</field>
+         <field name="model">cic_taxsb.uniteshenbaosheet</field>
+         <field name="arch" type="xml">
+             <tree>
+                 <field name="name" />
+                 <field name="tagname" />
+             </tree>
+         </field>
+    </record>
+
+
+    <record id="view_form_uniteshenbaosheet" model="ir.ui.view">
+         <field name="name">统一申报表模板</field>
+         <field name="model">cic_taxsb.uniteshenbaosheet</field>
+         <field name="arch" type="xml">
+             <form string="shenbaosheet">
+                 <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="tagname" />
+                            <field name="parent_id" />
+                        </group>
+                    </group>
+                    <group>
+                    <field name="cells" nolabel="1" mode="tree,kanban" >
+                        <tree string="Invoice Lines" editable="bottom">
+                            <field name="sheet_id"/>
+                            <field name="sequence"/>
+                            <field name="line"/>
+                            <field name="tagname"/>
+                            <field name="get_value_func"/>
+                            <field name="value"/>
+                        </tree>
+                    </field>
+                    </group>
+                 </sheet>
+             </form>
+         </field>
+    </record>
+</odoo>

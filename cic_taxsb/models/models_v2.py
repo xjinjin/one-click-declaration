@@ -14,42 +14,42 @@ import re
 
 # 地区代码
 DQBM_SELECTION = [
-    ('11', '北京市'),
-    ('12', '天津市'),
-    ('13', '河北省'),
-    ('14', '山西省'),
-    ('15', '内蒙古区'),
-    ('21', '辽宁省'),
-    ('22', '吉林省'),
-    ('23', '黑龙江省'),
-    ('31', '上海市'),
-    ('32', '江苏省'),
-    ('33', '浙江省'),
-    ('34', '安徽省'),
-    ('35', '福建省'),
-    ('36', '江西省'),
-    ('37', '山东省'),
-    ('41', '河南省'),
-    ('42', '湖北省'),
-    ('43', '湖南省'),
-    ('44', '广东省'),
-    ('45', '广西区'),
-    ('46', '海南省'),
-    ('50', '重庆市'),
-    ('51', '四川省'),
-    ('52', '贵州省'),
-    ('53', '云南省'),
-    ('54', '西藏区'),
-    ('61', '陕西省'),
-    ('62', '甘肃省'),
-    ('63', '青海省'),
-    ('64', '宁夏区'),
-    ('65', '新疆区'),
-    ('2102', '大连市'),
-    ('3302', '宁波市'),
-    ('3502', '厦门市'),
-    ('3702', '青岛市'),
-    ('4403', '深圳市'),
+    ('00', '[00]公共'),
+    ('11', '[11]北京市'),
+    ('12', '[12]天津市'),
+    ('13', '[13]河北省'),
+    ('14', '[14]山西省'),
+    ('15', '[15]内蒙古自治区'),
+    ('21', '[21]辽宁省'),
+    ('22', '[22]吉林省'),
+    ('23', '[23]黑龙江省'),
+    ('31', '[31]上海市'),
+    ('32', '[32]江苏省'),
+    ('33', '[33]浙江省'),
+    ('34', '[34]安徽省'),
+    ('35', '[35]福建省'),
+    ('36', '[36]江西省'),
+    ('37', '[37]山东省'),
+    ('370', '[370]青岛市'),
+    ('41', '[41]河南省'),
+    ('42', '[42]湖北省'),
+    ('43', '[43]湖南省'),
+    ('44', '[44]广东省'),
+    ('45', '[45]广西壮族自治区'),
+    ('46', '[46]海南省'),
+    ('50', '[50]重庆市'),
+    ('51', '[51]四川省'),
+    ('52', '[52]贵州省'),
+    ('53', '[53]云南省'),
+    ('54', '[54]西藏自治区'),
+    ('61', '[61]陕西省'),
+    ('62', '[62]甘肃省'),
+    ('63', '[63]青海省'),
+    ('64', '[64]宁夏回族自治区'),
+    ('65', '[65]新疆维吾尔自治区'),
+    ('71', '[71]台湾省'),
+    ('81', '[81]香港特别行政区'),
+    ('82', '[82]澳门特别行政区')
 ]
 
 # 纳税人资格代码
@@ -67,41 +67,6 @@ DLFS_SELECTION = [
 
 # 税种代码表
 SZDM_SELECTION = [
-    ('10101', '增值税一般纳税人申报表'),
-    ('10102', '增值税小规模申报表'),
-    ('10516', '城建税、教育费附加、地方教育附加税(费)申报表(月)'),
-    ('B0516', '城建税、教育费附加、地方教育附加税(费)申报表(季)'),
-    ('10502', '城镇土地使用税纳税申报表'),
-    ('10520', '地方各项基金费申报表（月报）'),
-    ('B0520', '地方各项基金费申报表（季）'),
-    ('10501', '房产税纳税申报表'),
-    ('90201', '综合所得申报表'),
-    ('10512', '分类所得申报表'),
-    ('10513', '非居民所得申报表'),
-    ('10524', '个人经营所得A类'),
-    ('10412', '企业所得税月（季）报A类'),
-    ('10413', '企业所得税月（季）报B类'),
-    ('90106', '社会保险费缴纳表'),
-    ('10601', '文化事业建设费(新国税)'),
-    ('39805', '财务报表(企业会计制度)'),
-    ('29806', '财务报表(小企业会计准则)'),
-    ('10311', '消费税（电池）申报表'),
-    ('10111', '印花税纳税申报表(新)月/季'),
-    ('B0111', '印花税纳税申报表(选报)次'),
-    ('B9805', '财务报表(企业会计准则)'),
-    ('C0502', '财务报表(企业会计准则)'),
-    ('90601', '生产经营所得纳税申报表'),
-    ('10306', '消费税其他'),
-    ('42016', '增值税预缴申报'),
-    ('10521', '土地增值税纳税申报表'),
-    ('10517', '残疾人就业保障金缴费申报表 月'),
-    ('B0517', '残疾人就业保障金缴费申报表 季'),
-]
-
-
-
-# serviceId代码表
-SERVICEID_SELECTION = [
     ('42016', '[42016]增值税预缴税'),
     ('10101', '[10101]增值税一般纳税人'),
     ('10102', '[10102]增值税小规模纳税人'),
@@ -130,6 +95,13 @@ SERVICEID_SELECTION = [
     ('10512', '[10512]分类所得税'),
     ('90201', '[90201]综合所得税'),
     ('10513', '[10513]非居民所得税')
+]
+
+
+
+# serviceId代码表
+SERVICEID_SELECTION = [
+
 ]
 
 # 纳税期限代码
@@ -259,7 +231,7 @@ class SBDjxx(models.Model):
 
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号 必须传")
     qymc = fields.Char('企业名称', help="企业名称 必须传")
-    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', help="地区编码【参考地区编码 平台申报开放API规范2.0(1)文档】 必须传")
+    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', help="地区编码")
     cwlxr = fields.Char('财务联系人', help="财务联系人          【江苏必须传】")
     cwlxrlxfs = fields.Char('财务联系人联系电话', help="财务联系人联系电话  【江苏必须传】")
     dscsdlmm = fields.Char('地税CA密码', help="地税CA密码 目前不支持")
@@ -370,15 +342,10 @@ class SBStatus(models.Model):
             temp_dict.pop('id', None)
             record.content = json.dumps(temp_dict)
 
-cell_stable_value = ['lmc', 'ewblxh', 'ewbhxh', 'hmc', 'xmmc', 'lc', 'jmxzdmjmc', 'msxmdmjmc', 'zcxmmc', 'zsxmMc',
-                     'zspmMc', 'zsxmDm', 'zspmDm', 'xm']
-class SBSubmitWizard(models.TransientModel):
-    """
-    申报提交接口,用于客户提交申报请求报文
-    根据统一报文对象，创建统一报文格式
-    """
-    _name = "cic_taxsb.submit.wizard"
-    _description = '申报提交向导'
+class UniteCreateShenbaoSheetWizard(models.TransientModel):
+    """根据统一报文对象，创建统一报文格式"""
+    _name = "create.uniteshenbaosheet.wizard"
+    _description = '申报表的向导'
     _inherit = "cic_taxsb.base"
 
     nsrsbh = fields.Char('申报的纳税人识别号', help="申报的纳税人识别号")
@@ -410,201 +377,82 @@ class SBSubmitWizard(models.TransientModel):
             'skssqz'
         ]
         for record in self:
-            if not record.ujson:
+            if record.create_dict:
                 temp_dict = record.read(_fields)[0]  # {'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
                 # temp_dict = record.read(_fields)  # [{'id': 2,'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}]
                 temp_dict.pop('id', None)  # {'gsdlfs': '2', 'gsnsmm': 'Jj111111', 'qyyf': '09'}
-                content = json.dumps(record.ujson)
+                content = json.dumps(record.create_dict)
                 temp_dict['bizXml'] = base64.b64encode(content.encode('utf-8')).decode("utf-8")
                 record.content = json.dumps(temp_dict)
 
     @api.multi
     def create_uniteshenbao_sheet(self):
-        '''根据统一报文对象，创建统一报文格式. dict'''
+        '''根据统一报文对象，创建统一报文格式. dict/json ?'''
         for record in self:
             # res = record.env['cic_tools.cic_finance'].get_declaration_data(record.account_id.levyNum, record.startdate,record.enddate)
             # res = record.env['cic_tools.cic_finance'].get_declaration_data('91320214MA1NYKMBXK','2019-07-01','2019-09-30')
 
-            level_two_dict = {}
-            # 构造level_two_dict
-            for level_two_obj in record.sheet_id.child_ids:
-                # 判断2层对象是否有cells
-                if not level_two_obj.cells:
-                    # 2层对象没有cells
-                    level_three_dict = {}
-                    for level_three_obj in level_two_obj.child_ids:
-                        # 判断3层对象是否有cells
-                        if not level_three_obj.cells:
-                            # 3层对象没有cells
-                            level_four_dict = {}
-                            for level_four_obj in level_three_obj.child_ids:
-                                # 构建第四层字典   # 第5层的字典：单元格，字典，单元格+列表
-                                if not level_four_obj.cells:
-                                    # 4层对象：字典：只有表没有单元格
-                                    level_five_dict = {}  # 构建第五层，分几种情况：列表和字典
-                                    level_five_list = []  # cgwgqyxxbgbVO
-                                    level_four_value_list = ['cgwgqyxxbgbVO']
-                                    # 5层对象没有cells
-                                    # {"cgwgqyxxbgbVO":[{"gdxxGrid": {"gdxxGridlb":[{...},...]},"wgqyxxForm":{...}}]}
-                                    if level_four_obj.tagname in level_four_value_list:
-                                        level_six_dict = {}
-                                        for level_five_obj in level_four_obj.child_ids:
-                                            if not level_five_obj.cells:
-                                                level_seven_dict = {}  # 构建第7层字典
-                                                level_nine_dict = {}
-                                                for level_six_obj in level_five_obj.child_ids:
-                                                    for cell in level_six_obj.cells:
-                                                        key = cell.tagname
-                                                        # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                                        # value = cell.value
-                                                        value = '110'
-                                                        if str(cell.line) not in level_nine_dict:
-                                                            level_nine_dict[str(cell.line)] = {}
-                                                            level_nine_dict[str(cell.line)][key] = value
-                                                        else:
-                                                            level_nine_dict[str(cell.line)][key] = value
-                                                    level_seven_dict[level_six_obj.tagname] = list(
-                                                        level_nine_dict.values())
-                                                level_six_dict[level_five_obj.tagname] = level_seven_dict
-                                            else:
-                                                level_seven_dict = {}
-                                                for cell in level_five_obj.cells:
-                                                    key = cell.tagname
-                                                    # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                                    # value = cell.value
-                                                    value = '110'
-                                                    level_seven_dict[key] = value
-                                                level_six_dict[level_five_obj.tagname] = level_seven_dict
-                                        level_five_list.append(level_six_dict)
-                                    else:
-                                        for level_five_obj in level_four_obj.child_ids:
-                                            # if not level_five_obj.cells:
-                                            #     pass
-                                            # else:
-                                            level_six_dict = {}
-                                            level_seven_dict = {}
-                                            for cell in level_five_obj.cells:
-                                                key = cell.tagname
-                                                # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                                # value = cell.value
-                                                value = '110'
-                                                if not cell.line:  # 单元格是否带行号，不带行号:dict
-                                                    level_six_dict[key] = value
-                                                else:  # 带行号:list
-                                                    if str(cell.line) not in level_seven_dict:
-                                                        level_seven_dict[str(cell.line)] = {}
-                                                        if cell.value:
-                                                            level_seven_dict[str(cell.line)][key] = cell.value
-                                                        else:
-                                                            level_seven_dict[str(cell.line)][key] = value
-                                                    else:
-                                                        if cell.value:
-                                                            level_seven_dict[str(cell.line)][key] = cell.value
-                                                        else:
-                                                            level_seven_dict[str(cell.line)][key] = value
-                                            if level_six_dict:
-                                                level_five_dict[level_five_obj.tagname] = level_six_dict
-                                            if level_seven_dict:
-                                                level_five_dict[level_five_obj.tagname] = list(
-                                                    level_seven_dict.values())
-                                    level_four_dict[level_four_obj.tagname] = level_five_dict or level_five_list
-                                else:
-                                    # 4层对象：单元格，单元格+列表。构建5层字典
-                                    level_five_dict = {}  # 构建5层字典
-                                    if level_four_obj.child_ids:  # 有表
-                                        for level_five_obj in level_four_obj.child_ids:
-                                            level_seven_dict = {}
-                                            for cell in level_five_obj.cells:
-                                                key = cell.tagname
-                                                # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                                # value = cell.value
-                                                value = '110'
-                                                if not cell.line:  # 单元格是否带行号，不带行号:dkdjsstyjksdkqdGridlb
-                                                    level_seven_dict[key] = value
-                                                else:  # 带行号:hznsqyzzsfpbGridlbVO
-                                                    if str(cell.line) not in level_seven_dict:
-                                                        level_seven_dict[str(cell.line)] = {}
-                                                        if cell.value:
-                                                            level_seven_dict[str(cell.line)][key] = cell.value
-                                                        else:
-                                                            level_seven_dict[str(cell.line)][key] = value
-                                                    else:
-                                                        if cell.value:
-                                                            level_seven_dict[str(cell.line)][key] = cell.value
-                                                        else:
-                                                            level_seven_dict[str(cell.line)][key] = value
+            level_one_dict = {}
+            for level_one_obj in record.sheet_id.cells:
+                level_one_dict[level_one_obj.tagname] = level_one_obj.value
+            for level_one_obj in record.sheet_id.child_ids:
+                if level_one_obj.tagname == 'head':
+                    level_two_dict = {}
+                    for cell in level_one_obj.cells:
+                        key = cell.tagname
+                        value = 0
+                        level_two_dict[key] = value
+                    level_one_dict[level_one_obj.tagname] = level_two_dict
+                if level_one_obj.tagname == 'note':
+                    level_two_dict = {}
+                    for cell in level_one_obj.cells:
+                        key = cell.tagname
+                        value = cell.value
+                        level_two_dict[key] = value
+                    level_one_dict[level_one_obj.tagname] = level_two_dict
+                if level_one_obj.tagname == 'body':
+                    level_two_dict = {}
+                    for level_two_obj in level_one_obj.child_ids:
+                        level_three_dict = {} # 构建3层字典。     1.dict      2.list
 
-                                            if isinstance(list(level_seven_dict.values())[0], dict):
-                                                level_five_dict[level_five_obj.tagname] = list(
-                                                    level_seven_dict.values())
-                                            else:
-                                                level_five_dict[level_five_obj.tagname] = [level_seven_dict]
-                                    for cell in level_four_obj.cells:  # 纯单元格
-                                        if cell.value:
-                                            level_five_dict[cell.tagname] = cell.value
-                                        else:
-                                            # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                            # value = cell.value
-                                            value = '110'
-                                            level_five_dict[cell.tagname] = value
-                                    if level_four_obj.tagname == 'kcxmqdmx':
-                                        level_four_dict[level_four_obj.tagname] = [level_five_dict]
-                                    else:
-                                        level_four_dict[level_four_obj.tagname] = level_five_dict
-                            level_three_dict[level_three_obj.tagname] = level_four_dict
-                        else:
-                            # 3层对象有cells
+                        for level_three_obj in level_two_obj.child_ids:
                             level_four_dict = {}
                             for cell in level_three_obj.cells:
-                                if cell.value:
-                                    level_four_dict[cell.tagname] = cell.value
+                                key = cell.tagname
+                                value = 0
+                                if cell.line:
+                                    if str(cell.line) not in level_four_dict:
+                                        level_four_dict[str(cell.line)] = {}
+                                        level_four_dict[str(cell.line)][key] = value
+                                    else:
+                                        level_four_dict[str(cell.line)][key] = value
                                 else:
-                                    # exec(cell.get_value_func,{'res':res,'cell':cell})
-                                    # value = cell.value
-                                    value = '110'
-                                    level_four_dict[cell.tagname] = value
-                            level_three_dict[level_three_obj.tagname] = level_four_dict
-                    level_two_dict[level_two_obj.tagname] = level_three_dict
-                else:
-                    # 2层对象有cells
-                    level_three_dict = {}
-                    for cell in level_two_obj.cells:
-                        if cell.value:
-                            level_three_dict[cell.tagname] = cell.value
-                        else:
-                            # exec(cell.get_value_func,{'res':res,'cell':cell})
-                            # value = cell.value
-                            value = '110'
-                            level_three_dict[cell.tagname] = value
-                    level_two_dict[level_two_obj.tagname] = level_three_dict
+                                    level_four_dict[key] = value
+                            if isinstance(list(level_four_dict.values())[0], dict):
+                                level_three_dict[level_three_obj.tagname] = list(level_four_dict.values())
+                            else:
+                                level_three_dict[level_three_obj.tagname] = level_four_dict
 
-            level_one_dict = {record.sheet_id.tagname: level_two_dict}
+                        level_two_dict[level_two_obj.tagname] = level_three_dict
+                    level_one_dict[level_one_obj.tagname] = level_two_dict
             record.create_dict = level_one_dict
 
-comment_re = re.compile(
-    '(^)?[^\S\n]*/(?:\*(.*?)\*/[^\S\n]*|/[^\n]*)($)?',
-    re.DOTALL | re.MULTILINE
-)
 class UniteCreateJsonObjWizard(models.TransientModel):
     """上传统一报文json文件，创建统一报文对象（自动增加项暂未考虑）"""
     _name = "unite.create.json.obj.wizard"
     _description = '创建json的向导'
 
+    dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', help="地区编码")
+    sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', help="参考代码表")
     name = fields.Char(string='json统一报文', help='附加税交付报文_V20191015.json')
     file = fields.Binary(string="Upload Json File")
 
     @api.one
     def create_json_obj(self):
         # bytes--->str
-        content = base64.b64decode(self.file).decode('utf-8')
-        # 清除注释
-        match = comment_re.search(content)
-        while match:
-            # single line comment
-            content = content[:match.start()] + content[match.end():]
-            match = comment_re.search(content)
-        # 字典
-        content_dict = eval(content)
+        content_str = base64.b64decode(self.file).decode('utf-8')
+
+        content_dict = eval(content_str)
 
         file_name_no_extend, extension_name = os.path.splitext(self.name)
         shenbaosheetcell = self.env['cic_taxsb.uniteshenbaosheet.cell']
@@ -612,320 +460,60 @@ class UniteCreateJsonObjWizard(models.TransientModel):
 
         level_one_keys = list(content_dict.keys())
 
-        # 判断第一层的情况：1.单个key（大部分情况） 2.多个key（统一报文，财务报表）
-        # 对于第二种情况，在第一层之上在加一层，解决创建报文结构时sheet_id的问题。
-        if len(level_one_keys) >= 2:
-            # 创建抽象0层的对象
-            level_zero_key_obj = shenbaosheet.create({'name': file_name_no_extend, 'tagname': 'level_zero_key'})
-            level_zero_key_id = level_zero_key_obj.id
+        # 创建抽象0层的对象
+        level_zero_key_obj = shenbaosheet.create({'name': file_name_no_extend, 'tagname': 'level_zero_key'})
+        level_zero_key_id = level_zero_key_obj.id
 
-            # 创建第一层keys
-            for level_one_key in level_one_keys:
+        # 创建第一层.    version head body note
+        for level_one_key in level_one_keys:
+            if level_one_key == 'version':
+                shenbaosheetcell.create({'sheet_id': level_zero_key_id, 'tagname': level_one_key, 'value': 'default'})
+            if level_one_key == 'head':
                 level_one_key_obj = shenbaosheet.create({'parent_id': level_zero_key_id, 'tagname': level_one_key})
                 level_one_key_id = level_one_key_obj.id
-
-                # 创建第二层keys
+                # 创建第二层.
+                level_two_dict = content_dict[level_one_key]
+                level_two_keys = list(level_two_dict.keys())
+                for level_two_key in level_two_keys:
+                    shenbaosheetcell.create({'sheet_id': level_one_key_id, 'tagname': level_two_key})
+            if level_one_key == 'note':
+                level_one_key_obj = shenbaosheet.create({'parent_id': level_zero_key_id, 'tagname': level_one_key})
+                level_one_key_id = level_one_key_obj.id
+                # 创建第二层.
+                level_two_dict = content_dict[level_one_key]
+                level_two_keys = list(level_two_dict.keys())
+                for level_two_key in level_two_keys:
+                    shenbaosheetcell.create({'sheet_id': level_one_key_id, 'tagname': level_two_key,'value': level_two_dict[level_two_key]})
+            if level_one_key == 'body':
+                level_one_key_obj = shenbaosheet.create({'parent_id': level_zero_key_id, 'tagname': level_one_key})
+                level_one_key_id = level_one_key_obj.id
+                # 创建第二层.
                 level_two_dict = content_dict[level_one_key]
                 level_two_keys = list(level_two_dict.keys())
                 for level_two_key in level_two_keys:
                     level_two_key_obj = shenbaosheet.create({'parent_id': level_one_key_id, 'tagname': level_two_key})
                     level_two_key_id = level_two_key_obj.id
 
-                    # # 统一报文财务报表：第二层的values是list
-                    # if isinstance(level_two_dict[level_two_key],list):
-                    #     level_three_list = level_two_dict[level_two_key]
-                    #     line = 0
-                    #     for level_four_dict in level_three_list:
-                    #         line = line + 1
-                    #         for level_four_key in list(level_four_dict.keys()):
-                    #             shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_four_key, 'line': line})
-
-                    # 第三层的values分类：     1.dict      2.cell
-                    # 创建第三层的keys
+                    # 创建第三层
                     level_three_dict = level_two_dict[level_two_key]
-                    if isinstance(list(level_three_dict.values())[0], dict):
-                        level_three_keys = list(level_three_dict.keys())
-                        for level_three_key in level_three_keys:
-                            level_three_key_obj = shenbaosheet.create(
-                                {'parent_id': level_two_key_id, 'tagname': level_three_key})
-                            level_three_key_id = level_three_key_obj.id
-
-                            # 第四层的的values分类:    1.cell  2.dict  3.list
-                            # 创建第四层的keys
-                            level_four_dict = level_three_dict[level_three_key]
-                            level_four_keys = list(level_four_dict.keys())
-                            if isinstance(list(level_four_dict.values())[0], dict):
-                                for level_four_key in level_four_keys:
-                                    level_four_key_obj = shenbaosheet.create(
-                                        {'parent_id': level_three_key_id, 'tagname': level_four_key})
-                                    level_four_key_id = level_four_key_obj.id
-
-                                    # 第五层的的values分类:    1.list  2.dict  3.cell
-                                    # 创建第五层的keys
-                                    level_five_dict = level_four_dict[level_four_key]
-                                    level_five_keys = list(level_five_dict.keys())
-                                    for level_five_key in level_five_keys:
-                                        if isinstance(level_five_dict[level_five_key], list):
-                                            level_five_key_obj = shenbaosheet.create(
-                                                {'parent_id': level_four_key_id, 'tagname': level_five_key})
-                                            level_five_key_id = level_five_key_obj.id
-
-                                            level_six_list = level_five_dict[level_five_key]
-                                            line_no = 0
-                                            for level_seven_dict in level_six_list:
-                                                level_seven_keys = list(level_seven_dict.keys())
-                                                if 'ewbhxh' in level_seven_dict or 'ewblxh' in level_seven_dict:
-                                                    if level_seven_dict.get('ewbhxh') == '合计':
-                                                        line = 999
-                                                    else:
-                                                        line = int(level_seven_dict.get('ewbhxh', 0)) or int(
-                                                            level_seven_dict.get('ewblxh', 0))
-                                                    for level_seven_key in level_seven_keys:
-                                                        if level_seven_key in cell_stable_value:
-                                                            shenbaosheetcell.create(
-                                                                {'sheet_id': level_five_key_id,
-                                                                 'tagname': level_seven_key,
-                                                                 'line': line,
-                                                                 'value': level_seven_dict[level_seven_key]})
-                                                        else:
-                                                            shenbaosheetcell.create(
-                                                                {'sheet_id': level_five_key_id,
-                                                                 'tagname': level_seven_key,
-                                                                 'line': line})
-                                                else:
-                                                    line_no = line_no + 1
-                                                    for level_seven_key in level_seven_keys:
-                                                        shenbaosheetcell.create(
-                                                            {'sheet_id': level_five_key_id, 'tagname': level_seven_key,
-                                                             'line': line_no})
-                                        # 第五层的的values分类:  2.dict
-                                        elif isinstance(level_five_dict[level_five_key], dict):
-                                            level_five_key_obj = shenbaosheet.create(
-                                                {'parent_id': level_four_key_id, 'tagname': level_five_key})
-                                            level_five_key_id = level_five_key_obj.id
-                                            # 创建第六层的单元格
-                                            level_six_dict = level_five_dict[level_five_key]
-                                            level_six_keys = list(level_six_dict.keys())
-                                            for level_six_key in level_six_keys:
-                                                shenbaosheetcell.create({'sheet_id': level_five_key_id,
-                                                                         'tagname': level_six_key})  # line value get_value_func
-                                        # 第五层的的values分类:    3.cell
-                                        else:
-                                            shenbaosheetcell.create({'sheet_id': level_four_key_id,
-                                                                     'tagname': level_five_key})  # line value get_value_func
-
-                            # 第四层的的values分类:    3.list
-                            # 创建第四层的keys，创建单元格
-                            elif isinstance(list(level_four_dict.values())[0], list):
-                                for level_four_key in level_four_keys:
-                                    level_four_key_obj = shenbaosheet.create(
-                                        {'parent_id': level_three_key_id, 'tagname': level_four_key})
-                                    level_four_key_id = level_four_key_obj.id
-
-                                    level_five_list_dict = level_four_dict[level_four_key][0]
-                                    level_five_list_dict_keys = list(level_five_list_dict.keys())
-                                    for level_five_list_dict_key in level_five_list_dict_keys:
-                                        if isinstance(level_five_list_dict[level_five_list_dict_key], dict):
-                                            level_five_list_dict_key_obj = shenbaosheet.create(
-                                                {'parent_id': level_four_key_id, 'tagname': level_five_list_dict_key})
-                                            level_five_list_dict_key_id = level_five_list_dict_key_obj.id
-
-                                            level_seven_dict = level_five_list_dict[level_five_list_dict_key]
-                                            level_seven_dict_keys = list(level_seven_dict.keys())
-                                            for level_seven_dict_key in level_seven_dict_keys:
-                                                if isinstance(level_seven_dict[level_seven_dict_key], list):
-                                                    level_seven_dict_key_obj = shenbaosheet.create(
-                                                        {'parent_id': level_five_list_dict_key_id,
-                                                         'tagname': level_seven_dict_key})
-                                                    level_seven_dict_key_id = level_seven_dict_key_obj.id
-
-                                                    level_eight_list = level_seven_dict[level_seven_dict_key]
-                                                    line_level_nine = 0
-                                                    for level_nine_dict in level_eight_list:
-                                                        line_level_nine = line_level_nine + 1
-                                                        level_nine_keys_list = list(level_nine_dict.keys())
-                                                        for level_nine_key in level_nine_keys_list:
-                                                            shenbaosheetcell.create(
-                                                                {'sheet_id': level_seven_dict_key_id,
-                                                                 'tagname': level_nine_key,
-                                                                 'line': line_level_nine})
-                                                else:
-                                                    shenbaosheetcell.create({'sheet_id': level_five_list_dict_key_id,
-                                                                             'tagname': level_seven_dict_key})
-                                        else:
-                                            shenbaosheetcell.create({'sheet_id': level_four_key_id,
-                                                                     'tagname': level_five_list_dict_key})  # line value get_value_func
-
-                            # 第四层的的values分类:    1.cell  创建单元格
-                            else:
-                                for level_four_key in level_four_keys:
-                                    shenbaosheetcell.create({'sheet_id': level_three_key_id,
-                                                             'tagname': level_four_key})  # line value get_value_func
-
-                    # 第三层的values分类： 2.cell   创建单元格 固定值写入value
-                    else:
-                        level_three_keys = list(level_three_dict.keys())
-                        for level_three_key in level_three_keys:
-                            if level_three_key == 'sz':
-                                shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_three_key,
-                                                         'value': level_three_dict['sz']})
-                            else:
-                                shenbaosheetcell.create(
-                                    {'sheet_id': level_two_key_id,
-                                     'tagname': level_three_key})  # line value get_value_func
-        else:
-
-            # 创建第一层keys
-            # level_one_key = list(content_dict.keys())[0]
-            level_one_key = level_one_keys[0]
-            # for level_one_key in level_one_keys:
-            level_one_key_obj = shenbaosheet.create({'name': file_name_no_extend, 'tagname': level_one_key})
-            level_one_key_id = level_one_key_obj.id
-
-            # 创建第二层keys
-            level_two_dict = content_dict[level_one_key]
-            level_two_keys = list(level_two_dict.keys())
-            for level_two_key in level_two_keys:
-                level_two_key_obj = shenbaosheet.create({'parent_id': level_one_key_id, 'tagname': level_two_key})
-                level_two_key_id = level_two_key_obj.id
-
-                # # 统一报文财务报表：第二层的values是list
-                # if isinstance(level_two_dict[level_two_key],list):
-                #     level_three_list = level_two_dict[level_two_key]
-                #     line = 0
-                #     for level_four_dict in level_three_list:
-                #         line = line + 1
-                #         for level_four_key in list(level_four_dict.keys()):
-                #             shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_four_key, 'line': line})
-
-                # 第三层的values分类：     1.dict      2.cell
-                # 创建第三层的keys
-                level_three_dict = level_two_dict[level_two_key]
-                if isinstance(list(level_three_dict.values())[0], dict):
                     level_three_keys = list(level_three_dict.keys())
                     for level_three_key in level_three_keys:
-                        level_three_key_obj = shenbaosheet.create(
-                            {'parent_id': level_two_key_id, 'tagname': level_three_key})
+                        level_three_key_obj = shenbaosheet.create({'parent_id': level_two_key_id, 'tagname': level_three_key})
                         level_three_key_id = level_three_key_obj.id
 
-                        # 第四层的的values分类:    1.cell  2.dict  3.list
-                        # 创建第四层的keys
-                        level_four_dict = level_three_dict[level_three_key]
-                        level_four_keys = list(level_four_dict.keys())
-                        if isinstance(list(level_four_dict.values())[0], dict):
+                        # 创建第四层      1.dict      2.list
+                        level_four = level_three_dict[level_three_key]
+                        if isinstance(level_four, dict):
+                            level_four_keys = list(level_four.keys())
                             for level_four_key in level_four_keys:
-                                level_four_key_obj = shenbaosheet.create(
-                                    {'parent_id': level_three_key_id, 'tagname': level_four_key})
-                                level_four_key_id = level_four_key_obj.id
-
-                                # 第五层的的values分类:    1.list  2.dict  3.cell
-                                # 创建第五层的keys
-                                level_five_dict = level_four_dict[level_four_key]
+                                shenbaosheetcell.create({'sheet_id': level_three_key_id, 'tagname': level_four_key})
+                        if isinstance(level_four, list):
+                            line = 0
+                            for level_five_dict in level_four:
+                                line = line + 1
                                 level_five_keys = list(level_five_dict.keys())
                                 for level_five_key in level_five_keys:
-                                    if isinstance(level_five_dict[level_five_key], list):
-                                        level_five_key_obj = shenbaosheet.create(
-                                            {'parent_id': level_four_key_id, 'tagname': level_five_key})
-                                        level_five_key_id = level_five_key_obj.id
-
-                                        level_six_list = level_five_dict[level_five_key]
-                                        line_no = 0
-                                        for level_seven_dict in level_six_list:
-                                            level_seven_keys = list(level_seven_dict.keys())
-                                            if 'ewbhxh' in level_seven_dict or 'ewblxh' in level_seven_dict:
-                                                if level_seven_dict.get('ewbhxh') == '合计':
-                                                    line = 999
-                                                else:
-                                                    line = int(level_seven_dict.get('ewbhxh', 0)) or int(
-                                                        level_seven_dict.get('ewblxh', 0))
-                                                for level_seven_key in level_seven_keys:
-                                                    if level_seven_key in cell_stable_value:
-                                                        shenbaosheetcell.create(
-                                                            {'sheet_id': level_five_key_id, 'tagname': level_seven_key,
-                                                             'line': line, 'value': level_seven_dict[level_seven_key]})
-                                                    else:
-                                                        shenbaosheetcell.create(
-                                                            {'sheet_id': level_five_key_id, 'tagname': level_seven_key,
-                                                             'line': line})
-                                            else:
-                                                line_no = line_no + 1
-                                                for level_seven_key in level_seven_keys:
-                                                    shenbaosheetcell.create(
-                                                        {'sheet_id': level_five_key_id, 'tagname': level_seven_key,
-                                                         'line': line_no})
-                                    # 第五层的的values分类:  2.dict
-                                    elif isinstance(level_five_dict[level_five_key], dict):
-                                        level_five_key_obj = shenbaosheet.create(
-                                            {'parent_id': level_four_key_id, 'tagname': level_five_key})
-                                        level_five_key_id = level_five_key_obj.id
-                                        # 创建第六层的单元格
-                                        level_six_dict = level_five_dict[level_five_key]
-                                        level_six_keys = list(level_six_dict.keys())
-                                        for level_six_key in level_six_keys:
-                                            shenbaosheetcell.create({'sheet_id': level_five_key_id,
-                                                                     'tagname': level_six_key})  # line value get_value_func
-                                    # 第五层的的values分类:    3.cell
-                                    else:
-                                        shenbaosheetcell.create({'sheet_id': level_four_key_id,
-                                                                 'tagname': level_five_key})  # line value get_value_func
-
-                        # 第四层的的values分类:    3.list
-                        # 创建第四层的keys，创建单元格
-                        elif isinstance(list(level_four_dict.values())[0], list):
-                            for level_four_key in level_four_keys:
-                                level_four_key_obj = shenbaosheet.create(
-                                    {'parent_id': level_three_key_id, 'tagname': level_four_key})
-                                level_four_key_id = level_four_key_obj.id
-
-                                level_five_list_dict = level_four_dict[level_four_key][0]
-                                level_five_list_dict_keys = list(level_five_list_dict.keys())
-                                for level_five_list_dict_key in level_five_list_dict_keys:
-                                    if isinstance(level_five_list_dict[level_five_list_dict_key], dict):
-                                        level_five_list_dict_key_obj = shenbaosheet.create(
-                                            {'parent_id': level_four_key_id, 'tagname': level_five_list_dict_key})
-                                        level_five_list_dict_key_id = level_five_list_dict_key_obj.id
-
-                                        level_seven_dict = level_five_list_dict[level_five_list_dict_key]
-                                        level_seven_dict_keys = list(level_seven_dict.keys())
-                                        for level_seven_dict_key in level_seven_dict_keys:
-                                            if isinstance(level_seven_dict[level_seven_dict_key], list):
-                                                level_seven_dict_key_obj = shenbaosheet.create(
-                                                    {'parent_id': level_five_list_dict_key_id,
-                                                     'tagname': level_seven_dict_key})
-                                                level_seven_dict_key_id = level_seven_dict_key_obj.id
-
-                                                level_eight_list = level_seven_dict[level_seven_dict_key]
-                                                line_level_nine = 0
-                                                for level_nine_dict in level_eight_list:
-                                                    line_level_nine = line_level_nine + 1
-                                                    level_nine_keys_list = list(level_nine_dict.keys())
-                                                    for level_nine_key in level_nine_keys_list:
-                                                        shenbaosheetcell.create({'sheet_id': level_seven_dict_key_id,
-                                                                                 'tagname': level_nine_key,
-                                                                                 'line': line_level_nine})
-                                            else:
-                                                shenbaosheetcell.create({'sheet_id': level_five_list_dict_key_id,
-                                                                         'tagname': level_seven_dict_key})
-                                    else:
-                                        shenbaosheetcell.create({'sheet_id': level_four_key_id,
-                                                                 'tagname': level_five_list_dict_key})  # line value get_value_func
-
-                        # 第四层的的values分类:    1.cell  创建单元格
-                        else:
-                            for level_four_key in level_four_keys:
-                                shenbaosheetcell.create({'sheet_id': level_three_key_id,
-                                                         'tagname': level_four_key})  # line value get_value_func
-
-                # 第三层的values分类： 2.cell   创建单元格 固定值写入value
-                else:
-                    level_three_keys = list(level_three_dict.keys())
-                    for level_three_key in level_three_keys:
-                        if level_three_key == 'sz':
-                            shenbaosheetcell.create({'sheet_id': level_two_key_id, 'tagname': level_three_key,
-                                                     'value': level_three_dict['sz']})
-                        else:
-                            shenbaosheetcell.create(
-                                {'sheet_id': level_two_key_id, 'tagname': level_three_key})  # line value get_value_func
+                                    shenbaosheetcell.create({'sheet_id': level_three_key_id, 'tagname': level_five_key,'line':line})
 
 class UniteShenBaoSheet(models.Model):
     """统一申报表模板
@@ -947,7 +535,6 @@ class UniteShenBaoSheet(models.Model):
     sequence = fields.Integer('序号')  # 排序使用 _order
     tagname = fields.Char('报文标签')
     cells = fields.One2many('cic_taxsb.uniteshenbaosheet.cell', 'sheet_id', string='单元格设置')  # 单元格设置
-
 
 class UniteShenBaoCell(models.Model):
     """统一申报表单元格定义模板
