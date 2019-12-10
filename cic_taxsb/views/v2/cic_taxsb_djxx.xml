@@ -5,12 +5,14 @@
          <field name="model">cic_taxsb.djxx</field>
          <field name="arch" type="xml">
              <tree>
+                 <field name="nsrsbh" />
                  <field name="qymc" />
                  <field name="dqbm" />
-                 <field name="cwlxr" />
-                 <field name="cwlxrlxfs" />
-                 <field name="qynf" />
-                 <field name="qyyf" />
+                 <field name="gsdlfs" />
+                 <field name="gsnsyhm" />
+                 <field name="gsnsmm" />
+                 <field name="kjzd" />
+                 <field name="nsrzgdm" />
              </tree>
          </field>
     </record>
@@ -24,25 +26,25 @@
                     <group>
                         <group>
                             <field name="nsrsbh" />
-                            <field name="cwlxr" />
-                            <field name="dscsdlmm" />
-                            <field name="dsdlmm" />
-                            <field name="gscamm" />
-                            <field name="gsnsmm" />
-                            <field name="gsnsyhm" />
-                            <field name="qynf" />
-                            <field name="nsrzgdm" />
-                        </group>
-                        <group>
                             <field name="qymc" />
                             <field name="dqbm" />
+                            <field name="cwlxr" />
                             <field name="cwlxrlxfs" />
+                            <field name="dscsdlmm" />
                             <field name="dsdlfs" />
+                            <field name="dsdlmm" />
                             <field name="dsdlyhm" />
+                        </group>
+                        <group>
+                            <field name="gscamm" />
                             <field name="gsdlfs" />
+                            <field name="gsnsmm" />
                             <field name="gsnsrsbh" />
+                            <field name="gsnsyhm" />
                             <field name="kjzd" />
+                            <field name="nsrzgdm" />
                             <field name="qyyf" />
+                            <field name="qynf" />
                         </group>
                     </group>
                     <group><field name="content" /></group>

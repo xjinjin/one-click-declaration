@@ -7,8 +7,11 @@
          <field name="arch" type="xml">
              <tree>
                  <field name="nsrsbh" />
+                 <field name="sbzlbh" />
                  <field name="skssqq" />
                  <field name="skssqz" />
+                 <field name="nsqxdm" />
+                 <field name="isRenew" />
              </tree>
          </field>
     </record>
@@ -23,11 +26,12 @@
                         <group>
                             <field name="nsrsbh" />
                             <field name="sbzlbh" />
+                            <field name="nsqxdm" />
                         </group>
                         <group>
                             <field name="skssqq" />
                             <field name="skssqz" />
-                            <field name="nsqxdm" />
+                            <field name="isRenew" />
                         </group>
                     </group>
                     <group><field name="content" /></group>

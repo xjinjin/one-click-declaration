@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+
+    <!--<record id="view_tree_create_uniteshenbaosheet_wizard" model="ir.ui.view">-->
+         <!--<field name="name">申报提交报文</field>-->
+         <!--<field name="model">create.uniteshenbaosheet.wizard</field>-->
+         <!--<field name="arch" type="xml">-->
+             <!--<tree>-->
+                 <!--<field name="sheet_id" />-->
+                 <!--<field name="account_id" />-->
+                 <!--<field name="nsrsbh" />-->
+                 <!--<field name="nsqxdm" />-->
+                 <!--<field name="skssqq" />-->
+                 <!--<field name="skssqz" />-->
+             <!--</tree>-->
+         <!--</field>-->
+    <!--</record>-->
+
     <record id="view_form_create_uniteshenbaosheet_wizard" model="ir.ui.view">
-         <field name="name">添加统一报表</field>
+         <field name="name">申报提交报文表单创建</field>
          <field name="model">create.uniteshenbaosheet.wizard</field>
          <field name="arch" type="xml">
              <form string="Create uniteshenbao">
                  <sheet>
                     <group>
                         <group>
+                            <field name="nsrsbh" />
+                            <field name="sbzlbh" />
+                            <field name="nsqxdm" />
+                            <field name="skssqq" />
+                            <field name="skssqz" />
+                        </group>
+                        <group>
                             <field name="sheet_id" />
                             <field name="account_id" />
-                            <field name="create_dict" />
                             <div></div>
                             <div style="text-align: right;width:190px">
                                 <button name="create_uniteshenbao_sheet" type="object"
@@ -18,6 +40,8 @@
                             </div>
                         </group>
                     </group>
+                    <!--<group><field name="create_dict" /></group>-->
+                    <!--<group><field name="content" /></group>-->
                  </sheet>
              </form>
          </field>

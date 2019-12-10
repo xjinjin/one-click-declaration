@@ -401,9 +401,9 @@ class SBDjxx(models.Model):
     gsnsrsbh = fields.Char('国税纳税人识别号', help="纳税人识别号        必须传")
     gsnsyhm = fields.Char('国税登录名', help="国税登录名            必须传")
     kjzd = fields.Selection(KJZDDM_SELECTION, string='会计制度,必须传', default='1', help="会计制度,必须传")
-    nsrzgdm = fields.Selection(NSRZGDM_SELECTION, string='nsrzgdm', help="纳税资格代码 【001增值税一般纳税人/101增值税小规模纳税人】 必须传")
-    qyyf = fields.Char('月份', help="启用月份(必填) 【系统(当前)月份】          必须传")
-    qynf = fields.Char('年份', help="启用年份(必填) 【系统(当前)年份】          必须传")
+    nsrzgdm = fields.Selection(NSRZGDM_SELECTION, string='纳税资格代码', help="纳税资格代码 【001增值税一般纳税人/101增值税小规模纳税人】 必须传")
+    qyyf = fields.Char('月份-09', help="启用月份(必填) 【系统(当前)月份】          必须传")
+    qynf = fields.Char('年份-2019', help="启用年份(必填) 【系统(当前)年份】          必须传")
 
     serviceId = fields.Char('服务方法标识', default='S001', help="服务方法标识")
     content = fields.Text('报文内容', compute='_compute_content')
@@ -1213,8 +1213,8 @@ class UniteCreateJsonObjWizard(models.TransientModel):
 
     dqbm = fields.Selection(DQBM_SELECTION, string='地区编码', help="地区编码")
     sbzlbh = fields.Selection(SZDM_SELECTION, string='申报种类编码', help="参考代码表")
-    name = fields.Char(string='json统一报文', help='附加税交付报文_V20191015.json')
-    file = fields.Binary(string="Upload Json File")
+    name = fields.Char(string='json报文名称', help='比如：附加税交付报文_V20191015.json')
+    file = fields.Binary(string="Upload")
 
     @api.one
     def create_json_obj(self):

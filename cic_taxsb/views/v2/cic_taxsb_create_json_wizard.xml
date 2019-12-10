@@ -8,6 +8,8 @@
                  <sheet>
                     <group>
                         <group>
+                            <field name="dqbm" />
+                            <field name="sbzlbh" />
                             <field name="name" />
                             <field name="file" />
                             <div></div>
