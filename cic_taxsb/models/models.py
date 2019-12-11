@@ -1306,7 +1306,6 @@ class UniteShenBaoSheet(models.Model):
     tagname = fields.Char('报文标签')
     cells = fields.One2many('cic_taxsb.uniteshenbaosheet.cell', 'sheet_id', string='单元格设置')  # 单元格设置
 
-
 class UniteShenBaoCell(models.Model):
     """统一申报表单元格定义模板
     模板用来定义最终输出的 申报的报文格式

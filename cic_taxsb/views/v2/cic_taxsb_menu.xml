@@ -1,56 +1,36 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
   <data>
-      <!--<record model="ir.actions.act_window" id="cic_taxsb.action_window_shenbao">-->
-          <!--<field name="name">申报模板</field>-->
-          <!--<field name="res_model">cic_taxsb.shenbaosheet</field>-->
-          <!--<field name="view_mode">tree,form</field>-->
-      <!--</record>-->
-      <!--<record model="ir.actions.act_window" id="cic_taxsb.action_window_uniteshenbao">-->
-          <!--<field name="name">统一申报模板</field>-->
-          <!--<field name="res_model">cic_taxsb.uniteshenbaosheet</field>-->
-          <!--<field name="view_mode">tree,form</field>-->
-      <!--</record>-->
-      <!--<record model="ir.actions.act_window" id="cic_taxsb.action_window_shenbao_cell">-->
-          <!--<field name="name">申报单元格模板</field>-->
-          <!--<field name="res_model">cic_taxsb.shenbaosheet.cell</field>-->
-          <!--<field name="view_mode">tree,form</field>-->
-      <!--</record>-->
-      <!--<record model="ir.actions.act_window" id="cic_taxsb.action_window_uniteshenbao_cell">-->
-          <!--<field name="name">统一申报单元格模板</field>-->
-          <!--<field name="res_model">cic_taxsb.uniteshenbaosheet.cell</field>-->
-          <!--<field name="view_mode">tree,form</field>-->
-      <!--</record>-->
+      <record model="ir.actions.act_window" id="cic_taxsb.action_window_uniteshenbao">
+          <field name="name">统一申报模板</field>
+          <field name="res_model">cic_taxsb.uniteshenbaosheet</field>
+          <field name="view_mode">tree,form</field>
+      </record>
+      <record model="ir.actions.act_window" id="cic_taxsb.action_window_uniteshenbao_cell">
+          <field name="name">统一申报单元格模板</field>
+          <field name="res_model">cic_taxsb.uniteshenbaosheet.cell</field>
+          <field name="view_mode">tree,form</field>
+      </record>
       <record model="ir.actions.act_window" id="cic_taxsb.action_djxx">
           <field name="name">登记信息</field>
           <field name="res_model">cic_taxsb.djxx</field>
           <field name="view_mode">tree,form</field>
       </record>
-      <!--<record model="ir.actions.act_window" id="cic_taxsb.action_cshjs">-->
-          <!--<field name="name">江苏初始化</field>-->
-          <!--<field name="res_model">cic_taxsb.cshjs</field>-->
-          <!--<field name="view_mode">tree,form</field>-->
-      <!--</record>-->
       <record model="ir.actions.act_window" id="cic_taxsb.action_csh">
           <field name="name">初始化往期数据</field>
           <field name="res_model">cic_taxsb.csh</field>
           <field name="view_mode">tree,form</field>
       </record>
-
-      <!--<act_window id="action_create_shenbaosheet_wizard"-->
-   <!--name="创建申报表"-->
-   <!--res_model="create.shenbaosheet.wizard"-->
-   <!--view_mode="form" view_id="cic_taxsb.view_form_create_shenbaosheet_wizard" target="new" />-->
+      <record model="ir.actions.act_window" id="cic_taxsb.action_status">
+          <field name="name">状态查询</field>
+          <field name="res_model">cic_taxsb.status</field>
+          <field name="view_mode">tree,form</field>
+      </record>
 
       <act_window id="action_create_uniteshenbaosheet_wizard"
    name="创建统一申报表"
    res_model="create.uniteshenbaosheet.wizard"
    view_mode="form" view_id="cic_taxsb.view_form_create_uniteshenbaosheet_wizard" target="new" />
-
-        <!--<act_window id="action_create_xml_wizard"-->
-   <!--name="创建xml"-->
-   <!--res_model="create.xml.obj.wizard"-->
-   <!--view_mode="form" view_id="cic_taxsb.view_form_create_xml_wizard" target="new" />-->
 
         <act_window id="action_create_json_wizard"
    name="创建json"
@@ -62,29 +42,20 @@
       <menuitem name="报表" id="cic_taxsb.menu_1" parent="cic_taxsb.menu_root"/>
       <menuitem name="新建报表" id="cic_taxsb.menu_2" parent="cic_taxsb.menu_root"/>
 
-      <!--<menuitem name="申报表模板" id="cic_taxsb.menu_shenbao_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="5" action="cic_taxsb.action_window_shenbao"/>-->
-      <!--<menuitem name="统一申报表模板" id="cic_taxsb.menu_uniteshenbao_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="15" action="cic_taxsb.action_window_uniteshenbao"/>-->
-      <!--<menuitem name="申报表单元格模板" id="cic_taxsb.menu_shenbao_cell_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="25" action="cic_taxsb.action_window_shenbao_cell"/>-->
-      <!--<menuitem name="统一申报表单元格模板" id="cic_taxsb.menu_uniteshenbao_cell_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="35" action="cic_taxsb.action_window_uniteshenbao_cell"/>-->
-      <!--<menuitem name="创建申报表" id="cic_taxsb.menu_create_shenbao_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="45" action="cic_taxsb.action_create_shenbaosheet_wizard"/>-->
+      <menuitem name="统一申报表模板" id="cic_taxsb.menu_uniteshenbao_list" parent="cic_taxsb.menu_2"
+              sequence="15" action="cic_taxsb.action_window_uniteshenbao"/>
+      <menuitem name="统一申报表单元格模板" id="cic_taxsb.menu_uniteshenbao_cell_list" parent="cic_taxsb.menu_2"
+              sequence="35" action="cic_taxsb.action_window_uniteshenbao_cell"/>
       <menuitem name="创建统一申报表" id="cic_taxsb.menu_create_uniteshenbao_list" parent="cic_taxsb.menu_2"
               sequence="55" action="cic_taxsb.action_create_uniteshenbaosheet_wizard"/>
-      <!--<menuitem name="上传xml文件" id="cic_taxsb.menu_create_xml_list" parent="cic_taxsb.menu_2"-->
-              <!--sequence="65" action="cic_taxsb.action_create_xml_wizard"/>-->
       <menuitem name="上传json文件" id="cic_taxsb.menu_create_json_list" parent="cic_taxsb.menu_2"
               sequence="75" action="cic_taxsb.action_create_json_wizard"/>
 
-
       <menuitem name="登记信息" id="cic_taxsb.menu_djxx" parent="cic_taxsb.menu_1"
               sequence="5" action="cic_taxsb.action_djxx"/>
-      <!--<menuitem name="江苏初始化" id="cic_taxsb.menu_cshjs" parent="cic_taxsb.menu_1"-->
-              <!--sequence="15" action="cic_taxsb.action_cshjs"/>-->
       <menuitem name="初始化往期数据" id="cic_taxsb.menu_csh" parent="cic_taxsb.menu_1"
-              sequence="25" action="cic_taxsb.action_csh"/>
+              sequence="15" action="cic_taxsb.action_csh"/>
+      <menuitem name="状态查询" id="cic_taxsb.menu_status" parent="cic_taxsb.menu_1"
+              sequence="25" action="cic_taxsb.action_status"/>
   </data>
 </odoo>

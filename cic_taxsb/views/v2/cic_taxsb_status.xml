@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <odoo>
-    <record id="view_tree_cshjs" model="ir.ui.view">
-         <field name="name">江苏初始化树形图</field>
-         <field name="model">cic_taxsb.cshjs</field>
+    <record id="view_tree_status" model="ir.ui.view">
+         <field name="name">状态查询</field>
+         <field name="model">cic_taxsb.status</field>
          <field name="arch" type="xml">
              <tree>
+                 <field name="sbzlbh" />
                  <field name="nsrsbh" />
+                 <field name="nsqxdm" />
                  <field name="skssqq" />
                  <field name="skssqz" />
-                 <field name="sssq" />
              </tree>
          </field>
     </record>
 
-    <record id="view_form_cshjs" model="ir.ui.view">
-         <field name="name">江苏初始化表单</field>
-         <field name="model">cic_taxsb.cshjs</field>
+    <record id="view_form_status" model="ir.ui.view">
+         <field name="name">状态查询表单</field>
+         <field name="model">cic_taxsb.status</field>
          <field name="arch" type="xml">
-             <form string="cshjs">
+             <form string="status">
                  <sheet>
                     <group>
                         <group>
-                            <field name="nsrsbh" />
                             <field name="sbzlbh" />
-                            <field name="sssq" />
-                        </group>
-                        <group>
+                            <field name="nsrsbh" />
+                            <field name="nsqxdm" />
                             <field name="skssqq" />
                             <field name="skssqz" />
-                            <field name="nsqxdm" />
                         </group>
                     </group>
-                    <group><field name="content" /></group>
                  </sheet>
              </form>
          </field>

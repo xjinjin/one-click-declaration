@@ -30,9 +30,9 @@
                         <group>
                             <field name="sequence" />
                             <field name="value" />
+                            <field name="get_value_func" />
                         </group>
                     </group>
-                    <group><field name="get_value_func" /></group>
                  </sheet>
              </form>
          </field>
